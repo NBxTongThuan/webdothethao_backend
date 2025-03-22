@@ -1,5 +1,7 @@
 package com.tongthuan.webdothethao_backend.entity;
 
+import com.tongthuan.webdothethao_backend.constantvalue.Gender;
+import com.tongthuan.webdothethao_backend.constantvalue.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -29,8 +31,12 @@ public class UserDetails {
     private String address;
     @Column(name = "date_of_birth")
     private Date date_of_birth;
+
+
     @Column(name = "gender")
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
     @Lob
     @Column(name = "avatar", columnDefinition = "LONGTEXT")
     private String avatar;

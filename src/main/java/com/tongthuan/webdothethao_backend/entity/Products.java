@@ -27,6 +27,9 @@ public class Products {
     @Column(name = "quantity_sold")
     private int quantitySold;
 
+    @Column(name = "price")
+    private double price;
+
     @OneToMany(mappedBy = "product",
             fetch = FetchType.EAGER, cascade = {
             CascadeType.DETACH,
@@ -84,5 +87,14 @@ public class Products {
             CascadeType.MERGE
     })
     private List<Reviews> reviewsList;
+
+    @OneToMany(mappedBy = "product",
+            fetch = FetchType.LAZY, cascade = {
+            CascadeType.DETACH,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH,
+            CascadeType.MERGE
+    })
+    private List<OrderDetail> orderDetailList;
 
 }

@@ -1,5 +1,6 @@
 package com.tongthuan.webdothethao_backend.entity;
 
+import com.tongthuan.webdothethao_backend.constantvalue.Color;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,6 +17,10 @@ public class Images {
     @Column(name = "data", columnDefinition = "LONGTEXT")
     @Lob
     private String data;
+
+    @Column(name = "color")
+    @Enumerated(EnumType.STRING)  // Lưu dưới dạng chuỗi
+    private Color color;
 
     @Column(name = "url")
     private String url;

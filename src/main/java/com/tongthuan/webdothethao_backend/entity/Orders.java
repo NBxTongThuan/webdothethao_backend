@@ -1,5 +1,7 @@
 package com.tongthuan.webdothethao_backend.entity;
 
+import com.tongthuan.webdothethao_backend.constantvalue.Color;
+import com.tongthuan.webdothethao_backend.constantvalue.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,8 +20,12 @@ public class Orders {
 
     @Column(name = "total_price")
     private double totalPrice;
+
     @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
+
     @Column(name = "created_date")
     private Date createdDate;
 
@@ -31,10 +37,6 @@ public class Orders {
     })
     @JoinColumn(name = "user_id")
     private Users user;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "payment_id")
-    private Payments payment;
 
     @OneToMany(mappedBy = "order",
             fetch = FetchType.EAGER, cascade = {

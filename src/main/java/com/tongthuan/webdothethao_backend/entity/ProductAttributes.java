@@ -1,5 +1,6 @@
 package com.tongthuan.webdothethao_backend.entity;
 
+import com.tongthuan.webdothethao_backend.constantvalue.Color;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,7 +15,8 @@ public class ProductAttributes {
     private String productAttributeId;
 
     @Column(name = "color")
-    private String color;
+    @Enumerated(EnumType.STRING)  // Lưu dưới dạng chuỗi
+    private Color color;
 
     @Column(name = "size")
     private String size;

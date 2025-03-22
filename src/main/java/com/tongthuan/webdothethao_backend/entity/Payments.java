@@ -1,5 +1,8 @@
 package com.tongthuan.webdothethao_backend.entity;
 
+import com.tongthuan.webdothethao_backend.constantvalue.Color;
+import com.tongthuan.webdothethao_backend.constantvalue.PaymentMethod;
+import com.tongthuan.webdothethao_backend.constantvalue.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,8 +19,18 @@ public class Payments {
     private String paymentId;
 
     @Column(name = "payment_method")
-    private String paymentMethod;
+    @Enumerated(EnumType.STRING)  // Lưu dưới dạng chuỗi
+    private PaymentMethod paymentMethod;
 
     @Column(name = "created_date")
     private Date createdDate;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)  // Lưu dưới dạng chuỗi
+    private PaymentStatus status;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id")
+    private Orders order;
+
 }

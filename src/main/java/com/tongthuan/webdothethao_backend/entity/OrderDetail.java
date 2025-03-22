@@ -29,4 +29,15 @@ public class OrderDetail {
     @JoinColumn(name = "order_id", nullable = false)
     private Orders order;
 
+    @ManyToOne(
+            cascade = {
+                    CascadeType.DETACH,
+                    CascadeType.MERGE,
+                    CascadeType.PERSIST,
+                    CascadeType.REFRESH
+            }
+    )
+    @JoinColumn(name = "product_id", nullable = false)
+    private Products product;
+
 }

@@ -1,5 +1,7 @@
 package com.tongthuan.webdothethao_backend.entity;
 
+import com.tongthuan.webdothethao_backend.constantvalue.Color;
+import com.tongthuan.webdothethao_backend.constantvalue.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,8 +27,11 @@ public class Users {
     private String email;
     @Column(name = "password")
     private String password;
+
     @Column(name = "role")
-    private String role;
+    @Enumerated(EnumType.STRING)  // Lưu dưới dạng chuỗi
+    private Role role;
+
     @Column(name = "created_date")
     private Date createdDate;
     @Column(name = "enable")

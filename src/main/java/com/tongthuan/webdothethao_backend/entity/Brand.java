@@ -17,6 +17,10 @@ public class Brand {
     @Column(name = "brand_name")
     private String brandName;
 
+    @Column(name = "country")
+    private String country;
+
+
     @OneToMany(mappedBy = "brand",
             fetch = FetchType.EAGER, cascade = {
             CascadeType.DETACH,
