@@ -13,6 +13,8 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
@@ -38,6 +40,16 @@ public class ProductController {
         PagedModel<EntityModel<ProductsResponse>> pagedModel = pagedAssembler.toModel(productsPage);
 
         return ResponseEntity.ok(pagedModel);
+    }
+
+    @GetMapping("/oneproduct")
+    public ResponseEntity<Optional<ProductsResponse>> getProductById(@RequestParam("productId") String productId)
+    {
+        if(productId.equals(""))
+        {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok().body(productsServiceInterface.getByProductId(productId).map(ProductsResponse::new));
     }
 
 
