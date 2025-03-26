@@ -31,4 +31,14 @@ public class ProductsServiceImpl implements ProductsService {
     public Optional<Products> getByProductId(String productId) {
         return productsRepository.findById(productId);
     }
+
+    @Override
+    public Page<Products> getListProductsByCategoryId(int categoryId, Pageable pageable) {
+        return productsRepository.findProductsByCategoryId(categoryId,pageable);
+    }
+
+    @Override
+    public Page<Products> getListProductsByProductName(String productName, Pageable pageable) {
+        return productsRepository.findProductsByProductName(productName,pageable);
+    }
 }

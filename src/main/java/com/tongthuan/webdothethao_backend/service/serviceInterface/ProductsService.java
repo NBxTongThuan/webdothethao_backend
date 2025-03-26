@@ -9,10 +9,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductsService {
-    public List<Products> findAll();
+    List<Products> findAll();
 
-    public Page<Products> getAllProducts(Pageable pageable);
+    Page<Products> getAllProducts(Pageable pageable);
 
-    public Optional<Products> getByProductId(String productId);
+    Optional<Products> getByProductId(String productId);
 
+    Page<Products> getListProductsByCategoryId(int categoryId, Pageable pageable);
+
+    Page<Products> getListProductsByProductName(String productName, Pageable pageable);
 }

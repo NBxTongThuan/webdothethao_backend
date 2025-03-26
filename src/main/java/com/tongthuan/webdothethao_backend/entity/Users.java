@@ -37,6 +37,12 @@ public class Users {
     @Column(name = "enable")
     private boolean enable;
 
+    @Column(name = "active")
+    private boolean isActive;
+
+    @Column(name = "active_code",length = 50)
+    private String activeCode;
+
     @OneToMany(mappedBy = "user",
             fetch = FetchType.LAZY, cascade = {
             CascadeType.DETACH,
@@ -55,5 +61,11 @@ public class Users {
     })
     private List<Orders> listOrders;
 
+    public boolean isActive() {
+        return isActive;
+    }
 
+    public void setActive(boolean active) {
+        isActive = active;
+    }
 }
