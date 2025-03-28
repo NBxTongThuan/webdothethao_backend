@@ -2,6 +2,7 @@ package com.tongthuan.webdothethao_backend.repository;
 
 import com.tongthuan.webdothethao_backend.entity.Cart;
 import com.tongthuan.webdothethao_backend.entity.CartItems;
+import com.tongthuan.webdothethao_backend.entity.ProductAttributes;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,7 +14,12 @@ import java.util.Optional;
 @Repository
 public interface CartItemsRepository extends JpaRepository<CartItems, String> {
 
-    @Query(value = "SELECT * FROM cart_items WHERE cart_id = :cartId", nativeQuery = true)
+    @Query("SELECT ci FROM CartItems ci WHERE ci.cart.cartId = :cartId")
     List<CartItems> findByCartId(@Param("cartId") String cartId);
+
+    @Query("SELECT ci FROM CartItems ci WHERE ci.cart = :cart AND ci.productAttribute = :productAttribute")
+    CartItems findByCartAndProductAttribute(@Param("cart") Cart cart, @Param("productAttribute") ProductAttributes productAttribute);
+
+
 
 }

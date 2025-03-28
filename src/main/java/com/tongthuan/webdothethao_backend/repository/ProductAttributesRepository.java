@@ -15,4 +15,8 @@ public interface ProductAttributesRepository extends JpaRepository<ProductAttrib
     @Query(value = "SELECT * FROM product_attributes WHERE product_id = :productId", nativeQuery = true)
     List<ProductAttributes> findByProductId(@Param("productId") String productId);
 
+    @Query("SELECT p FROM ProductAttributes p WHERE p.productAttributeId = :productAttributeId")
+    ProductAttributes findByProductAttributeId(@Param("productAttributeId") String productAttributeId);
+
+
 }

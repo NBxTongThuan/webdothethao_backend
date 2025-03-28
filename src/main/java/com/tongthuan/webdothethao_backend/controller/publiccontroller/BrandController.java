@@ -12,7 +12,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/brands")
 public class BrandController {
-
     @Autowired
     private BrandService brandService;
 

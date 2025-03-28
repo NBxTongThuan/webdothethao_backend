@@ -6,11 +6,27 @@ public class EndPoints {
     public static final String[] PUBLIC_GET_ENDPOINTS = {
             "/api/users/checkExistsByUserName",
             "/api/users/checkExistsByEmail",
-            "/api/account/Active"
+            "/api/account/Active",
+            "/api/brands/getBrandByProductId",
+            "/api/categories",
+            "/api/images/getListImages",
+            "/api/images/getFirstImage",
+            "/api/productAttribute",
+            "/api/products",
+            "/api/products/listByCateId",
+            "/api/products/listByName",
+            "/api/products/oneproduct",
+            "/api/reviews",
+
     };
 
     public static final String[] PUBLIC_POST_ENDPOINTS = {
-            "/api/account/Register"
+            "/api/account/Register",
+            "/api/account/Login",
+    };
+
+    public static final String[] CUSTOMER_POST_ENDPOINTS = {
+            "/api/cart/addToCart"
     };
 
     public static final String[] ADMIN_GET_ENDPOINTS = {

@@ -4,6 +4,8 @@ import com.tongthuan.webdothethao_backend.constantvalue.Color;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "product_attributes")
@@ -34,5 +36,23 @@ public class ProductAttributes {
     )
     @JoinColumn(name = "product_id", nullable = false)
     private Products product;
+
+    @OneToMany(mappedBy = "productAttribute",
+            fetch = FetchType.LAZY, cascade = {
+            CascadeType.DETACH,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH,
+            CascadeType.MERGE
+    })
+    private List<CartItems> cartItemsList;
+
+    @OneToMany(mappedBy = "productAttribute",
+            fetch = FetchType.LAZY, cascade = {
+            CascadeType.DETACH,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH,
+            CascadeType.MERGE
+    })
+    private List<OrderDetail> orderDetailList;
 
 }

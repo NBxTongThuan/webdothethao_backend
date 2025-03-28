@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -31,7 +32,7 @@ public class JWTService {
         Users user = usersService.findByUserName(userName);
 
         if(user!=null)
-            claims.put("ROLE",user.getRole());
+            claims.put("ROLE", user.getRole().name());
         return createToken(claims,userName);
 
     }
@@ -54,7 +55,7 @@ public class JWTService {
     }
 
     //Trích xuất thông tin
-    private Claims extractAllClaims(String token)
+    public Claims extractAllClaims(String token)
     {
         return Jwts
                 .parserBuilder()
@@ -82,7 +83,7 @@ public class JWTService {
     }
 
     //Kiểm tra Jwt hết hạn
-    private boolean isTokenExprired(String token)
+    public boolean isTokenExprired(String token)
     {
         return extractExpiration(token).before(new Date());
     }
@@ -90,7 +91,7 @@ public class JWTService {
     // Kiểm tra tính hợp lệ
     public boolean validateToken(String token, UserDetails userDetails){
         final String userName = extractUsername(token);
-        return (userName.equals(userDetails.getUsername()) && isTokenExprired(token));
+        return (userName.equals(userDetails.getUsername()) && !isTokenExprired(token));
     }
 
 }

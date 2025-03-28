@@ -2,7 +2,9 @@ package com.tongthuan.webdothethao_backend.service;
 
 import com.tongthuan.webdothethao_backend.HandleError;
 import com.tongthuan.webdothethao_backend.constantvalue.Role;
+import com.tongthuan.webdothethao_backend.entity.Cart;
 import com.tongthuan.webdothethao_backend.entity.Users;
+import com.tongthuan.webdothethao_backend.repository.CartRepository;
 import com.tongthuan.webdothethao_backend.repository.UsersRepository;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class AccountService {
 
     @Autowired
     private UsersRepository usersRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -65,7 +70,7 @@ public class AccountService {
         String text = "";
         text+="<br/> Nhấn vào nút bên dưới để kích hoạt cho tài khoản "+email;
         String url = "http://localhost:3000/Active/"+email+"/"+activeCode;
-        text+="<br/> <a href="+url+">"+"<button>KÍCH HOẠT</button>"+"</a>";
+        text+="<br/> <a href="+url+">"+"<button >KÍCH HOẠT</button>"+"</a>";
         emailService.sendMessage("tongthuan15092003@gmail.com",email,subject,text);
     }
 
@@ -89,11 +94,23 @@ public class AccountService {
             user.setActive(true);
             user.setActiveCode(null);
             usersRepository.save(user);
-            return  ResponseEntity.ok("Kích hoạt tài khoản thaành công");
+            addCart(user);
+            return  ResponseEntity.ok("Kích hoạt tài khoản thành công");
         }else {
             return  ResponseEntity.badRequest().body("Mã kích hoạt không chính xác!");
         }
 
+    }
+
+    public void addCart(Users user)
+    {
+        Cart cart = cartRepository.findCartByUserId(user.getUserId());
+        if(cart == null)
+        {
+            cart = new Cart();
+            cart.setUser(user);
+            cartRepository.save(cart);
+        }
     }
 
 

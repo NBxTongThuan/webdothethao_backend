@@ -70,14 +70,7 @@ public class Products {
     @JoinColumn(name = "type_id", nullable = false)
     private Types type;
 
-    @OneToMany(mappedBy = "product",
-            fetch = FetchType.LAZY, cascade = {
-            CascadeType.DETACH,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH,
-            CascadeType.MERGE
-    })
-    private List<CartItems> cartItemsList;
+
 
     @OneToMany(mappedBy = "product",
             fetch = FetchType.EAGER, cascade = {
@@ -88,13 +81,6 @@ public class Products {
     })
     private List<Reviews> reviewsList;
 
-    @OneToMany(mappedBy = "product",
-            fetch = FetchType.LAZY, cascade = {
-            CascadeType.DETACH,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH,
-            CascadeType.MERGE
-    })
-    private List<OrderDetail> orderDetailList;
+
 
 }

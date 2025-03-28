@@ -37,7 +37,7 @@ public class OrderDetail {
                     CascadeType.REFRESH
             }
     )
-    @JoinColumn(name = "product_id", nullable = false)
-    private Products product;
+    @JoinColumn(name = "product_attribute_id", nullable = false)
+    private ProductAttributes productAttribute;
 
 }
