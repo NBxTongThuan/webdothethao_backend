@@ -12,7 +12,11 @@ import com.tongthuan.webdothethao_backend.repository.UsersRepository;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -67,5 +71,20 @@ public class CartServiceImpl implements CartService {
             return ResponseEntity.ok().body("Thêm sản phẩm vào giỏ hàng thành công");
         }
 
+    }
+
+    @Override
+    public ResponseEntity<?> getCartByUserName(String userName) {
+        Users user = usersRepository.findByUserName(userName);
+        if(user == null)
+        {
+            return ResponseEntity.badRequest().body("gặp lỗi!");
+        }
+        return ResponseEntity.ok(Collections.singletonMap("cartId", cartRepository.findCartByUserId(user.getUserId()).getCartId()));
+    }
+
+    @Override
+    public List<CartItems> getListCartItem(String cartId) {
+        return cartItemsRepository.findByCartId(cartId);
     }
 }

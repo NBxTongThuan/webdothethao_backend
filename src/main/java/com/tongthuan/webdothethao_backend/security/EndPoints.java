@@ -17,6 +17,8 @@ public class EndPoints {
             "/api/products/listByName",
             "/api/products/oneproduct",
             "/api/reviews",
+            "/api/cart/getCartIDByUserName",
+            "/api/cart/getListCartItem"
 
     };
 

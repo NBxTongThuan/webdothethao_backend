@@ -2,6 +2,7 @@ package com.tongthuan.webdothethao_backend.repository;
 
 import com.tongthuan.webdothethao_backend.entity.Images;
 import com.tongthuan.webdothethao_backend.entity.ProductAttributes;
+import com.tongthuan.webdothethao_backend.entity.Products;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,6 +18,5 @@ public interface ProductAttributesRepository extends JpaRepository<ProductAttrib
 
     @Query("SELECT p FROM ProductAttributes p WHERE p.productAttributeId = :productAttributeId")
     ProductAttributes findByProductAttributeId(@Param("productAttributeId") String productAttributeId);
-
 
 }
