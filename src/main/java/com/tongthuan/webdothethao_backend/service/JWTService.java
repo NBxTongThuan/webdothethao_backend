@@ -22,41 +22,41 @@ public class JWTService {
 
     @Autowired
     private UsersService usersService;
-    public static final String SECRET= "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+    public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 
 
-//    Lấy token cho userName
-    public String generateToken(String userName)
-    {
+    //    Lấy token cho userName
+    public String generateToken(String userName) {
         Map<String, Object> claims = new HashMap<>();
         Users user = usersService.findByUserName(userName);
 
-        if(user!=null)
+        if (user != null) {
             claims.put("ROLE", user.getRole().name());
-        return createToken(claims,userName);
+            claims.put("isActivated", user.isActive());
+        }
+        return createToken(claims, userName);
 
     }
 
-//    Tạo token dựa trên Map và userName
-    private String createToken(Map<String,Object> claims,String userName){
+    //    Tạo token dựa trên Map và userName
+    private String createToken(Map<String, Object> claims, String userName) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+30*60*1000))
+                .setExpiration(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
                 .signWith(getSignKey())
                 .compact();
     }
 
     //Lấy secret key
-    private Key getSignKey(){
+    private Key getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
     //Trích xuất thông tin
-    public Claims extractAllClaims(String token)
-    {
+    public Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignKey())
@@ -65,31 +65,28 @@ public class JWTService {
                 .getBody();
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsFunction)
-    {
+    public <T> T extractClaim(String token, Function<Claims, T> claimsFunction) {
         final Claims claims = extractAllClaims(token);
         return claimsFunction.apply(claims);
     }
 
     // Kiểm tra thời gian hết hạn từ JWT
-    public Date extractExpiration(String token)
-    {
+    public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
+
     //Lấy tên đăng nhập
-    public String extractUsername(String token)
-    {
+    public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
     //Kiểm tra Jwt hết hạn
-    public boolean isTokenExprired(String token)
-    {
+    public boolean isTokenExprired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
     // Kiểm tra tính hợp lệ
-    public boolean validateToken(String token, UserDetails userDetails){
+    public boolean validateToken(String token, UserDetails userDetails) {
         final String userName = extractUsername(token);
         return (userName.equals(userDetails.getUsername()) && !isTokenExprired(token));
     }
