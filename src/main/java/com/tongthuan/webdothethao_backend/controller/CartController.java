@@ -40,4 +40,15 @@ public class CartController {
         return ResponseEntity.ok().body(cartService.getListCartItem(cartId).stream().map(CartItemReponse::new).toList());
     }
 
+    @DeleteMapping("/deleteCartItem")
+    public ResponseEntity<String> deleteCartItemByID(@RequestParam("cartItemID") String cartItemID)
+    {
+        if(cartService.deleteCartItem(cartItemID) != 0)
+        {
+            return ResponseEntity.ok().body("true");
+        }
+        return ResponseEntity.badRequest().body("false");
+    }
+
+
 }

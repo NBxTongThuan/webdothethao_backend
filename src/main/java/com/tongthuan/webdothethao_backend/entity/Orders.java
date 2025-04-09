@@ -29,6 +29,39 @@ public class Orders {
     @Column(name = "created_date")
     private Date createdDate;
 
+    @Column(name = "to_name")
+    private String toName;
+
+    @Column(name = "to_phone")
+    private String toPhone;
+
+    @Column(name = "to_email")
+    private String toEmail;
+
+    @Column(name = "to_province")
+    private String toProvince;
+
+    @Column(name = "to_district")
+    private String toDistrict;
+
+    @Column(name = "to_ward")
+    private String toWard;
+
+    @Column(name = "to_address", columnDefinition = "LONGTEXT")
+    private String toAddress;
+
+    @Column(name = "order_note", columnDefinition = "LONGTEXT")
+    private String orderNote;
+
+    @Column(name = "order_note_canceled", columnDefinition = "LONGTEXT")
+    private String orderNoteCanceled;
+
+    @Column(name = "date_receive")
+    private Date dateReceive;
+
+    @Column(name = "date_expected")
+    private Date dateExpected;
+
     @ManyToOne(cascade = {
             CascadeType.DETACH,
             CascadeType.MERGE,

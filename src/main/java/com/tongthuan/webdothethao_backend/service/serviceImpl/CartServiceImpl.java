@@ -12,12 +12,13 @@ import com.tongthuan.webdothethao_backend.repository.UsersRepository;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
 
+@Transactional
 @Service
 public class CartServiceImpl implements CartService {
 
@@ -86,5 +87,11 @@ public class CartServiceImpl implements CartService {
     @Override
     public List<CartItems> getListCartItem(String cartId) {
         return cartItemsRepository.findByCartId(cartId);
+    }
+
+
+    @Override
+    public int deleteCartItem(String cartItemID) {
+        return cartItemsRepository.deleteByCartItemID(cartItemID);
     }
 }

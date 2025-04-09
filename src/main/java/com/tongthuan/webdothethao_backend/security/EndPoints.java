@@ -31,6 +31,10 @@ public class EndPoints {
             "/api/cart/addToCart"
     };
 
+    public static final String[] CUSTOMER_DELETE_ENDPOINTS = {
+            "/api/cart/deleteCartItem"
+    };
+
     public static final String[] ADMIN_GET_ENDPOINTS = {
 
     };

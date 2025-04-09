@@ -25,17 +25,28 @@ public class UserDetails {
     private String lastName;
     @Column(name = "first_name")
     private String firstName;
-    @Column(name = "phone_number")
-    private String phoneNumber;
-    @Column(name = "address")
-    private String address;
-    @Column(name = "date_of_birth")
-    private Date date_of_birth;
-
 
     @Column(name = "gender")
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
+    @Column(name = "date_of_birth")
+    private Date date_of_birth;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @Column(name = "province")
+    private String province;
+
+    @Column(name = "district")
+    private String district;
+
+    @Column(name = "ward")
+    private String ward;
+
+    @Column(name = "address", columnDefinition = "LONGTEXT")
+    private String address;
 
     @Lob
     @Column(name = "avatar", columnDefinition = "LONGTEXT")

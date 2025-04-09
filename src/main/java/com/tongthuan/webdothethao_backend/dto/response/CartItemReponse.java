@@ -1,5 +1,6 @@
 package com.tongthuan.webdothethao_backend.dto.response;
 
+import com.tongthuan.webdothethao_backend.constantvalue.Color;
 import com.tongthuan.webdothethao_backend.entity.CartItems;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +18,9 @@ public class CartItemReponse {
     private String productId;
     private String productName;
     private String description;
+    private Color color;
+    private String size;
+    private int remainQuantity;
 
     public CartItemReponse(CartItems cartItems) {
         this.cartItemId = cartItems.getCartItemId();
@@ -26,5 +30,8 @@ public class CartItemReponse {
         this.productId = cartItems.getProductAttribute().getProduct().getProductId();
         this.productName = cartItems.getProductAttribute().getProduct().getProductName();
         this.description = cartItems.getProductAttribute().getProduct().getDescription();
+        this.remainQuantity = cartItems.getProductAttribute().getQuantity();
+        this.color = cartItems.getProductAttribute().getColor();
+        this.size = cartItems.getProductAttribute().getSize();
     }
 }

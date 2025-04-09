@@ -14,5 +14,6 @@ public interface CartService {
 
     public List<CartItems> getListCartItem(String cartId);
 
+    public int deleteCartItem(String cartItemId);
 
 }
