@@ -4,6 +4,8 @@ import com.tongthuan.webdothethao_backend.entity.Users;
 import com.tongthuan.webdothethao_backend.repository.UsersRepository;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -21,8 +23,8 @@ public class UsersServiceImpl implements UsersService {
 
 
     @Override
-    public List<Users> findAll() {
-        return usersRepository.findAll();
+    public Page<Users> findAllUsersPage(Pageable pageable) {
+        return usersRepository.findAll(pageable);
     }
 
     @Override

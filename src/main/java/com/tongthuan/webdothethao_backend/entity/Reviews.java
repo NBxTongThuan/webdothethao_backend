@@ -24,6 +24,10 @@ public class Reviews {
     @Column(name = "created_date")
     private Date createdDate;
 
+    @OneToOne
+    @JoinColumn(name = "order_item_id")
+    private OrderItems orderItems;
+
     @ManyToOne(cascade = {
             CascadeType.DETACH,
             CascadeType.MERGE,
@@ -32,6 +36,9 @@ public class Reviews {
     })
     @JoinColumn(name = "user_id")
     private Users user;
+
+    @Column(name = "is_edited")
+    private boolean isEdited;
 
     @ManyToOne(
             cascade = {
@@ -43,5 +50,18 @@ public class Reviews {
     )
     @JoinColumn(name = "product_id", nullable = false)
     private Products product;
+
+    @ManyToOne(
+            cascade = {
+                    CascadeType.DETACH,
+                    CascadeType.MERGE,
+                    CascadeType.PERSIST,
+                    CascadeType.REFRESH
+            }
+    )
+    @JoinColumn(name = "product_attribute_id",nullable = false)
+    private ProductAttributes productAttribute;
+
+
 
 }

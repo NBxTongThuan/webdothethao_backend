@@ -53,6 +53,14 @@ public class ProductAttributes {
             CascadeType.REFRESH,
             CascadeType.MERGE
     })
-    private List<OrderDetail> orderDetailList;
+    private List<OrderItems> orderItemsList;
+
+    @OneToMany(mappedBy = "productAttribute",
+            fetch = FetchType.LAZY, cascade = {
+            CascadeType.DETACH,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH,
+            CascadeType.MERGE})
+    private List<Reviews> reviewsList;
 
 }

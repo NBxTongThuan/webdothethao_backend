@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ReviewsService {
     List<Reviews> findByProductId(String productId);
+
+    Reviews addReviews();
 }

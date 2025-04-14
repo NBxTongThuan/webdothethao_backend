@@ -18,4 +18,9 @@ public class ProductAttributeServiceImpl implements ProductAttributeService {
     public List<ProductAttributes> findByProductId(String productId) {
         return productAttributesRepository.findByProductId(productId);
     }
+
+    @Override
+    public ProductAttributes findByProductAttributeId(String productAttributeId) {
+        return productAttributesRepository.findByProductAttributeId(productAttributeId);
+    }
 }

@@ -1,6 +1,8 @@
 package com.tongthuan.webdothethao_backend.repository;
 
 import com.tongthuan.webdothethao_backend.entity.Users;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,5 +26,7 @@ public interface UsersRepository extends JpaRepository<Users, String> {
     @Query("SELECT COUNT(u) > 0 FROM Users u WHERE u.email = :email")
     boolean existsByEmail(@Param("email") String email);
 
+    @Query("SELECT u FROM Users u WHERE u.userId = :userId")
+    Users findByUserId(@Param("userId") String userId);
 
 }

@@ -15,9 +15,9 @@ public class UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "user_detail_id", length = 50)
-    private String user_detail_id;
+    private String userDetailId;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "user_id")
     private Users user;
 
@@ -31,7 +31,7 @@ public class UserDetails {
     private Gender gender;
 
     @Column(name = "date_of_birth")
-    private Date date_of_birth;
+    private Date dateOfBirth;
 
     @Column(name = "phone_number")
     private String phoneNumber;
@@ -47,9 +47,5 @@ public class UserDetails {
 
     @Column(name = "address", columnDefinition = "LONGTEXT")
     private String address;
-
-    @Lob
-    @Column(name = "avatar", columnDefinition = "LONGTEXT")
-    private String avatar;
 
 }

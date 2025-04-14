@@ -16,7 +16,8 @@ public class ReviewController {
     @Autowired
     private ReviewsService reviewsService;
 
-    @GetMapping
+
+    @GetMapping("/getListReviews")
     public ResponseEntity<List<ReviewResponse>> getListReviewsByProductID(@RequestParam("productId") String productId)
     {
         if(productId.equals(""))

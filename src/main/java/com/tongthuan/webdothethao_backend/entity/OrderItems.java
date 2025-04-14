@@ -5,18 +5,23 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "order_details")
-public class OrderDetail {
+@Table(name = "order_items")
+public class OrderItems {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "order_detail_id", length = 50)
-    private String orderDetailId;
+    @Column(name = "order_item_id", length = 50)
+    private String orderItemId;
 
     @Column(name = "quantity")
     private int quantity;
 
     @Column(name = "price")
     private double price;
+
+    @Column(name = "is_reviewed")
+    private boolean isReviewed;
+
+
 
     @ManyToOne(
             cascade = {

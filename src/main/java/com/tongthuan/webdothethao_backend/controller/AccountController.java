@@ -1,6 +1,8 @@
 package com.tongthuan.webdothethao_backend.controller;
 
+import com.tongthuan.webdothethao_backend.dto.request.ChangePasswordRequest;
 import com.tongthuan.webdothethao_backend.dto.request.LoginRequest;
+import com.tongthuan.webdothethao_backend.dto.request.ResetPasswordRequest;
 import com.tongthuan.webdothethao_backend.dto.response.JwtResponse;
 import com.tongthuan.webdothethao_backend.entity.Users;
 import com.tongthuan.webdothethao_backend.service.AccountService;
@@ -53,6 +55,47 @@ public class AccountController {
             return ResponseEntity.badRequest().body("Tên đăng nhập hoặc mật khẩu không chính xác");
         }
         return ResponseEntity.badRequest().body("Xác thực không thành công");
+    }
+
+    @DeleteMapping("/lockAccount")
+    public ResponseEntity<?> lockAccount(@RequestParam("userId") String userId) {
+        if (userId.equalsIgnoreCase("")) {
+            return ResponseEntity.badRequest().body("nguoi dung khong ton tai");
+        }
+
+        if(accountService.lockAccount(userId) == null)
+        {
+            return ResponseEntity.badRequest().body("nguoi dung khong ton tai");
+        }
+
+        return ResponseEntity.ok().body("true");
+    }
+
+    @PutMapping("/changePassword")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest){
+        boolean result = accountService.changePassword(changePasswordRequest);
+
+        if (result) return ResponseEntity.ok().body("doi mat khau thanh cong");
+
+        return ResponseEntity.badRequest().body("thong tin tai khoan hoac mat khau khong chinh xac!");
+
+    }
+
+    @GetMapping("/forgotPassword")
+    public ResponseEntity<?> forgotPassword(@RequestParam("email") String email)
+    {
+        if(!accountService.forgotPassword(email))
+            return ResponseEntity.badRequest().body("email khong ton tai hoac gap loi trong qua trinh xu ly!");
+        return ResponseEntity.ok().build();
+    }
+
+
+    @PostMapping("/resetPassword")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest)
+    {
+        if(!accountService.resetPassword(resetPasswordRequest))
+            return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok().build();
     }
 
 

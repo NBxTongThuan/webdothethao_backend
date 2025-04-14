@@ -1,6 +1,5 @@
 package com.tongthuan.webdothethao_backend.entity;
 
-import com.tongthuan.webdothethao_backend.constantvalue.Color;
 import com.tongthuan.webdothethao_backend.constantvalue.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,6 +19,9 @@ public class Orders {
 
     @Column(name = "total_price")
     private double totalPrice;
+
+    @Column(name = "ship_fee")
+    private double shipFee;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
@@ -62,6 +64,9 @@ public class Orders {
     @Column(name = "date_expected")
     private Date dateExpected;
 
+    @Column(name = "date_canceled")
+    private Date dateCanceled;
+
     @ManyToOne(cascade = {
             CascadeType.DETACH,
             CascadeType.MERGE,
@@ -78,7 +83,7 @@ public class Orders {
             CascadeType.REFRESH,
             CascadeType.MERGE
     })
-    private List<OrderDetail> listOrderDetail;
+    private List<OrderItems> listOrderItems;
 
 
 }

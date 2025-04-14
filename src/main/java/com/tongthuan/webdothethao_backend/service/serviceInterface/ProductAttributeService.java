@@ -8,4 +8,6 @@ public interface ProductAttributeService {
 
     public List<ProductAttributes> findByProductId(String productId);
 
+    public ProductAttributes findByProductAttributeId(String productAttributeId);
+
 }

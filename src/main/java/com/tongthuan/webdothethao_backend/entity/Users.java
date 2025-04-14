@@ -34,6 +34,7 @@ public class Users {
 
     @Column(name = "created_date")
     private Date createdDate;
+
     @Column(name = "enable")
     private boolean enable;
 
@@ -42,6 +43,9 @@ public class Users {
 
     @Column(name = "active_code",length = 50)
     private String activeCode;
+
+    @Column(name = "forgot_password_code",length = 50)
+    private String forgotPasswordCode;
 
     @OneToMany(mappedBy = "user",
             fetch = FetchType.LAZY, cascade = {
