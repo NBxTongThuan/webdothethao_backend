@@ -53,7 +53,8 @@ public class EndPoints {
 
     public static final String[] CUSTOMER_POST_ENDPOINTS = {
             "/api/cart/addToCart",
-            "/api/orders/codOrder"
+            "/api/orders/codOrder",
+            "api/reviews/addReview"
     };
 
     public static final String[] CUSTOMER_DELETE_ENDPOINTS = {

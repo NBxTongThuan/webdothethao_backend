@@ -1,6 +1,8 @@
 package com.tongthuan.webdothethao_backend.controller.publiccontroller;
 
+import com.tongthuan.webdothethao_backend.dto.request.ReviewRequest.ReviewRequest;
 import com.tongthuan.webdothethao_backend.dto.response.ReviewResponse;
+import com.tongthuan.webdothethao_backend.entity.Reviews;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.ReviewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +20,20 @@ public class ReviewController {
 
 
     @GetMapping("/getListReviews")
-    public ResponseEntity<List<ReviewResponse>> getListReviewsByProductID(@RequestParam("productId") String productId)
-    {
-        if(productId.equals(""))
+    public ResponseEntity<List<ReviewResponse>> getListReviewsByProductID(@RequestParam("productId") String productId) {
+        if (productId.equalsIgnoreCase(""))
             return ResponseEntity.badRequest().build();
         return ResponseEntity.ok().body(reviewsService.findByProductId(productId).stream().map(ReviewResponse::new).toList());
     }
+
+
+    @PostMapping("/addReview")
+    public ResponseEntity<?> addReview(@RequestBody ReviewRequest reviewRequest) {
+       boolean result = reviewsService.addReviews(reviewRequest);
+        if (!result)
+            return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok().build();
+    }
+
 
 }

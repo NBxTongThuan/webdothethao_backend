@@ -16,7 +16,7 @@ public class Reviews {
     private String reviewId;
 
     @Column(name = "rating")
-    private double rating;
+    private int rating;
 
     @Column(name = "comment",columnDefinition = "LONGTEXT")
     private String comment;
@@ -26,7 +26,7 @@ public class Reviews {
 
     @OneToOne
     @JoinColumn(name = "order_item_id")
-    private OrderItems orderItems;
+    private OrderItems orderItem;
 
     @ManyToOne(cascade = {
             CascadeType.DETACH,
