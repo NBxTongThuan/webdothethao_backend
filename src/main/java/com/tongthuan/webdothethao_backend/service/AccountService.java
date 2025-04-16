@@ -2,8 +2,8 @@ package com.tongthuan.webdothethao_backend.service;
 
 import com.tongthuan.webdothethao_backend.HandleError;
 import com.tongthuan.webdothethao_backend.constantvalue.Role;
-import com.tongthuan.webdothethao_backend.dto.request.ChangePasswordRequest;
-import com.tongthuan.webdothethao_backend.dto.request.ResetPasswordRequest;
+import com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest.ChangePasswordRequest;
+import com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest.ResetPasswordRequest;
 import com.tongthuan.webdothethao_backend.entity.Cart;
 import com.tongthuan.webdothethao_backend.entity.UserDetails;
 import com.tongthuan.webdothethao_backend.entity.Users;
@@ -170,7 +170,7 @@ public class AccountService {
             return false;
         }
 
-        String forgotCode = user.getForgotPasswordCode()+"";
+        String forgotCode = user.getForgotPasswordCode();
 
         if(!forgotCode.equals(resetPasswordRequest.getForgotPasswordCode()))
             return false;

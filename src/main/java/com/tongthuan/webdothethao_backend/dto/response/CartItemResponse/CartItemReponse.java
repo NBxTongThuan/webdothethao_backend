@@ -1,4 +1,4 @@
-package com.tongthuan.webdothethao_backend.dto.response;
+package com.tongthuan.webdothethao_backend.dto.response.CartItemResponse;
 
 import com.tongthuan.webdothethao_backend.constantvalue.Color;
 import com.tongthuan.webdothethao_backend.entity.CartItems;

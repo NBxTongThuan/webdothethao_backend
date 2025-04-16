@@ -1,4 +1,4 @@
-package com.tongthuan.webdothethao_backend.dto.response;
+package com.tongthuan.webdothethao_backend.dto.response.BrandResponse;
 
 import com.tongthuan.webdothethao_backend.entity.Brand;
 import lombok.AllArgsConstructor;

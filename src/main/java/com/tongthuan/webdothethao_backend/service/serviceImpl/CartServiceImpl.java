@@ -1,6 +1,6 @@
 package com.tongthuan.webdothethao_backend.service.serviceImpl;
 
-import com.tongthuan.webdothethao_backend.dto.request.CartItemRequest;
+import com.tongthuan.webdothethao_backend.dto.request.CartItemRequest.AddCartItemRequest;
 import com.tongthuan.webdothethao_backend.entity.Cart;
 import com.tongthuan.webdothethao_backend.entity.CartItems;
 import com.tongthuan.webdothethao_backend.entity.ProductAttributes;
@@ -35,7 +35,7 @@ public class CartServiceImpl implements CartService {
     ProductAttributesRepository productAttributesRepository;
 
     @Override
-    public ResponseEntity<?> addItemToCart(CartItemRequest cartItemRequest) {
+    public ResponseEntity<?> addItemToCart(AddCartItemRequest cartItemRequest) {
 
         Users user = usersRepository.findByUserName(cartItemRequest.getUserName());
         if (user == null) {
@@ -72,16 +72,6 @@ public class CartServiceImpl implements CartService {
             return ResponseEntity.ok().body("Thêm sản phẩm vào giỏ hàng thành công");
         }
 
-    }
-
-    @Override
-    public ResponseEntity<?> getCartByUserName(String userName) {
-        Users user = usersRepository.findByUserName(userName);
-        if(user == null)
-        {
-            return ResponseEntity.badRequest().body("gặp lỗi!");
-        }
-        return ResponseEntity.ok(Collections.singletonMap("cartId", cartRepository.findCartByUserId(user.getUserId()).getCartId()));
     }
 
     @Override

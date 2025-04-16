@@ -1,11 +1,9 @@
-package com.tongthuan.webdothethao_backend.dto.request;
+package com.tongthuan.webdothethao_backend.dto.request.PaymentRequest;
 
 import com.tongthuan.webdothethao_backend.constantvalue.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.sql.Date;
 
 @Data
 @NoArgsConstructor

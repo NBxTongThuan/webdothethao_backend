@@ -1,6 +1,6 @@
 package com.tongthuan.webdothethao_backend.service.serviceImpl;
 
-import com.tongthuan.webdothethao_backend.dto.request.UserDetailRequest;
+import com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest.UserDetailRequest;
 import com.tongthuan.webdothethao_backend.entity.UserDetails;
 import com.tongthuan.webdothethao_backend.entity.Users;
 import com.tongthuan.webdothethao_backend.repository.UserDetailsRepository;

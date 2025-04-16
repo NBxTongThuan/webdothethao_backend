@@ -1,8 +1,8 @@
 package com.tongthuan.webdothethao_backend.controller;
 
-import com.tongthuan.webdothethao_backend.dto.request.ChangePasswordRequest;
-import com.tongthuan.webdothethao_backend.dto.request.LoginRequest;
-import com.tongthuan.webdothethao_backend.dto.request.ResetPasswordRequest;
+import com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest.ChangePasswordRequest;
+import com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest.LoginRequest;
+import com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest.ResetPasswordRequest;
 import com.tongthuan.webdothethao_backend.dto.response.JwtResponse;
 import com.tongthuan.webdothethao_backend.entity.Users;
 import com.tongthuan.webdothethao_backend.service.AccountService;

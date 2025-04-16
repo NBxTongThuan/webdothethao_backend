@@ -4,18 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReviewRequest {
-
-    private int rating;
+public class UpdateReviewRequest {
+    private String reviewId;
     private String comment;
-    private String orderItemId;
-    private String productId;
-    private String productAttributeId;
-    private String userName;
+    private int rating;
+
+
 
 }

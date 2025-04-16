@@ -1,6 +1,7 @@
 package com.tongthuan.webdothethao_backend.service.serviceImpl;
 
-import com.tongthuan.webdothethao_backend.dto.request.ReviewRequest.ReviewRequest;
+import com.tongthuan.webdothethao_backend.dto.request.ReviewRequest.AddReviewRequest;
+import com.tongthuan.webdothethao_backend.dto.request.ReviewRequest.UpdateReviewRequest;
 import com.tongthuan.webdothethao_backend.entity.*;
 import com.tongthuan.webdothethao_backend.repository.*;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.ReviewsService;
@@ -34,7 +35,7 @@ public class ReviewsServiceImpl implements ReviewsService {
     }
 
     @Override
-    public boolean addReviews(ReviewRequest reviewRequest) {
+    public boolean addReviews(AddReviewRequest reviewRequest) {
 
         Reviews review = reviewsRepository.findByOrderItemId(reviewRequest.getOrderItemId());
         if (review != null)
@@ -70,6 +71,26 @@ public class ReviewsServiceImpl implements ReviewsService {
         orderItem.setReviewed(true);
         orderItemRepository.saveAndFlush(orderItem);
         return true;
+    }
+
+    @Override
+    public Reviews findByOrderItemId(String orderItemId) {
+        return reviewsRepository.findByOrderItemId(orderItemId);
+    }
+
+    @Override
+    public boolean updateReview(UpdateReviewRequest updateReviewRequest) {
+
+        Reviews review = reviewsRepository.findById(updateReviewRequest.getReviewId()).orElse(null);
+        if(review == null)
+        {
+            return  false;
+        }
+
+        review.setEdited(true);
+        review.setRating(updateReviewRequest.getRating());
+        review.setComment(updateReviewRequest.getComment());
+        return reviewsRepository.saveAndFlush(review) != null;
     }
 
 }

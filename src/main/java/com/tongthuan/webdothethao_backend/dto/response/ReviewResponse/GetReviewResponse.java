@@ -1,23 +1,17 @@
-package com.tongthuan.webdothethao_backend.dto.response;
+package com.tongthuan.webdothethao_backend.dto.response.ReviewResponse;
 
 import com.tongthuan.webdothethao_backend.constantvalue.Color;
 import com.tongthuan.webdothethao_backend.entity.Reviews;
-import com.tongthuan.webdothethao_backend.entity.UserDetails;
-import com.tongthuan.webdothethao_backend.repository.UserDetailsRepository;
-import com.tongthuan.webdothethao_backend.service.serviceImpl.UserDetailServiceImpl;
-import com.tongthuan.webdothethao_backend.service.serviceInterface.UserDetailService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Date;
-import java.util.Optional;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReviewResponse {
+public class GetReviewResponse {
 
     private String reviewId;
     private double rating;
@@ -27,8 +21,7 @@ public class ReviewResponse {
     private String userName;
     private Color color;
     private String size;
-
-    public ReviewResponse(Reviews reviews){
+    public GetReviewResponse(Reviews reviews){
         this.reviewId = reviews.getReviewId();
         this.rating = reviews.getRating();
         this.comment = reviews.getComment();
@@ -38,5 +31,6 @@ public class ReviewResponse {
         this.color = reviews.getProductAttribute().getColor();
         this.size = reviews.getProductAttribute().getSize();
     }
+
 
 }

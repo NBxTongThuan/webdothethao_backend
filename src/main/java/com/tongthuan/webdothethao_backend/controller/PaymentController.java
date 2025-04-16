@@ -1,6 +1,5 @@
 package com.tongthuan.webdothethao_backend.controller;
 
-import com.tongthuan.webdothethao_backend.dto.request.PaymentRequest;
 import com.tongthuan.webdothethao_backend.dto.response.PaymentResponse;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;

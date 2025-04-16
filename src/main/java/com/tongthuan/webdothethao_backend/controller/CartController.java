@@ -1,7 +1,7 @@
 package com.tongthuan.webdothethao_backend.controller;
 
-import com.tongthuan.webdothethao_backend.dto.request.CartItemRequest;
-import com.tongthuan.webdothethao_backend.dto.response.CartItemReponse;
+import com.tongthuan.webdothethao_backend.dto.request.CartItemRequest.AddCartItemRequest;
+import com.tongthuan.webdothethao_backend.dto.response.CartItemResponse.CartItemReponse;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +18,10 @@ public class CartController {
     private CartService cartService;
 
     @PostMapping("/addToCart")
-    public ResponseEntity<?> addItemToCart(@RequestBody CartItemRequest cartItemRequest)
+    public ResponseEntity<?> addItemToCart(@RequestBody AddCartItemRequest cartItemRequest)
     {
         ResponseEntity<?> response = cartService.addItemToCart(cartItemRequest);
         return response;
-    }
-
-    @GetMapping("/getCartIDByUserName")
-    public ResponseEntity<?> getCartId(@RequestParam("userName") String userName)
-    {
-       return cartService.getCartByUserName(userName);
     }
 
     @GetMapping("/getListCartItem")

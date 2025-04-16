@@ -1,6 +1,8 @@
 package com.tongthuan.webdothethao_backend.service;
 
 import com.tongthuan.webdothethao_backend.entity.Users;
+import com.tongthuan.webdothethao_backend.repository.CartRepository;
+import com.tongthuan.webdothethao_backend.service.serviceInterface.CartService;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.UsersService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -24,6 +26,8 @@ public class JWTService {
     private UsersService usersService;
     public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 
+    @Autowired
+    private CartRepository cartRepository;
 
     //    Lấy token cho userName
     public String generateToken(String userName) {
@@ -33,6 +37,7 @@ public class JWTService {
         if (user != null) {
             claims.put("ROLE", user.getRole().name());
             claims.put("isActivated", user.isActive());
+            claims.put("cartId",cartRepository.findCartByUserId(user.getUserId()).getCartId());
         }
         return createToken(claims, userName);
 
@@ -81,14 +86,14 @@ public class JWTService {
     }
 
     //Kiểm tra Jwt hết hạn
-    public boolean isTokenExprired(String token) {
+    public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
     // Kiểm tra tính hợp lệ
     public boolean validateToken(String token, UserDetails userDetails) {
         final String userName = extractUsername(token);
-        return (userName.equals(userDetails.getUsername()) && !isTokenExprired(token));
+        return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
 }

@@ -17,7 +17,6 @@ public class EndPoints {
             "/api/products/listByName",
             "/api/products/oneproduct",
             "/api/reviews/getListReviews",
-            "/api/cart/getCartIDByUserName",
             "/api/cart/getListCartItem",
             "/api/provinces",
             "/api/districts",
@@ -28,7 +27,8 @@ public class EndPoints {
             "/api/orderItems/listOrderItem",
             "/api/payment/getPayment",
             "/api/account/forgotPassword",
-            "/api/orders/getOrderByOrderId"
+            "/api/orders/getOrderByOrderId",
+            "api/reviews/seeAReview"
     };
 
 
@@ -42,7 +42,8 @@ public class EndPoints {
             "/api/payment/updatePayment",
             "/api/orders/admin/updateOrder",
             "/api/account/changePassword",
-            "/api/orders/cancelOrder"
+            "/api/orders/cancelOrder",
+            "/api/reviews/updateReview"
     };
 
     public static final String[] PUBLIC_POST_ENDPOINTS = {
@@ -55,6 +56,7 @@ public class EndPoints {
             "/api/cart/addToCart",
             "/api/orders/codOrder",
             "api/reviews/addReview"
+
     };
 
     public static final String[] CUSTOMER_DELETE_ENDPOINTS = {

@@ -6,13 +6,8 @@ import com.tongthuan.webdothethao_backend.constantvalue.PaymentStatus;
 import com.tongthuan.webdothethao_backend.dto.adminRequest.AdminUpdateOrderRequest;
 import com.tongthuan.webdothethao_backend.dto.request.OrderRequest.CancelOrderRequest;
 import com.tongthuan.webdothethao_backend.dto.request.OrderRequest.OrderRequest;
-import com.tongthuan.webdothethao_backend.entity.OrderItems;
-import com.tongthuan.webdothethao_backend.entity.Orders;
-import com.tongthuan.webdothethao_backend.entity.Payments;
-import com.tongthuan.webdothethao_backend.entity.Users;
-import com.tongthuan.webdothethao_backend.repository.OrderItemRepository;
-import com.tongthuan.webdothethao_backend.repository.OrdersRepository;
-import com.tongthuan.webdothethao_backend.repository.PaymentsRepository;
+import com.tongthuan.webdothethao_backend.entity.*;
+import com.tongthuan.webdothethao_backend.repository.*;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.OrdersService;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.ProductAttributeService;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.UsersService;
@@ -46,6 +41,12 @@ public class OrdersServiceImpl implements OrdersService {
     @Autowired
     private OrderItemRepository orderItemRepository;
 
+    @Autowired
+    private ProductAttributesRepository productAttributesRepository;
+
+    @Autowired
+    private ProductsRepository productsRepository;
+
     @Override
     public Orders addCodOrder(OrderRequest orderRequest) {
 
@@ -69,6 +70,7 @@ public class OrdersServiceImpl implements OrdersService {
         orders.setToEmail(orderRequest.getToEmail());
         orders.setToName(orderRequest.getToName());
         orders.setToPhone(orderRequest.getToPhone());
+        orders.setDeleted(true);
 
         //orderDetails
         List<OrderItems> orderItems = new ArrayList<>();
@@ -76,15 +78,20 @@ public class OrdersServiceImpl implements OrdersService {
             OrderItems orderItems1 = new OrderItems();
             orderItems1.setOrder(orders);
             orderItems1.setPrice(item.getPrice());
+
+            ProductAttributes productAttribute = productAttributeService.findByProductAttributeId(item.getProductAttributeId());
+            if (productAttribute == null) {
+                return;
+            }
             orderItems1.setProductAttribute(
-                    productAttributeService.findByProductAttributeId(item.getProductAttributeId())
+                    productAttribute
             );
             orderItems1.setQuantity(item.getQuantity());
+            productAttribute.setQuantity(productAttribute.getQuantity() - item.getQuantity());
+            productAttributesRepository.saveAndFlush(productAttribute);
             orderItems.add(orderItems1);
         });
         orders.setListOrderItems(orderItems);
-
-
         //Payment
         Payments payments = new Payments();
         payments.setOrder(orders);
@@ -105,7 +112,7 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Override
     public Page<Orders> findByUserNameAndOrderStatus(String userName, OrderStatus orderStatus, Pageable pageable) {
-        return ordersRepository.findByUserNameAndOrderStatus(userName,orderStatus,pageable);
+        return ordersRepository.findByUserNameAndOrderStatus(userName, orderStatus, pageable);
     }
 
     @Override
@@ -115,13 +122,29 @@ public class OrdersServiceImpl implements OrdersService {
         if (order == null)
             return false;
         Payments payment = paymentsRepository.findByOrderId(adminUpdateOrderRequest.getOrderId()).orElse(null);
-        if(payment == null)
-        {
+        if (payment == null) {
             return false;
         }
 
         order.setStatus(adminUpdateOrderRequest.getOrderStatus());
+
+        if (adminUpdateOrderRequest.getOrderStatus().equals(OrderStatus.DELIVERED)) {
+
+            List<OrderItems> orderItemsList = orderItemRepository.findByOrderId(order.getOrderId());
+            for (OrderItems orderItem : orderItemsList) {
+                ProductAttributes productAttribute = productAttributesRepository.findByProductAttributeId(orderItem.getProductAttribute().getProductAttributeId());
+                if (productAttribute == null)
+                    continue;
+                Products product = productAttribute.getProduct();
+                product.setQuantitySold(product.getQuantitySold() + orderItem.getQuantity());
+                productsRepository.saveAndFlush(product);
+            }
+            order.setDateReceive(new Date(System.currentTimeMillis()));
+
+        }
+
         payment.setStatus(adminUpdateOrderRequest.getPaymentStatus());
+
         ordersRepository.saveAndFlush(order);
         paymentsRepository.saveAndFlush(payment);
         return true;
@@ -138,16 +161,25 @@ public class OrdersServiceImpl implements OrdersService {
 
         Orders order = ordersRepository.findByOrderId(cancelOrderRequest.getOrderId()).orElse(null);
 
-        if(order == null)
-        {
+        if (order == null) {
             return false;
         }
+
+        List<OrderItems> orderItemsList = orderItemRepository.findByOrderId(cancelOrderRequest.getOrderId());
+
+        orderItemsList.forEach(
+                item -> {
+                    ProductAttributes productAttribute = productAttributesRepository.findByProductAttributeId(item.getProductAttribute().getProductAttributeId());
+                    if (productAttribute == null)
+                        return;
+                    productAttribute.setQuantity(productAttribute.getQuantity() + item.getQuantity());
+                    productAttributesRepository.saveAndFlush(productAttribute);
+                });
         order.setStatus(OrderStatus.CANCELLED);
         order.setOrderNoteCanceled(cancelOrderRequest.getOrderCancelNote());
         order.setDateCanceled(new Date(System.currentTimeMillis()));
         ordersRepository.saveAndFlush(order);
         return true;
     }
-
 
 }

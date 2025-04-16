@@ -1,4 +1,4 @@
-package com.tongthuan.webdothethao_backend.dto.request;
+package com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

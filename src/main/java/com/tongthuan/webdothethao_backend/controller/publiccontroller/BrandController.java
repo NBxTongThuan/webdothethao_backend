@@ -1,6 +1,6 @@
 package com.tongthuan.webdothethao_backend.controller.publiccontroller;
 
-import com.tongthuan.webdothethao_backend.dto.response.BrandResponse;
+import com.tongthuan.webdothethao_backend.dto.response.BrandResponse.BrandResponse;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

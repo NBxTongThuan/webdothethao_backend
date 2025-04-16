@@ -1,7 +1,6 @@
 package com.tongthuan.webdothethao_backend.service.serviceImpl;
 
 import com.tongthuan.webdothethao_backend.dto.adminRequest.AdminUpdateOrderRequest;
-import com.tongthuan.webdothethao_backend.dto.request.PaymentRequest;
 import com.tongthuan.webdothethao_backend.entity.Payments;
 import com.tongthuan.webdothethao_backend.repository.PaymentsRepository;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.PaymentService;

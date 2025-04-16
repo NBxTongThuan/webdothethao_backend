@@ -1,4 +1,4 @@
-package com.tongthuan.webdothethao_backend.dto.request;
+package com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest;
 
 import com.tongthuan.webdothethao_backend.constantvalue.Gender;
 import lombok.AllArgsConstructor;

@@ -14,13 +14,13 @@ import java.util.Optional;
 @Repository
 public interface OrdersRepository extends JpaRepository<Orders, String> {
 
-    @Query("SELECT od FROM Orders od WHERE od.user.userName = :userName")
+    @Query("SELECT od FROM Orders od WHERE od.user.userName = :userName AND od.deleted = false")
     Page<Orders> findByUserName(@Param("userName") String userName,Pageable pageable);
 
-    @Query("SELECT od FROM Orders od WHERE od.user.userName = :userName AND od.status = :orderStatus")
+    @Query("SELECT od FROM Orders od WHERE od.user.userName = :userName AND od.status = :orderStatus AND od.deleted = false")
     Page<Orders> findByUserNameAndOrderStatus(@Param("userName") String userName, @Param("orderStatus") OrderStatus orderStatus, Pageable pageable);
 
-    @Query("SELECT od FROM Orders od WHERE od.orderId = :orderId")
+    @Query("SELECT od FROM Orders od WHERE od.orderId = :orderId AND od.deleted = false")
     Optional<Orders> findByOrderId(@Param("orderId") String orderId);
 
 }
