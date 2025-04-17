@@ -26,6 +26,9 @@ public class ProductAttributes {
     @Column(name = "quantity")
     private int quantity;
 
+    @Column(name = "enable")
+    private boolean enable;
+
     @ManyToOne(
             cascade = {
                     CascadeType.DETACH,

@@ -13,6 +13,5 @@ public class AdminUpdateOrderRequest {
 
     private String orderId;
     private OrderStatus orderStatus;
-    private PaymentStatus paymentStatus;
 
 }

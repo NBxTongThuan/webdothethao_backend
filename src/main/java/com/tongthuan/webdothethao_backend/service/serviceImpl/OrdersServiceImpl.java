@@ -47,6 +47,8 @@ public class OrdersServiceImpl implements OrdersService {
     @Autowired
     private ProductsRepository productsRepository;
 
+
+    //USER
     @Override
     public Orders addCodOrder(OrderRequest orderRequest) {
 
@@ -116,41 +118,6 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public boolean adminUpdateOrderByOrderId(AdminUpdateOrderRequest adminUpdateOrderRequest) {
-
-        Orders order = ordersRepository.findByOrderId(adminUpdateOrderRequest.getOrderId()).orElse(null);
-        if (order == null)
-            return false;
-        Payments payment = paymentsRepository.findByOrderId(adminUpdateOrderRequest.getOrderId()).orElse(null);
-        if (payment == null) {
-            return false;
-        }
-
-        order.setStatus(adminUpdateOrderRequest.getOrderStatus());
-
-        if (adminUpdateOrderRequest.getOrderStatus().equals(OrderStatus.DELIVERED)) {
-
-            List<OrderItems> orderItemsList = orderItemRepository.findByOrderId(order.getOrderId());
-            for (OrderItems orderItem : orderItemsList) {
-                ProductAttributes productAttribute = productAttributesRepository.findByProductAttributeId(orderItem.getProductAttribute().getProductAttributeId());
-                if (productAttribute == null)
-                    continue;
-                Products product = productAttribute.getProduct();
-                product.setQuantitySold(product.getQuantitySold() + orderItem.getQuantity());
-                productsRepository.saveAndFlush(product);
-            }
-            order.setDateReceive(new Date(System.currentTimeMillis()));
-
-        }
-
-        payment.setStatus(adminUpdateOrderRequest.getPaymentStatus());
-
-        ordersRepository.saveAndFlush(order);
-        paymentsRepository.saveAndFlush(payment);
-        return true;
-    }
-
-    @Override
     public Optional<Orders> findByOrderId(String orderId) {
         return ordersRepository.findByOrderId(orderId);
     }
@@ -161,10 +128,14 @@ public class OrdersServiceImpl implements OrdersService {
 
         Orders order = ordersRepository.findByOrderId(cancelOrderRequest.getOrderId()).orElse(null);
 
-        if (order == null) {
+        Payments payment = paymentsRepository.findByOrderId(cancelOrderRequest.getOrderId()).orElse(null);
+        if (payment == null) {
             return false;
         }
 
+        if (order == null) {
+            return false;
+        }
         List<OrderItems> orderItemsList = orderItemRepository.findByOrderId(cancelOrderRequest.getOrderId());
 
         orderItemsList.forEach(
@@ -175,11 +146,76 @@ public class OrdersServiceImpl implements OrdersService {
                     productAttribute.setQuantity(productAttribute.getQuantity() + item.getQuantity());
                     productAttributesRepository.saveAndFlush(productAttribute);
                 });
+        payment.setStatus(PaymentStatus.CANCELLED);
         order.setStatus(OrderStatus.CANCELLED);
         order.setOrderNoteCanceled(cancelOrderRequest.getOrderCancelNote());
         order.setDateCanceled(new Date(System.currentTimeMillis()));
+        paymentsRepository.saveAndFlush(payment);
         ordersRepository.saveAndFlush(order);
         return true;
+    }
+
+    //ADMIN
+    @Override
+    public boolean adminUpdateOrderByOrderId(AdminUpdateOrderRequest adminUpdateOrderRequest) {
+        Orders order = ordersRepository.findByOrderId(adminUpdateOrderRequest.getOrderId()).orElse(null);
+        if (order == null)
+            return false;
+        Payments payment = paymentsRepository.findByOrderId(adminUpdateOrderRequest.getOrderId()).orElse(null);
+        if (payment == null) {
+            return false;
+        }
+        order.setStatus(adminUpdateOrderRequest.getOrderStatus());
+
+        //CONFIRMED hoặc SHIPPING
+        if (adminUpdateOrderRequest.getOrderStatus().equals(OrderStatus.CONFIRMED) || adminUpdateOrderRequest.getOrderStatus().equals(OrderStatus.SHIPPING)) {
+            order.setDateReceive(new Date(System.currentTimeMillis()));
+            if (payment.getPaymentMethod() == PaymentMethod.VN_PAY)
+                payment.setStatus(PaymentStatus.COMPLETED);
+            else if (payment.getPaymentMethod() == PaymentMethod.CASH_ON_DELIVERY)
+                payment.setStatus(PaymentStatus.PENDING);
+        }//SHIPPING
+        else if (adminUpdateOrderRequest.getOrderStatus().equals(OrderStatus.DELIVERED)) {
+            List<OrderItems> orderItemsList = orderItemRepository.findByOrderId(order.getOrderId());
+            for (OrderItems orderItem : orderItemsList) {
+                ProductAttributes productAttribute = productAttributesRepository.findByProductAttributeId(orderItem.getProductAttribute().getProductAttributeId());
+                if (productAttribute == null)
+                    continue;
+                Products product = productAttribute.getProduct();
+                product.setQuantitySold(product.getQuantitySold() + orderItem.getQuantity());
+                productsRepository.saveAndFlush(product);
+            }
+            order.setDateReceive(new Date(System.currentTimeMillis()));
+            payment.setStatus(PaymentStatus.COMPLETED);
+        }//CANCELLED
+        else if (adminUpdateOrderRequest.getOrderStatus().equals(OrderStatus.CANCELLED)) {
+            List<OrderItems> orderItemsList = orderItemRepository.findByOrderId(adminUpdateOrderRequest.getOrderId());
+            orderItemsList.forEach(
+                    item -> {
+                        ProductAttributes productAttribute = productAttributesRepository.findByProductAttributeId(item.getProductAttribute().getProductAttributeId());
+                        if (productAttribute == null)
+                            return;
+                        productAttribute.setQuantity(productAttribute.getQuantity() + item.getQuantity());
+                        productAttributesRepository.saveAndFlush(productAttribute);
+                    });
+            order.setOrderNoteCanceled("Đơn hàng được hủy bởi người bán, vui lòng liên hệ hotline để biết thông tin!");
+            order.setDateCanceled(new Date(System.currentTimeMillis()));
+            payment.setStatus(PaymentStatus.CANCELLED);
+
+        }
+        ordersRepository.saveAndFlush(order);
+        paymentsRepository.saveAndFlush(payment);
+        return true;
+    }
+
+    @Override
+    public Page<Orders> adminGetAllOrders(Pageable pageable) {
+        return ordersRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Orders> adminGetAllOrdersByStatus(Pageable pageable, OrderStatus orderStatus) {
+        return ordersRepository.adminFindAllByOrderStatus(orderStatus, pageable);
     }
 
 }

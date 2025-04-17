@@ -39,20 +39,18 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public Users findByUserName(String userName) {
-        return usersRepository.findByUserName(userName);
+        return usersRepository.findByUserName(userName).orElse(null);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Users user = usersRepository.findByUserName(username);
+        Users user = usersRepository.findByUserName(username).orElse(null);
         if(user == null)
         {
             throw new UsernameNotFoundException("Khong tim thay nguoi dung");
         }
-
         List<GrantedAuthority> roles = Arrays.asList(new SimpleGrantedAuthority(user.getRole().name()));
-
         User user1 = new User(user.getUserName(),user.getPassword(),roles);
 
         return user1;

@@ -2,7 +2,7 @@ package com.tongthuan.webdothethao_backend.controller;
 
 import com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest.UserDetailRequest;
 import com.tongthuan.webdothethao_backend.dto.response.UserDetailResponse;
-import com.tongthuan.webdothethao_backend.entity.UserDetails;
+import com.tongthuan.webdothethao_backend.entity.UserDetail;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,7 @@ public class UserDetailController {
     @PutMapping("/updateUserDetail")
     public ResponseEntity<?> updateUserDetail(@RequestBody UserDetailRequest userDetailRequest)
     {
-        UserDetails userDetails = userDetailService.updateUserDetail(userDetailRequest);
+        UserDetail userDetails = userDetailService.updateUserDetail(userDetailRequest);
 
         if(userDetails == null)
         {

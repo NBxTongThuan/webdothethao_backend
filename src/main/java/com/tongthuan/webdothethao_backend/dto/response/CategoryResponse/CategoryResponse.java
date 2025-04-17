@@ -1,4 +1,4 @@
-package com.tongthuan.webdothethao_backend.dto.response;
+package com.tongthuan.webdothethao_backend.dto.response.CategoryResponse;
 
 import com.tongthuan.webdothethao_backend.entity.Categories;
 import lombok.AllArgsConstructor;

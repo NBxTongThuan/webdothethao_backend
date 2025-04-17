@@ -30,7 +30,6 @@ public class PaymentServiceImpl implements PaymentService {
         if (payment == null)
             return false;
 
-        payment.setStatus(adminUpdateOrderRequest.getPaymentStatus());
         paymentsRepository.saveAndFlush(payment);
         return true;
     }

@@ -1,8 +1,7 @@
 package com.tongthuan.webdothethao_backend.dto.response;
 
 import com.tongthuan.webdothethao_backend.constantvalue.Gender;
-import com.tongthuan.webdothethao_backend.entity.UserDetails;
-import com.tongthuan.webdothethao_backend.entity.Users;
+import com.tongthuan.webdothethao_backend.entity.UserDetail;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,7 +23,7 @@ public class UserDetailResponse {
    private String ward;
    private String address;
 
-    public UserDetailResponse(UserDetails userDetails) {
+    public UserDetailResponse(UserDetail userDetails) {
         this.userDetailId = userDetails.getUserDetailId();
         this.firstName = userDetails.getFirstName();
         this.lastName = userDetails.getLastName();

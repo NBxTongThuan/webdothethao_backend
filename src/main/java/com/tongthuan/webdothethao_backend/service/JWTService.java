@@ -37,7 +37,7 @@ public class JWTService {
         if (user != null) {
             claims.put("ROLE", user.getRole().name());
             claims.put("isActivated", user.isActive());
-            claims.put("cartId",cartRepository.findCartByUserId(user.getUserId()).getCartId());
+            claims.put("cartId", cartRepository.findCartByUserId(user.getUserId()).getCartId());
         }
         return createToken(claims, userName);
 

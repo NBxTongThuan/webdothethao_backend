@@ -37,7 +37,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public ResponseEntity<?> addItemToCart(AddCartItemRequest cartItemRequest) {
 
-        Users user = usersRepository.findByUserName(cartItemRequest.getUserName());
+        Users user = usersRepository.findByUserName(cartItemRequest.getUserName()).orElse(null);
         if (user == null) {
             return ResponseEntity.badRequest().body("Người dùng không tồn tại!");
         }

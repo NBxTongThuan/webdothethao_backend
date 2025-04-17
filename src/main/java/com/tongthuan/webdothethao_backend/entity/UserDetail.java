@@ -1,7 +1,6 @@
 package com.tongthuan.webdothethao_backend.entity;
 
 import com.tongthuan.webdothethao_backend.constantvalue.Gender;
-import com.tongthuan.webdothethao_backend.constantvalue.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -10,7 +9,7 @@ import java.sql.Date;
 @Data
 @Entity
 @Table(name = "user_details")
-public class UserDetails {
+public class UserDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

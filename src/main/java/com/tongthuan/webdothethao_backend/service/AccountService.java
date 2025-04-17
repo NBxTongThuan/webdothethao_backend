@@ -5,7 +5,7 @@ import com.tongthuan.webdothethao_backend.constantvalue.Role;
 import com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest.ChangePasswordRequest;
 import com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest.ResetPasswordRequest;
 import com.tongthuan.webdothethao_backend.entity.Cart;
-import com.tongthuan.webdothethao_backend.entity.UserDetails;
+import com.tongthuan.webdothethao_backend.entity.UserDetail;
 import com.tongthuan.webdothethao_backend.entity.Users;
 import com.tongthuan.webdothethao_backend.repository.CartRepository;
 import com.tongthuan.webdothethao_backend.repository.UserDetailsRepository;
@@ -58,7 +58,7 @@ public class AccountService {
         user.setRole(Role.CUSTOMER);
         user.setCreatedDate(new Date(System.currentTimeMillis()));
 
-        UserDetails userDetails = new UserDetails();
+        UserDetail userDetails = new UserDetail();
         userDetails.setUser(user);
         usersRepository.saveAndFlush(user);
         userDetailsRepository.saveAndFlush(userDetails);
@@ -135,7 +135,7 @@ public class AccountService {
     }
 
     public boolean changePassword(ChangePasswordRequest changePasswordRequest) {
-        Users user = usersRepository.findByUserName(changePasswordRequest.getUserName());
+        Users user = usersRepository.findByUserName(changePasswordRequest.getUserName()).orElse(null);
         if (user == null)
             return false;
 
@@ -151,7 +151,6 @@ public class AccountService {
         Users user = usersRepository.findByEmail(email);
         if(user == null)
         {
-            System.out.println("ABC");
             return false;
         }
         user.setForgotPasswordCode(genUUIDCode());

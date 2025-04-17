@@ -71,14 +71,7 @@ public class OrdersController {
         return ResponseEntity.ok(new OrderResponse(orders));
     }
 
-    @PutMapping("/admin/updateOrder")
-    public ResponseEntity<?> updateOrderByOrderId(@RequestBody AdminUpdateOrderRequest adminUpdateOrderRequest) {
-        boolean result = ordersService.adminUpdateOrderByOrderId(adminUpdateOrderRequest);
-        if (result)
-            return ResponseEntity.ok().body("cap nhat don hang thanh cong");
 
-        return ResponseEntity.badRequest().body("gap loi trong qua trinh xu ly!");
-    }
 
     @PutMapping("/cancelOrder")
     public ResponseEntity<?> cancelingOrder(@RequestBody CancelOrderRequest cancelOrderRequest)

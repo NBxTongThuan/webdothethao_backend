@@ -18,9 +18,9 @@ public class Images {
     @Lob
     private String data;
 
-    @Column(name = "color")
-    @Enumerated(EnumType.STRING)  // Lưu dưới dạng chuỗi
-    private Color color;
+//    @Column(name = "color")
+//    @Enumerated(EnumType.STRING)  // Lưu dưới dạng chuỗi
+//    private Color color;
 
     @Column(name = "url")
     private String url;

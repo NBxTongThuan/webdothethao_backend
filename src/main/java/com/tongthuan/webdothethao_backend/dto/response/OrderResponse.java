@@ -30,6 +30,7 @@ public class OrderResponse {
     private double shipFee;
     private Date dateReceive;
     private Date dateExpected;
+    private Date dateCancel;
 
     public OrderResponse(Orders order) {
         this.orderId = order.getOrderId();
@@ -48,5 +49,6 @@ public class OrderResponse {
         this.shipFee = order.getShipFee();
         this.dateReceive = order.getDateReceive();
         this.dateExpected = order.getDateExpected();
+        this.dateCancel = order.getDateCanceled();
     }
 }

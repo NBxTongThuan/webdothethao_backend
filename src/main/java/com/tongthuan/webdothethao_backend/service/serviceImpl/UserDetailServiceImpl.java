@@ -1,19 +1,20 @@
 package com.tongthuan.webdothethao_backend.service.serviceImpl;
 
 import com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest.UserDetailRequest;
-import com.tongthuan.webdothethao_backend.entity.UserDetails;
+import com.tongthuan.webdothethao_backend.entity.UserDetail;
 import com.tongthuan.webdothethao_backend.entity.Users;
 import com.tongthuan.webdothethao_backend.repository.UserDetailsRepository;
 import com.tongthuan.webdothethao_backend.repository.UsersRepository;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
-public class UserDetailServiceImpl implements UserDetailService {
+public class UserDetailServiceImpl implements UserDetailService{
 
     @Autowired
     UserDetailsRepository userDetailsRepository;
@@ -22,20 +23,20 @@ public class UserDetailServiceImpl implements UserDetailService {
     UsersRepository usersRepository;
 
     @Override
-    public Optional<UserDetails> findByUserName(String userName) {
+    public Optional<UserDetail> findByUserName(String userName) {
         return Optional.of(userDetailsRepository.findByUserName(userName));
     }
 
     @Transactional
     @Override
-    public UserDetails updateUserDetail(UserDetailRequest userDetailsRequest) {
+    public UserDetail updateUserDetail(UserDetailRequest userDetailsRequest) {
 
-        UserDetails userDetail = userDetailsRepository.findByUserDetailId(userDetailsRequest.getUserDetailId());
+        UserDetail userDetail = userDetailsRepository.findByUserDetailId(userDetailsRequest.getUserDetailId());
         if (userDetail == null) {
             return null;
         }
         userDetail.setUserDetailId(userDetailsRequest.getUserDetailId());
-        Users user = usersRepository.findByUserName(userDetailsRequest.getUserName());
+        Users user = usersRepository.findByUserName(userDetailsRequest.getUserName()).orElse(null);
         if (user == null) {
             return null;
         }
@@ -52,4 +53,5 @@ public class UserDetailServiceImpl implements UserDetailService {
         userDetailsRepository.saveAndFlush(userDetail);
         return userDetail;
     }
+
 }

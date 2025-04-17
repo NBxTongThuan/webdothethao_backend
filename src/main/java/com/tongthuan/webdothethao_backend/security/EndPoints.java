@@ -32,7 +32,6 @@ public class EndPoints {
     };
 
 
-
     public static final String[] PUBLIC_DELETE_ENDPOINTS = {
             "/api/account/lockAccount"
     };
@@ -64,11 +63,17 @@ public class EndPoints {
     };
 
     public static final String[] ADMIN_GET_ENDPOINTS = {
-
+            "/api/admin/getAllOrder",
+            "/api/admin/products/getAllProduct",
+            "/api/admin/productAttribute/getProductAttributeByProductId",
+            "/api/admin/brands/getAll",
+            "/api/admin/reviews/getAllReviews",
+            "/api/admin/types/getAllType"
     };
 
     public static final String[] ADMIN_POST_ENDPOINTS = {
-
+            "/api/admin/products/addProduct",
+            "/api/admin/account/Login"
     };
 
 }

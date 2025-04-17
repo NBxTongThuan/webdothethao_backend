@@ -6,6 +6,8 @@ import com.tongthuan.webdothethao_backend.entity.*;
 import com.tongthuan.webdothethao_backend.repository.*;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.ReviewsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -57,7 +59,7 @@ public class ReviewsServiceImpl implements ReviewsService {
         }
 
         review.setOrderItem(orderItem);
-        Users user = usersRepository.findByUserName(reviewRequest.getUserName());
+        Users user = usersRepository.findByUserName(reviewRequest.getUserName()).orElse(null);
 
         if (user == null) {
             return false;
@@ -91,6 +93,11 @@ public class ReviewsServiceImpl implements ReviewsService {
         review.setRating(updateReviewRequest.getRating());
         review.setComment(updateReviewRequest.getComment());
         return reviewsRepository.saveAndFlush(review) != null;
+    }
+
+    @Override
+    public Page<Reviews> getAllReview(Pageable pageable) {
+        return reviewsRepository.findAll(pageable);
     }
 
 }

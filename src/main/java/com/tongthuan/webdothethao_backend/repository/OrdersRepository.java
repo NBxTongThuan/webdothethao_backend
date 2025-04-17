@@ -23,4 +23,7 @@ public interface OrdersRepository extends JpaRepository<Orders, String> {
     @Query("SELECT od FROM Orders od WHERE od.orderId = :orderId AND od.deleted = false")
     Optional<Orders> findByOrderId(@Param("orderId") String orderId);
 
+    @Query("SELECT od FROM Orders od WHERE od.status = :orderStatus AND od.deleted = false")
+    Page<Orders> adminFindAllByOrderStatus(@Param("orderStatus") OrderStatus orderStatus, Pageable pageable);
+
 }
