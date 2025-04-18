@@ -23,6 +23,6 @@ public class CategoriesController {
     @GetMapping
     public ResponseEntity<List<CategoryResponse>> getAllCate()
     {
-        return ResponseEntity.ok().body(categoriesService.findAll().stream().map(CategoryResponse::new).toList());
+        return ResponseEntity.ok().body(categoriesService.findALl().stream().map(CategoryResponse::new).toList());
     }
 }

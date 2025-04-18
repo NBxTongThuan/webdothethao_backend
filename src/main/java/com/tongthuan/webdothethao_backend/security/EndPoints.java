@@ -68,7 +68,14 @@ public class EndPoints {
             "/api/admin/productAttribute/getProductAttributeByProductId",
             "/api/admin/brands/getAll",
             "/api/admin/reviews/getAllReviews",
-            "/api/admin/types/getAllType"
+            "/api/admin/types/getAllType",
+            "/api/admin/categories/getAllCategory",
+            "/api/admin/categories/checkCategoryExists"
+
+    };
+
+    public static final String[] ADMIN_PUT_ENDPOINTS = {
+          "/api/admin/orders/updateOrder"
     };
 
     public static final String[] ADMIN_POST_ENDPOINTS = {

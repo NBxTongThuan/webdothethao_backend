@@ -4,11 +4,14 @@ import com.tongthuan.webdothethao_backend.dto.response.CategoryResponse.Category
 import com.tongthuan.webdothethao_backend.entity.Categories;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.CategoriesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,13 +23,28 @@ public class CategoryControllerAdmin {
     @Autowired
     private CategoriesService categoriesService;
 
+    @Autowired
+    private PagedResourcesAssembler<CategoryResponse> pagedResourcesAssembler;
+
     @GetMapping("/getAllCategory")
-    public ResponseEntity<List<CategoryResponse>> getAllCategory()
-    {
-        List<Categories> categoriesList = categoriesService.findAll();
-        if(categoriesList.isEmpty())
+    public ResponseEntity<PagedModel<EntityModel<CategoryResponse>>> getAllCategory(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<CategoryResponse> categoryResponses = categoriesService.findAllPage(pageable).map(CategoryResponse::new);
+        if (categoryResponses.isEmpty())
             return ResponseEntity.badRequest().build();
-        return ResponseEntity.ok(categoriesList.stream().map(CategoryResponse::new).toList());
+        PagedModel<EntityModel<CategoryResponse>> pagedModel = pagedResourcesAssembler.toModel(categoryResponses);
+        return ResponseEntity.ok(pagedModel);
     }
+
+    @GetMapping("/checkCategoryExists")
+    public ResponseEntity<Boolean> checkExists(@RequestParam("categoryName") String categoryName) {
+
+        if (categoryName.equalsIgnoreCase("")) {
+            return ResponseEntity.badRequest().build();
+        }
+        boolean result = categoriesService.checkExistsByCategoryName(categoryName);
+        return ResponseEntity.ok(result);
+    }
+
 
 }

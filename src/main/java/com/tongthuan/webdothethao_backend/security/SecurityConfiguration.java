@@ -54,6 +54,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, EndPoints.ADMIN_POST_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.DELETE,EndPoints.CUSTOMER_DELETE_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.PUT,EndPoints.CUSTOMER_PUT_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.PUT,EndPoints.ADMIN_PUT_ENDPOINTS).permitAll()
                         .anyRequest().permitAll()
         );
         httpSecurity.cors(

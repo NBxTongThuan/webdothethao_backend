@@ -67,8 +67,8 @@ public class Orders {
     @Column(name = "date_canceled")
     private Date dateCanceled;
 
-    @Column(name = "deleted")
-    private boolean deleted;
+//    @Column(name = "deleted")
+//    private boolean deleted;
 
     @ManyToOne(cascade = {
             CascadeType.DETACH,

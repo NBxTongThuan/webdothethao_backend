@@ -17,6 +17,13 @@ public class Categories {
     @Column(name = "categories_name")
     private String categoriesName;
 
+    @Column(name = "image_data", columnDefinition = "LONGTEXT")
+    @Lob
+    private String imageData;
+
+    @Column(name = "enable")
+    private boolean enable;
+
     @OneToMany(mappedBy = "categories",
             fetch = FetchType.EAGER, cascade = {
             CascadeType.DETACH,
@@ -25,6 +32,9 @@ public class Categories {
             CascadeType.MERGE
     })
     private List<Types> typesList;
+
+
+
 
 
 }

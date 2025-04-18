@@ -72,7 +72,6 @@ public class OrdersServiceImpl implements OrdersService {
         orders.setToEmail(orderRequest.getToEmail());
         orders.setToName(orderRequest.getToName());
         orders.setToPhone(orderRequest.getToPhone());
-        orders.setDeleted(true);
 
         //orderDetails
         List<OrderItems> orderItems = new ArrayList<>();
@@ -159,10 +158,13 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public boolean adminUpdateOrderByOrderId(AdminUpdateOrderRequest adminUpdateOrderRequest) {
         Orders order = ordersRepository.findByOrderId(adminUpdateOrderRequest.getOrderId()).orElse(null);
-        if (order == null)
+        if (order == null) {
+            System.out.println("ko thay don hang");
             return false;
+        }
         Payments payment = paymentsRepository.findByOrderId(adminUpdateOrderRequest.getOrderId()).orElse(null);
         if (payment == null) {
+            System.out.println("ko thay don hang");
             return false;
         }
         order.setStatus(adminUpdateOrderRequest.getOrderStatus());
@@ -198,7 +200,7 @@ public class OrdersServiceImpl implements OrdersService {
                         productAttribute.setQuantity(productAttribute.getQuantity() + item.getQuantity());
                         productAttributesRepository.saveAndFlush(productAttribute);
                     });
-            order.setOrderNoteCanceled("Đơn hàng được hủy bởi người bán, vui lòng liên hệ hotline để biết thông tin!");
+            order.setOrderNoteCanceled(adminUpdateOrderRequest.getOrderCancelNote());
             order.setDateCanceled(new Date(System.currentTimeMillis()));
             payment.setStatus(PaymentStatus.CANCELLED);
 
