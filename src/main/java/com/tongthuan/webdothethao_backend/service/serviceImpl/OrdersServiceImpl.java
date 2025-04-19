@@ -170,14 +170,14 @@ public class OrdersServiceImpl implements OrdersService {
         order.setStatus(adminUpdateOrderRequest.getOrderStatus());
 
         //CONFIRMED hoặc SHIPPING
-        if (adminUpdateOrderRequest.getOrderStatus().equals(OrderStatus.CONFIRMED) || adminUpdateOrderRequest.getOrderStatus().equals(OrderStatus.SHIPPING)) {
+        if (adminUpdateOrderRequest.getOrderStatus() == OrderStatus.CONFIRMED || adminUpdateOrderRequest.getOrderStatus() == OrderStatus.SHIPPING) {
             order.setDateReceive(new Date(System.currentTimeMillis()));
             if (payment.getPaymentMethod() == PaymentMethod.VN_PAY)
                 payment.setStatus(PaymentStatus.COMPLETED);
             else if (payment.getPaymentMethod() == PaymentMethod.CASH_ON_DELIVERY)
                 payment.setStatus(PaymentStatus.PENDING);
         }//SHIPPING
-        else if (adminUpdateOrderRequest.getOrderStatus().equals(OrderStatus.DELIVERED)) {
+        else if (adminUpdateOrderRequest.getOrderStatus() == (OrderStatus.DELIVERED)) {
             List<OrderItems> orderItemsList = orderItemRepository.findByOrderId(order.getOrderId());
             for (OrderItems orderItem : orderItemsList) {
                 ProductAttributes productAttribute = productAttributesRepository.findByProductAttributeId(orderItem.getProductAttribute().getProductAttributeId());
@@ -190,7 +190,7 @@ public class OrdersServiceImpl implements OrdersService {
             order.setDateReceive(new Date(System.currentTimeMillis()));
             payment.setStatus(PaymentStatus.COMPLETED);
         }//CANCELLED
-        else if (adminUpdateOrderRequest.getOrderStatus().equals(OrderStatus.CANCELLED)) {
+        else if (adminUpdateOrderRequest.getOrderStatus() == (OrderStatus.CANCELLED)) {
             List<OrderItems> orderItemsList = orderItemRepository.findByOrderId(adminUpdateOrderRequest.getOrderId());
             orderItemsList.forEach(
                     item -> {

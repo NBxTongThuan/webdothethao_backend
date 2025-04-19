@@ -48,13 +48,15 @@ public class EndPoints {
     public static final String[] PUBLIC_POST_ENDPOINTS = {
             "/api/account/Register",
             "/api/account/Login",
-            "/api/account/resetPassword"
+            "/api/account/resetPassword",
+            "/api/admin/account/Login",
     };
 
     public static final String[] CUSTOMER_POST_ENDPOINTS = {
             "/api/cart/addToCart",
             "/api/orders/codOrder",
-            "api/reviews/addReview"
+            "/api/reviews/addReview",
+
 
     };
 
@@ -75,12 +77,19 @@ public class EndPoints {
     };
 
     public static final String[] ADMIN_PUT_ENDPOINTS = {
-          "/api/admin/orders/updateOrder"
+            "/api/admin/orders/updateOrder",
+            "/api/admin/categories/updateCategory",
+            "/api/admin/categories/enableCategory"
     };
 
     public static final String[] ADMIN_POST_ENDPOINTS = {
             "/api/admin/products/addProduct",
-            "/api/admin/account/Login"
+
+            "/api/admin/categories/addCategory"
+    };
+
+    public static final String[] ADMIN_DELETE_ENDPOINTS = {
+            "/api/admin/categories/deleteCategory"
     };
 
 }

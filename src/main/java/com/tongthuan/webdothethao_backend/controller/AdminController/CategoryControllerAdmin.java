@@ -1,5 +1,7 @@
 package com.tongthuan.webdothethao_backend.controller.AdminController;
 
+import com.tongthuan.webdothethao_backend.dto.adminRequest.AddCategoryRequest;
+import com.tongthuan.webdothethao_backend.dto.adminRequest.UpdateCategoryRequest;
 import com.tongthuan.webdothethao_backend.dto.response.CategoryResponse.CategoryResponse;
 import com.tongthuan.webdothethao_backend.entity.Categories;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.CategoriesService;
@@ -26,6 +28,14 @@ public class CategoryControllerAdmin {
     @Autowired
     private PagedResourcesAssembler<CategoryResponse> pagedResourcesAssembler;
 
+    @GetMapping("/getById")
+    public ResponseEntity<CategoryResponse> findById(@RequestParam("categoryId") int categoryId) {
+        Categories category = categoriesService.findById(categoryId).orElse(null);
+        if (category == null)
+            return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(new CategoryResponse(category));
+    }
+
     @GetMapping("/getAllCategory")
     public ResponseEntity<PagedModel<EntityModel<CategoryResponse>>> getAllCategory(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -44,6 +54,38 @@ public class CategoryControllerAdmin {
         }
         boolean result = categoriesService.checkExistsByCategoryName(categoryName);
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/addCategory")
+    public ResponseEntity<?> addCategory(@RequestBody AddCategoryRequest addCategoryRequest) {
+        if (addCategoryRequest == null)
+            return ResponseEntity.badRequest().body(false);
+        return ResponseEntity.ok(categoriesService.addCategory(addCategoryRequest));
+
+    }
+
+    @DeleteMapping("/disableCategory")
+    public ResponseEntity<?> disableCategoryById(@RequestParam("categoryId") int categoryId) {
+        boolean result = categoriesService.deleteCategory(categoryId);
+        if (!result)
+            return ResponseEntity.badRequest().body(false);
+        return ResponseEntity.ok(true);
+    }
+
+    @PutMapping("/enableCategory")
+    public ResponseEntity<?> enableCategoryById(@RequestParam("categoryId") int categoryId) {
+        boolean result = categoriesService.enableCategory(categoryId);
+        if (!result)
+            return ResponseEntity.badRequest().body(false);
+        return ResponseEntity.ok(true);
+    }
+
+    @PutMapping("/updateCategory")
+    public ResponseEntity<?> updateCategory(@RequestBody UpdateCategoryRequest updateCategoryRequest) {
+        boolean result = categoriesService.updateCategory(updateCategoryRequest);
+        if (!result)
+            return ResponseEntity.badRequest().body(false);
+        return ResponseEntity.ok(true);
     }
 
 

@@ -27,7 +27,6 @@ public class CartController {
     @GetMapping("/getListCartItem")
     public ResponseEntity<List<CartItemReponse>> getListCartItem(@RequestParam("cartId") String cartId)
     {
-
         if(cartId.equals("")){
             return ResponseEntity.badRequest().build();
         }

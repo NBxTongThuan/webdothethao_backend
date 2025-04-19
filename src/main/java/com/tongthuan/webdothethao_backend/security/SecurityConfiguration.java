@@ -55,6 +55,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.DELETE,EndPoints.CUSTOMER_DELETE_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.PUT,EndPoints.CUSTOMER_PUT_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.PUT,EndPoints.ADMIN_PUT_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.DELETE,EndPoints.ADMIN_DELETE_ENDPOINTS).hasAuthority("ADMIN")
                         .anyRequest().permitAll()
         );
         httpSecurity.cors(
