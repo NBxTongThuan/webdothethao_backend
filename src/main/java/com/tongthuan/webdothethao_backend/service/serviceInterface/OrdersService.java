@@ -5,6 +5,7 @@ import com.tongthuan.webdothethao_backend.dto.adminRequest.AdminUpdateOrderReque
 import com.tongthuan.webdothethao_backend.dto.request.OrderRequest.CancelOrderRequest;
 import com.tongthuan.webdothethao_backend.dto.request.OrderRequest.OrderRequest;
 import com.tongthuan.webdothethao_backend.entity.Orders;
+import com.tongthuan.webdothethao_backend.entity.Payments;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -24,6 +25,7 @@ public interface OrdersService {
 
     public boolean cancelingOrder(CancelOrderRequest cancelOrderRequest);
 
+    public boolean createVNPayOrder(OrderRequest orderRequest, String vnpTxnRef);
 
 //    forAdmin
     public Page<Orders> adminGetAllOrders(Pageable pageable);

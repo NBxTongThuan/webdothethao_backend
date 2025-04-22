@@ -12,10 +12,14 @@ public class Types {
 
     @Id
     @Column(name = "type_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int typeId;
 
     @Column(name = "type_name")
     private String typename;
+
+    @Column(name = "enable")
+    private boolean enable;
 
     @ManyToOne(
             cascade = {

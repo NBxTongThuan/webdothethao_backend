@@ -12,12 +12,14 @@ import com.tongthuan.webdothethao_backend.service.serviceInterface.OrdersService
 import com.tongthuan.webdothethao_backend.service.serviceInterface.ProductAttributeService;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +30,12 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Autowired
     private OrdersRepository ordersRepository;
+
+    @Autowired
+    private CartItemsRepository cartItemsRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     @Autowired
     private UsersService usersService;
@@ -47,20 +55,22 @@ public class OrdersServiceImpl implements OrdersService {
     @Autowired
     private ProductsRepository productsRepository;
 
+    @Autowired
+    private UsersRepository usersRepository;
 
     //USER
     @Override
     public Orders addCodOrder(OrderRequest orderRequest) {
 
-        Orders orders = new Orders();
+
         Users user = usersService.findByUserName(orderRequest.getUserName());
         if (user == null) {
             return null;
         }
+        Orders orders = new Orders();
         orders.setUser(user);
-        orders.setCreatedDate(new Date(System.currentTimeMillis()));
-        orders.setDateExpected(new Date(System.currentTimeMillis() + 30000));
-
+        orders.setCreatedDate(LocalDateTime.now());
+        orders.setDateExpected(LocalDateTime.now().plusDays(3));
         orders.setOrderNote(orderRequest.getOrderNote());
         orders.setStatus(OrderStatus.PENDING);
         orders.setTotalPrice(orderRequest.getTotalPrice());
@@ -96,8 +106,10 @@ public class OrdersServiceImpl implements OrdersService {
         //Payment
         Payments payments = new Payments();
         payments.setOrder(orders);
+        payments.setUser(user);
+        payments.setAmount(orderRequest.getTotalPrice());
         payments.setStatus(PaymentStatus.PENDING);
-        payments.setCreatedDate(new Date(System.currentTimeMillis()));
+        payments.setCreatedDate(LocalDateTime.now());
         payments.setPaymentMethod(PaymentMethod.CASH_ON_DELIVERY);
 
         ordersRepository.saveAndFlush(orders);
@@ -148,11 +160,73 @@ public class OrdersServiceImpl implements OrdersService {
         payment.setStatus(PaymentStatus.CANCELLED);
         order.setStatus(OrderStatus.CANCELLED);
         order.setOrderNoteCanceled(cancelOrderRequest.getOrderCancelNote());
-        order.setDateCanceled(new Date(System.currentTimeMillis()));
+        order.setDateCanceled(LocalDateTime.now());
         paymentsRepository.saveAndFlush(payment);
         ordersRepository.saveAndFlush(order);
         return true;
     }
+//VNPay
+    @Override
+    public boolean createVNPayOrder(OrderRequest orderRequest,String vnpTxnRef) {
+
+        Users user = usersRepository.findByUserName(orderRequest.getUserName()).orElse(null);
+
+        if(user == null)
+            return false;
+
+        Orders orders = new Orders();
+        orders.setUser(user);
+        orders.setCreatedDate(LocalDateTime.now());
+        orders.setDateExpected(LocalDateTime.now().plusDays(3));
+
+        orders.setOrderNote(orderRequest.getOrderNote());
+        orders.setStatus(OrderStatus.PENDING);
+        orders.setTotalPrice(orderRequest.getTotalPrice());
+        orders.setShipFee(orderRequest.getShipFee());
+        orders.setToProvince(orderRequest.getToProvince());
+        orders.setToDistrict(orderRequest.getToDistrict());
+        orders.setToWard(orderRequest.getToWard());
+        orders.setToAddress(orderRequest.getToAddress());
+        orders.setToEmail(orderRequest.getToEmail());
+        orders.setToName(orderRequest.getToName());
+        orders.setToPhone(orderRequest.getToPhone());
+
+        //orderDetails
+        List<OrderItems> orderItems = new ArrayList<>();
+        Arrays.stream(orderRequest.getOrderItems()).forEach(item -> {
+            OrderItems orderItems1 = new OrderItems();
+            orderItems1.setOrder(orders);
+            orderItems1.setPrice(item.getPrice());
+
+            ProductAttributes productAttribute = productAttributeService.findByProductAttributeId(item.getProductAttributeId());
+            if (productAttribute == null) {
+                return;
+            }
+            orderItems1.setProductAttribute(
+                    productAttribute
+            );
+            orderItems1.setQuantity(item.getQuantity());
+            productAttribute.setQuantity(productAttribute.getQuantity() - item.getQuantity());
+            productAttributesRepository.saveAndFlush(productAttribute);
+            orderItems.add(orderItems1);
+        });
+        orders.setListOrderItems(orderItems);
+        //Payment
+        Payments payments = new Payments();
+        payments.setOrder(orders);
+        payments.setStatus(PaymentStatus.PENDING);
+        payments.setCreatedDate(LocalDateTime.now());
+        payments.setAmount(orderRequest.getTotalPrice());
+        payments.setUser(user);
+        payments.setVnpTxnRef(vnpTxnRef);
+        payments.setPaymentMethod(PaymentMethod.VN_PAY);
+
+        ordersRepository.saveAndFlush(orders);
+        paymentsRepository.saveAndFlush(payments);
+
+        return true;
+    }
+
 
     //ADMIN
     @Override
@@ -171,7 +245,7 @@ public class OrdersServiceImpl implements OrdersService {
 
         //CONFIRMED hoặc SHIPPING
         if (adminUpdateOrderRequest.getOrderStatus() == OrderStatus.CONFIRMED || adminUpdateOrderRequest.getOrderStatus() == OrderStatus.SHIPPING) {
-            order.setDateReceive(new Date(System.currentTimeMillis()));
+            order.setDateReceive(LocalDateTime.now());
             if (payment.getPaymentMethod() == PaymentMethod.VN_PAY)
                 payment.setStatus(PaymentStatus.COMPLETED);
             else if (payment.getPaymentMethod() == PaymentMethod.CASH_ON_DELIVERY)
@@ -187,7 +261,7 @@ public class OrdersServiceImpl implements OrdersService {
                 product.setQuantitySold(product.getQuantitySold() + orderItem.getQuantity());
                 productsRepository.saveAndFlush(product);
             }
-            order.setDateReceive(new Date(System.currentTimeMillis()));
+            order.setDateReceive(LocalDateTime.now());
             payment.setStatus(PaymentStatus.COMPLETED);
         }//CANCELLED
         else if (adminUpdateOrderRequest.getOrderStatus() == (OrderStatus.CANCELLED)) {
@@ -201,7 +275,7 @@ public class OrdersServiceImpl implements OrdersService {
                         productAttributesRepository.saveAndFlush(productAttribute);
                     });
             order.setOrderNoteCanceled(adminUpdateOrderRequest.getOrderCancelNote());
-            order.setDateCanceled(new Date(System.currentTimeMillis()));
+            order.setDateCanceled(LocalDateTime.now());
             payment.setStatus(PaymentStatus.CANCELLED);
 
         }

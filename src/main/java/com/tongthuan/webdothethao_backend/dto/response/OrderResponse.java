@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -16,7 +17,7 @@ public class OrderResponse {
 
     private String orderId;
     private OrderStatus status;
-    private Date createdDate;
+    private LocalDateTime createdDate;
     private String toName;
     private String toPhone;
     private String toEmail;
@@ -28,9 +29,9 @@ public class OrderResponse {
     private String orderNoteCanceled;
     private double totalPrice;
     private double shipFee;
-    private Date dateReceive;
-    private Date dateExpected;
-    private Date dateCancel;
+    private LocalDateTime dateReceive;
+    private LocalDateTime dateExpected;
+    private LocalDateTime dateCancel;
 
     public OrderResponse(Orders order) {
         this.orderId = order.getOrderId();

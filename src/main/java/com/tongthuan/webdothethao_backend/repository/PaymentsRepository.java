@@ -14,4 +14,8 @@ public interface PaymentsRepository extends JpaRepository<Payments, String> {
     @Query("SELECT pm FROM Payments pm WHERE pm.order.orderId = :orderId")
     public Optional<Payments> findByOrderId(@Param("orderId") String orderId);
 
+    @Query("SELECT pm FROM Payments pm WHERE pm.vnpTxnRef = :vnpTxnRef")
+    public Optional<Payments> findByVnpTxnRef(@Param("vnpTxnRef") String vnpTxnRef);
+
+
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/admin/categories")
@@ -27,6 +28,12 @@ public class CategoryControllerAdmin {
 
     @Autowired
     private PagedResourcesAssembler<CategoryResponse> pagedResourcesAssembler;
+
+    @GetMapping("/findAll")
+    public ResponseEntity<List<CategoryResponse>> findAllCategory()
+    {
+        return ResponseEntity.ok(categoriesService.findALl().stream().map(CategoryResponse::new).toList());
+    }
 
     @GetMapping("/getById")
     public ResponseEntity<CategoryResponse> findById(@RequestParam("categoryId") int categoryId) {

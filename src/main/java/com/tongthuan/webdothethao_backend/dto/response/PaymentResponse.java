@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -15,7 +16,7 @@ import java.sql.Date;
 public class PaymentResponse {
 
     private String paymentId;
-    private Date createdDate;
+    private LocalDateTime createdDate;
     private PaymentMethod paymentMethod;
     private PaymentStatus paymentStatus;
     private String orderId;

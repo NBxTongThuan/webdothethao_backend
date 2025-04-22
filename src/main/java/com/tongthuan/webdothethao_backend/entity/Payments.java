@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -23,7 +24,7 @@ public class Payments {
     private PaymentMethod paymentMethod;
 
     @Column(name = "created_date")
-    private Date createdDate;
+    private LocalDateTime createdDate;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)  // Lưu dưới dạng chuỗi
@@ -32,5 +33,23 @@ public class Payments {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
     private Orders order;
+
+    @Column(name = "amount")
+    private double amount;
+
+    @Column(name = "updated_date")
+    private LocalDateTime updatedDate;
+
+    @Column(name = "vnp_txn_ref")
+    private String vnpTxnRef;
+
+    @ManyToOne(cascade = {
+            CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH
+    })
+    @JoinColumn(name = "user_id")
+    private Users user;
 
 }

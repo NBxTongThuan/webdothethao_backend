@@ -56,6 +56,7 @@ public class EndPoints {
             "/api/cart/addToCart",
             "/api/orders/codOrder",
             "/api/reviews/addReview",
+            "/api/payment/vnpay/create"
 
 
     };
@@ -72,24 +73,29 @@ public class EndPoints {
             "/api/admin/reviews/getAllReviews",
             "/api/admin/types/getAllType",
             "/api/admin/categories/getAllCategory",
-            "/api/admin/categories/checkCategoryExists"
+            "/api/admin/categories/checkCategoryExists",
+            "/api/admin/types/checkExistsType",
+            "/api/admin/categories/findAll"
 
     };
 
     public static final String[] ADMIN_PUT_ENDPOINTS = {
             "/api/admin/orders/updateOrder",
             "/api/admin/categories/updateCategory",
-            "/api/admin/categories/enableCategory"
+            "/api/admin/categories/enableCategory",
+            "/api/admin/types/enableType",
+            "/api/admin/types/updateType"
     };
 
     public static final String[] ADMIN_POST_ENDPOINTS = {
             "/api/admin/products/addProduct",
-
-            "/api/admin/categories/addCategory"
+            "/api/admin/categories/addCategory",
+            "/api/admin/types/addTypes"
     };
 
     public static final String[] ADMIN_DELETE_ENDPOINTS = {
-            "/api/admin/categories/deleteCategory"
+            "/api/admin/categories/deleteCategory",
+            "/api/admin/types/disableType",
     };
 
 }

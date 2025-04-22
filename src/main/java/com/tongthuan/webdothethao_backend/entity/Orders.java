@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -29,7 +30,7 @@ public class Orders {
 
 
     @Column(name = "created_date")
-    private Date createdDate;
+    private LocalDateTime createdDate;
 
     @Column(name = "to_name")
     private String toName;
@@ -59,13 +60,13 @@ public class Orders {
     private String orderNoteCanceled;
 
     @Column(name = "date_receive")
-    private Date dateReceive;
+    private LocalDateTime dateReceive;
 
     @Column(name = "date_expected")
-    private Date dateExpected;
+    private LocalDateTime dateExpected;
 
     @Column(name = "date_canceled")
-    private Date dateCanceled;
+    private LocalDateTime dateCanceled;
 
 //    @Column(name = "deleted")
 //    private boolean deleted;
