@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 public class OrderRequest {
 
     private String userName;
-    private double totalPrice;
-    private double shipFee;
+    private Long totalPrice;
+    private Long shipFee;
     private String orderNote;
     private String toAddress;
     private String toProvince;

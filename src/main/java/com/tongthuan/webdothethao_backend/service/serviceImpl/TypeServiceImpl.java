@@ -96,5 +96,10 @@ public class TypeServiceImpl implements TypeService {
         return true;
     }
 
+    @Override
+    public List<Types> getTypesByCategoryName(String categoryName) {
+        return typesRepository.findByCategoryName(categoryName);
+    }
+
 
 }

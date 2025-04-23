@@ -16,7 +16,7 @@ public class OrderItems {
     private int quantity;
 
     @Column(name = "price")
-    private double price;
+    private Long price;
 
     @Column(name = "is_reviewed")
     private boolean isReviewed;

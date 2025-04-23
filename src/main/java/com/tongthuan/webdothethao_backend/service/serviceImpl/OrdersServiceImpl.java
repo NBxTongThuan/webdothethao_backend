@@ -99,6 +99,7 @@ public class OrdersServiceImpl implements OrdersService {
             );
             orderItems1.setQuantity(item.getQuantity());
             productAttribute.setQuantity(productAttribute.getQuantity() - item.getQuantity());
+            productAttribute.setQuantitySold(productAttribute.getQuantitySold()+item.getQuantity());
             productAttributesRepository.saveAndFlush(productAttribute);
             orderItems.add(orderItems1);
         });
@@ -207,6 +208,10 @@ public class OrdersServiceImpl implements OrdersService {
             );
             orderItems1.setQuantity(item.getQuantity());
             productAttribute.setQuantity(productAttribute.getQuantity() - item.getQuantity());
+            productAttribute.setQuantitySold(productAttribute.getQuantitySold() + item.getQuantity());
+            Products product = productAttribute.getProduct();
+            product.setQuantitySold(product.getQuantitySold() + item.getQuantity());
+            productsRepository.saveAndFlush(product);
             productAttributesRepository.saveAndFlush(productAttribute);
             orderItems.add(orderItems1);
         });
@@ -227,6 +232,28 @@ public class OrdersServiceImpl implements OrdersService {
         return true;
     }
 
+    public void handleCancelVNPayOrder(Payments payment){
+        payment.setStatus(PaymentStatus.CANCELLED);
+        Orders order = payment.getOrder();
+        order.setStatus(OrderStatus.CANCELLED);
+        order.setOrderNoteCanceled("Đơn hàng bị hủy do thanh toán không thành công!");
+        order.setDateCanceled(LocalDateTime.now());
+        List<OrderItems> orderItemsList = order.getListOrderItems();
+        for(OrderItems orderItems:orderItemsList)
+        {
+            ProductAttributes productAttribute = orderItems.getProductAttribute();
+            productAttribute.setQuantity(productAttribute.getQuantity() + orderItems.getQuantity());
+            productAttribute.setQuantitySold(productAttribute.getQuantitySold() - orderItems.getQuantity());
+            Products product = productAttribute.getProduct();
+            product.setQuantitySold(product.getQuantitySold() - orderItems.getQuantity());
+            productsRepository.saveAndFlush(product);
+            productAttributesRepository.saveAndFlush(productAttribute);
+        }
+        ordersRepository.saveAndFlush(order);
+        paymentsRepository.save(payment);
+    }
+
+//VNPay
 
     //ADMIN
     @Override

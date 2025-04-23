@@ -3,7 +3,6 @@ package com.tongthuan.webdothethao_backend.controller.AdminController;
 import com.tongthuan.webdothethao_backend.dto.adminRequest.AddTypesRequest;
 import com.tongthuan.webdothethao_backend.dto.adminRequest.UpdateTypeRequest;
 import com.tongthuan.webdothethao_backend.dto.response.TypeResponse;
-import com.tongthuan.webdothethao_backend.entity.Types;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,7 +19,7 @@ import java.util.List;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/admin/types")
-public class TypeControllerAdmin {
+public class AdminTypeController {
 
     @Autowired
     private TypeService typeService;
@@ -41,6 +40,15 @@ public class TypeControllerAdmin {
         PagedModel<EntityModel<TypeResponse>> pagedModel = pagedResourcesAssembler.toModel(typesList);
 
         return ResponseEntity.ok(pagedModel);
+    }
+
+    @GetMapping("/getTypeByCategoryName")
+    public ResponseEntity<List<TypeResponse>> getTypesByCategoryName(@RequestParam("categoryName") String categoryName) {
+
+        if(categoryName.equalsIgnoreCase(""))
+            return ResponseEntity.badRequest().build();
+
+        return ResponseEntity.ok(typeService.getTypesByCategoryName(categoryName).stream().map(TypeResponse::new).toList());
     }
 
     @GetMapping("/checkExistsType")

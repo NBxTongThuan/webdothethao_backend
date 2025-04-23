@@ -27,6 +27,8 @@ public interface OrdersService {
 
     public boolean createVNPayOrder(OrderRequest orderRequest, String vnpTxnRef);
 
+    public void handleCancelVNPayOrder(Payments payment);
+
 //    forAdmin
     public Page<Orders> adminGetAllOrders(Pageable pageable);
 

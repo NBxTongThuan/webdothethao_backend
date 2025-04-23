@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class AddCartItemRequest {
 
     private String userName;
-    private double price;
+    private Long price;
     private int quantity;
     private String productAttributeId;
 

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,5 +25,10 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public Page<Brand> getAllBrand(Pageable pageable) {
         return brandRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Brand> getAllBrands() {
+        return brandRepository.findAll();
     }
 }

@@ -49,9 +49,9 @@ public class VnPayService {
         String vnpTxnRef = "VNP_" + System.currentTimeMillis();
         String orderInfo = "Thanh toan don hang " + vnpTxnRef;
 
-        boolean result = ordersService.createVNPayOrder(orderRequest,vnpTxnRef);
+        boolean result = ordersService.createVNPayOrder(orderRequest, vnpTxnRef);
 
-        if(!result)
+        if (!result)
             return "";
 
         // 2. Tạo param gửi VNPAY
@@ -59,7 +59,7 @@ public class VnPayService {
         vnpParams.put("vnp_Version", "2.1.0");
         vnpParams.put("vnp_Command", "pay");
         vnpParams.put("vnp_TmnCode", vnpayConfig.getTmnCode());
-        vnpParams.put("vnp_Amount", String.valueOf((long)(orderRequest.getTotalPrice() * 100)));
+        vnpParams.put("vnp_Amount", String.valueOf((long) (orderRequest.getTotalPrice() * 100)));
         vnpParams.put("vnp_CurrCode", "VND");
         vnpParams.put("vnp_TxnRef", vnpTxnRef);
         vnpParams.put("vnp_OrderInfo", orderInfo);
@@ -101,7 +101,7 @@ public class VnPayService {
         String orderInfo = "Thanh toan don hang " + vnpTxnRef;
 
         Payments payment = paymentRepo.findById(paymentId).orElse(null);
-        if(payment == null)
+        if (payment == null)
             return "";
 
         if (payment.getStatus() == PaymentStatus.COMPLETED) {
@@ -116,7 +116,7 @@ public class VnPayService {
         vnpParams.put("vnp_Version", "2.1.0");
         vnpParams.put("vnp_Command", "pay");
         vnpParams.put("vnp_TmnCode", vnpayConfig.getTmnCode());
-        vnpParams.put("vnp_Amount", String.valueOf((long)(payment.getAmount() * 100)));
+        vnpParams.put("vnp_Amount", String.valueOf((long) (payment.getAmount() * 100)));
         vnpParams.put("vnp_CurrCode", "VND");
         vnpParams.put("vnp_TxnRef", vnpTxnRef);
         vnpParams.put("vnp_OrderInfo", orderInfo);
@@ -222,13 +222,8 @@ public class VnPayService {
 
             return "success";
         } else {
-            payment.setStatus(PaymentStatus.CANCELLED);
-            Orders order = payment.getOrder();
-            order.setStatus(OrderStatus.CANCELLED);
-//            order.setDateCanceled();
-            ordersRepository.saveAndFlush(order);
-            paymentRepo.save(payment);
-            return "failed";
+            ordersService.handleCancelVNPayOrder(payment);
+            return "success";
         }
     }
 

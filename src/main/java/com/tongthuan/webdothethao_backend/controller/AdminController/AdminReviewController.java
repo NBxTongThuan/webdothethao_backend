@@ -1,6 +1,5 @@
 package com.tongthuan.webdothethao_backend.controller.AdminController;
 
-import com.tongthuan.webdothethao_backend.dto.response.ReviewResponse.GetReviewResponse;
 import com.tongthuan.webdothethao_backend.dto.response.ReviewResponse.SeeReviewResponse;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.ReviewsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/admin/reviews")
-public class ReviewControllerAdmin {
+public class AdminReviewController {
 
     @Autowired
     private ReviewsService reviewsService;

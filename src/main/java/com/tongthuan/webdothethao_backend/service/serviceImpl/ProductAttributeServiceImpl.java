@@ -5,6 +5,8 @@ import com.tongthuan.webdothethao_backend.entity.ProductAttributes;
 import com.tongthuan.webdothethao_backend.repository.ProductAttributesRepository;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.ProductAttributeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,5 +35,10 @@ public class ProductAttributeServiceImpl implements ProductAttributeService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Page<ProductAttributes> findAllByProductId(String productId, Pageable pageable) {
+        return productAttributesRepository.finAllByProductId(productId,pageable);
     }
 }

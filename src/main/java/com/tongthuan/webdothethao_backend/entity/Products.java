@@ -30,6 +30,9 @@ public class Products {
     @Column(name = "price")
     private double price;
 
+    @Column(name = "is_in_stock")
+    private boolean isInStock;
+
     @OneToMany(mappedBy = "product",
             fetch = FetchType.EAGER, cascade = {
             CascadeType.DETACH,

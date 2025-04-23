@@ -16,7 +16,7 @@ public class CartItems {
     @Column(name = "quantity")
     private int quantity;
     @Column(name = "price")
-    private double price;
+    private Long price;
 
     @ManyToOne(
             cascade = {

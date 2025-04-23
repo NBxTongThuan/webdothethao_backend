@@ -16,4 +16,6 @@ public interface BrandService {
 //    Admin
     public Page<Brand> getAllBrand(Pageable pageable);
 
+    public List<Brand> getAllBrands();
+
 }

@@ -1,5 +1,6 @@
 package com.tongthuan.webdothethao_backend.service.serviceInterface;
 
+import com.tongthuan.webdothethao_backend.dto.adminRequest.UpdateProductRequest;
 import com.tongthuan.webdothethao_backend.dto.request.ProductRequest.ProductRequest;
 import com.tongthuan.webdothethao_backend.entity.Products;
 import org.springframework.data.domain.Page;
@@ -21,4 +22,10 @@ public interface ProductsService {
     Page<Products> getListProductsByProductName(String productName, Pageable pageable);
 
     boolean addProduct(ProductRequest productRequest);
+
+    boolean disableInStock(String productId);
+
+    boolean inStock(String productId);
+
+    boolean updateProduct(UpdateProductRequest updateProductRequest);
 }

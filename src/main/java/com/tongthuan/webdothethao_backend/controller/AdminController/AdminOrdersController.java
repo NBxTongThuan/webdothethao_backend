@@ -3,7 +3,6 @@ package com.tongthuan.webdothethao_backend.controller.AdminController;
 import com.tongthuan.webdothethao_backend.constantvalue.OrderStatus;
 import com.tongthuan.webdothethao_backend.dto.adminRequest.AdminUpdateOrderRequest;
 import com.tongthuan.webdothethao_backend.dto.response.OrderResponse;
-import com.tongthuan.webdothethao_backend.repository.OrdersRepository;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/admin/orders")
-public class OrdersControllerAdmin {
+public class AdminOrdersController {
 
     @Autowired
     private OrdersService ordersService;
