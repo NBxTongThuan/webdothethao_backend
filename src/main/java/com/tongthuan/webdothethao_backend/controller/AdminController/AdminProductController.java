@@ -1,5 +1,6 @@
 package com.tongthuan.webdothethao_backend.controller.AdminController;
 
+import com.tongthuan.webdothethao_backend.dto.adminRequest.CheckProductExistsRequest;
 import com.tongthuan.webdothethao_backend.dto.adminRequest.UpdateProductRequest;
 import com.tongthuan.webdothethao_backend.dto.request.ProductRequest.ProductRequest;
 import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.AdminProductsResponse;
@@ -69,6 +70,16 @@ public class AdminProductController {
         if(!result)
             return ResponseEntity.ok(false);
         return ResponseEntity.ok(true);
+    }
+
+    @PostMapping("/checkExists")
+    public ResponseEntity<Boolean> checkExistsByProductNameTypeNameBrandName(@RequestBody CheckProductExistsRequest checkProductExistsRequest)
+    {
+        boolean result = productsService.checkExistsByProductName(checkProductExistsRequest.getProductName(),checkProductExistsRequest.getTypeName(),checkProductExistsRequest.getBrandName());
+        if(!result)
+            return ResponseEntity.ok(false);
+        return ResponseEntity.ok(true);
+
     }
 
 

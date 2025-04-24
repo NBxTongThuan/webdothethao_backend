@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateImageRequest {
-    private String imageId;
-    private String name;
-    private String url;
-    private String data;
+public class CheckProductExistsRequest {
+    private String productName;
+    private String typeName;
+    private String brandName;
+
 }

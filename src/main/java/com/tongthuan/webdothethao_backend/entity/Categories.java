@@ -1,5 +1,6 @@
 package com.tongthuan.webdothethao_backend.entity;
 
+import com.tongthuan.webdothethao_backend.constantvalue.Size;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -23,6 +24,10 @@ public class Categories {
 
     @Column(name = "enable")
     private boolean enable;
+
+    @Column(name = "size")
+    @Enumerated(EnumType.STRING)
+    public Size size;
 
     @OneToMany(mappedBy = "categories",
             fetch = FetchType.EAGER, cascade = {

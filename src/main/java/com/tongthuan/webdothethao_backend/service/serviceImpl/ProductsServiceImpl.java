@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,7 @@ public class ProductsServiceImpl implements ProductsService {
     @Autowired
     private ProductAttributeService productAttributeService;
 
+    @Autowired
     private ImagesRepository imagesRepository;
 
     @Override
@@ -80,6 +82,7 @@ public class ProductsServiceImpl implements ProductsService {
         product.setProductName(productRequest.getProductName());
         product.setDescription(productRequest.getProductDescription());
         product.setPrice(productRequest.getPrice());
+        product.setCreatedDate(LocalDateTime.now());
 
         List<ProductAttributes> productAttributesList = new ArrayList<>();
 
@@ -166,7 +169,7 @@ public class ProductsServiceImpl implements ProductsService {
                         image.setProduct(product);
                         image.setData(updateImageRequest.getData());
                         image.setUrl(updateImageRequest.getUrl());
-                        image.setName(updateImageRequest.getImageName());
+                        image.setName(updateImageRequest.getName());
                         imagesList.add(image);
                     }
                 }else{
@@ -174,7 +177,7 @@ public class ProductsServiceImpl implements ProductsService {
                     image.setProduct(product);
                     image.setData(updateImageRequest.getData());
                     image.setUrl(updateImageRequest.getUrl());
-                    image.setName(updateImageRequest.getImageName());
+                    image.setName(updateImageRequest.getName());
                     imagesList.add(image);
                 }
             }
@@ -186,6 +189,11 @@ public class ProductsServiceImpl implements ProductsService {
 
         productsRepository.saveAndFlush(product);
         return true;
+    }
+
+    @Override
+    public boolean checkExistsByProductName(String productName, String typeName,String brandName) {
+        return productsRepository.findProductsByProductNameAndTypeName(productName, typeName,brandName).isPresent();
     }
 
 

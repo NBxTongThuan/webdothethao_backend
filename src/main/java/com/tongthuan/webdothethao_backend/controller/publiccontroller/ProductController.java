@@ -1,5 +1,6 @@
 package com.tongthuan.webdothethao_backend.controller.publiccontroller;
 
+import com.tongthuan.webdothethao_backend.dto.adminRequest.CheckProductExistsRequest;
 import com.tongthuan.webdothethao_backend.dto.response.ProductsResponse;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.ProductsService;
 import lombok.RequiredArgsConstructor;
@@ -77,6 +78,7 @@ public class ProductController {
         }
         return ResponseEntity.ok().body(productsServiceInterface.getByProductId(productId).map(ProductsResponse::new));
     }
+
 
 
 }

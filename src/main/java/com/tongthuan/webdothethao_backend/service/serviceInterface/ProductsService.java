@@ -28,4 +28,6 @@ public interface ProductsService {
     boolean inStock(String productId);
 
     boolean updateProduct(UpdateProductRequest updateProductRequest);
+
+    boolean checkExistsByProductName(String productName, String typeName,String brandName);
 }
