@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -56,7 +57,7 @@ public class AccountService {
         user.setActive(false);
         user.setEnable(true);
         user.setRole(Role.CUSTOMER);
-        user.setCreatedDate(new Date(System.currentTimeMillis()));
+        user.setCreatedDate(LocalDateTime.now());
 
         UserDetail userDetails = new UserDetail();
         userDetails.setUser(user);
@@ -82,7 +83,6 @@ public class AccountService {
     private void sendActiveEmail(String email, String activeCode) {
         String subject = "Kích hoạt tài khoản tại web YOUSPORT";
         String text = "";
-
         text += "<div style=\"font-family: Arial, sans-serif; font-size: 14px; color: #333; padding: 20px;\">";
         text += "<h2 style=\"color: #2e7d32;\">Kích hoạt tài khoản của bạn</h2>";
         text += "<p>Chào bạn,</p>";
@@ -95,7 +95,6 @@ public class AccountService {
         text += "<p style=\"margin-top: 20px;\">Nếu bạn không thực hiện hành động này, hãy bỏ qua email này.</p>";
         text += "<p>Trân trọng,<br/>Đội ngũ YOUSPORT</p>";
         text += "</div>";
-
         emailService.sendMessage("tongthuan15092003@gmail.com", email, subject, text);
 
     }

@@ -52,4 +52,10 @@ public class AdminOrdersController {
         return ResponseEntity.badRequest().body("gap loi trong qua trinh xu ly!");
     }
 
+    @GetMapping("/totalOrderToday")
+    public ResponseEntity<Long> getTotalOrderToday()
+    {
+        return ResponseEntity.ok(ordersService.getTotalToDayOrder());
+    }
+
 }

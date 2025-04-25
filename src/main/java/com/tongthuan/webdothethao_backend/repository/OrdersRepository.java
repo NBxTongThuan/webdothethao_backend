@@ -26,5 +26,7 @@ public interface OrdersRepository extends JpaRepository<Orders, String> {
     @Query("SELECT od FROM Orders od WHERE od.status = :orderStatus")
     Page<Orders> adminFindAllByOrderStatus(@Param("orderStatus") OrderStatus orderStatus, Pageable pageable);
 
+    @Query("SELECT COUNT(o) FROM Orders o WHERE DAY(o.createdDate) = :today AND DAY(o.createdDate) = :year")
+    Long countOrderToDay(@Param("today") int today, @Param("year")int year);
 
 }

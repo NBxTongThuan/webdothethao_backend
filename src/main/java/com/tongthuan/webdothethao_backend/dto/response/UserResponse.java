@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -16,7 +17,7 @@ public class UserResponse {
     private String email;
     private String role;
     private boolean active;
-    private Date createdDate;
+    private LocalDateTime createdDate;
     private boolean enable;
 
     public UserResponse(Users user) {

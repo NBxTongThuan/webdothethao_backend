@@ -29,4 +29,10 @@ public interface UsersRepository extends JpaRepository<Users, String> {
     @Query("SELECT u FROM Users u WHERE u.userId = :userId")
     Users findByUserId(@Param("userId") String userId);
 
+    @Query("SELECT COUNT(u) FROM Users u WHERE MONTH(u.createdDate) = :month AND YEAR(u.createdDate) = :year")
+    Long countByMonthAndYear(@Param("month") int month, @Param("year") int year);
+
+    @Query("SELECT COUNT(u) FROM Users u")
+    Long countAll();
+
 }

@@ -83,6 +83,7 @@ public class ProductsServiceImpl implements ProductsService {
         product.setDescription(productRequest.getProductDescription());
         product.setPrice(productRequest.getPrice());
         product.setCreatedDate(LocalDateTime.now());
+        product.setInStock(true);
 
         List<ProductAttributes> productAttributesList = new ArrayList<>();
 

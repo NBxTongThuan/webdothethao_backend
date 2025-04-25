@@ -27,4 +27,6 @@ public interface CategoriesService {
 
     Optional<Categories> findById(int categoryId);
 
+    Categories findByName(String categoryName);
+
 }

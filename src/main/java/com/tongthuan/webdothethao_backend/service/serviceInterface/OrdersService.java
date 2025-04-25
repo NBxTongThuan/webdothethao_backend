@@ -35,4 +35,7 @@ public interface OrdersService {
     public boolean adminUpdateOrderByOrderId(AdminUpdateOrderRequest adminUpdateOrderRequest);
 
     public Page<Orders> adminGetAllOrdersByStatus(Pageable pageable,OrderStatus orderStatus);
+
+    Long getTotalToDayOrder();
+
 }

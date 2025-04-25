@@ -84,4 +84,9 @@ public class CategoriesServiceImpl implements CategoriesService {
     public Optional<Categories> findById(int categoryId) {
         return categoriesRepository.findById(categoryId);
     }
+
+    @Override
+    public Categories findByName(String categoryName) {
+        return categoriesRepository.findByName(categoryName).orElse(null);
+    }
 }

@@ -1,5 +1,6 @@
 package com.tongthuan.webdothethao_backend.service.serviceImpl;
 
+import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.UserStatsResponse;
 import com.tongthuan.webdothethao_backend.entity.Users;
 import com.tongthuan.webdothethao_backend.repository.UsersRepository;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.UsersService;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,6 +42,32 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public Users findByUserName(String userName) {
         return usersRepository.findByUserName(userName).orElse(null);
+    }
+
+    @Override
+    public UserStatsResponse getUserStats() {
+        LocalDate now = LocalDate.now();
+
+        int currentMonth = now.getMonthValue();
+        int currentYear = now.getYear();
+
+        LocalDate lastMonthDate = now.minusMonths(1);
+        int lastMonth = lastMonthDate.getMonthValue();
+        int lastYear = lastMonthDate.getYear();
+
+        Long currentTotal = usersRepository.countByMonthAndYear(currentMonth, currentYear);
+        Long total = usersRepository.countAll();
+
+        Long lastMonthTotal = total - currentTotal;
+
+        double percentChange = 0.0;
+        if (lastMonthTotal != 0) {
+            percentChange = ((double)(total - lastMonthTotal) / lastMonthTotal) * 100;
+        } else if (currentTotal > 0) {
+            percentChange = 100.0;
+        }
+
+        return new UserStatsResponse(total, lastMonthTotal, percentChange);
     }
 
     @Override

@@ -43,6 +43,14 @@ public class AdminCategoryController {
         return ResponseEntity.ok(new CategoryResponse(category));
     }
 
+    @GetMapping("/getByCategoryName")
+    public ResponseEntity<CategoryResponse> findByName(@RequestParam("categoryName") String categoryName) {
+        Categories category = categoriesService.findByName(categoryName);
+        if (category == null)
+            return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(new CategoryResponse(category));
+    }
+
     @GetMapping("/getAllCategory")
     public ResponseEntity<PagedModel<EntityModel<CategoryResponse>>> getAllCategory(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size) {
         Pageable pageable = PageRequest.of(page, size);

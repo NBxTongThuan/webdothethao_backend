@@ -1,5 +1,6 @@
 package com.tongthuan.webdothethao_backend.controller;
 
+import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.UserStatsResponse;
 import com.tongthuan.webdothethao_backend.dto.response.ProductsResponse;
 import com.tongthuan.webdothethao_backend.dto.response.UserResponse;
 import com.tongthuan.webdothethao_backend.entity.Products;
@@ -53,5 +54,12 @@ public class UsersController {
 
         return ResponseEntity.ok(pagedModel);
     }
+
+    @GetMapping("/stats")
+    public ResponseEntity<UserStatsResponse> getUserStats() {
+        UserStatsResponse response = usersService.getUserStats();
+        return ResponseEntity.ok(response);
+    }
+
 
 }
