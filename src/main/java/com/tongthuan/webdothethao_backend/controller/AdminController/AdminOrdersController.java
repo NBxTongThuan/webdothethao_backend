@@ -2,6 +2,7 @@ package com.tongthuan.webdothethao_backend.controller.AdminController;
 
 import com.tongthuan.webdothethao_backend.constantvalue.OrderStatus;
 import com.tongthuan.webdothethao_backend.dto.adminRequest.AdminUpdateOrderRequest;
+import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.RevenueByDateResponse;
 import com.tongthuan.webdothethao_backend.dto.response.OrderResponse;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,10 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -57,5 +62,19 @@ public class AdminOrdersController {
     {
         return ResponseEntity.ok(ordersService.getTotalToDayOrder());
     }
+
+    @GetMapping("/getRevenueOfMonth")
+    public  ResponseEntity<Long> getRevenueOfMonth()
+    {
+        return  ResponseEntity.ok(ordersService.getRevenueOfMonth());
+    }
+
+
+    @GetMapping("/getRevenueByDate")
+    public ResponseEntity<List<RevenueByDateResponse>> getRevenueByDate(@RequestParam("start") LocalDate start, @RequestParam("end") LocalDate end)
+    {
+        return ResponseEntity.ok(ordersService.getRevenueByDateResponse(start,end));
+    }
+
 
 }

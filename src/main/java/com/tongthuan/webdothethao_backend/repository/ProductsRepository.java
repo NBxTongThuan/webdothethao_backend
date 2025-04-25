@@ -27,4 +27,7 @@ public interface ProductsRepository extends JpaRepository<Products, String> {
     @Query("SELECT p FROM Products p WHERE p.productName = :productName AND p.type.typename = :typeName AND p.brand.brandName = :brandName")
     Optional<Products> findProductsByProductNameAndTypeName(@Param("productName") String productName, @Param("typeName") String typeName,@Param("brandName") String brandName);
 
+    @Query("SELECT COUNT(p) FROM Products p WHERE p.isInStock = true")
+    Long countProductInStock();
+
 }

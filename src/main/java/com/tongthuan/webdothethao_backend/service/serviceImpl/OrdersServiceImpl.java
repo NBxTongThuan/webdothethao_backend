@@ -6,6 +6,7 @@ import com.tongthuan.webdothethao_backend.constantvalue.PaymentStatus;
 import com.tongthuan.webdothethao_backend.dto.adminRequest.AdminUpdateOrderRequest;
 import com.tongthuan.webdothethao_backend.dto.request.OrderRequest.CancelOrderRequest;
 import com.tongthuan.webdothethao_backend.dto.request.OrderRequest.OrderRequest;
+import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.RevenueByDateResponse;
 import com.tongthuan.webdothethao_backend.entity.*;
 import com.tongthuan.webdothethao_backend.repository.*;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.OrdersService;
@@ -19,12 +20,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrdersServiceImpl implements OrdersService {
@@ -100,7 +104,7 @@ public class OrdersServiceImpl implements OrdersService {
             );
             orderItems1.setQuantity(item.getQuantity());
             productAttribute.setQuantity(productAttribute.getQuantity() - item.getQuantity());
-            productAttribute.setQuantitySold(productAttribute.getQuantitySold()+item.getQuantity());
+            productAttribute.setQuantitySold(productAttribute.getQuantitySold() + item.getQuantity());
             productAttributesRepository.saveAndFlush(productAttribute);
             orderItems.add(orderItems1);
         });
@@ -167,13 +171,14 @@ public class OrdersServiceImpl implements OrdersService {
         ordersRepository.saveAndFlush(order);
         return true;
     }
-//VNPay
+
+    //VNPay
     @Override
-    public boolean createVNPayOrder(OrderRequest orderRequest,String vnpTxnRef) {
+    public boolean createVNPayOrder(OrderRequest orderRequest, String vnpTxnRef) {
 
         Users user = usersRepository.findByUserName(orderRequest.getUserName()).orElse(null);
 
-        if(user == null)
+        if (user == null)
             return false;
 
         Orders orders = new Orders();
@@ -233,15 +238,14 @@ public class OrdersServiceImpl implements OrdersService {
         return true;
     }
 
-    public void handleCancelVNPayOrder(Payments payment){
+    public void handleCancelVNPayOrder(Payments payment) {
         payment.setStatus(PaymentStatus.CANCELLED);
         Orders order = payment.getOrder();
         order.setStatus(OrderStatus.CANCELLED);
         order.setOrderNoteCanceled("Đơn hàng bị hủy do thanh toán không thành công!");
         order.setDateCanceled(LocalDateTime.now());
         List<OrderItems> orderItemsList = order.getListOrderItems();
-        for(OrderItems orderItems:orderItemsList)
-        {
+        for (OrderItems orderItems : orderItemsList) {
             ProductAttributes productAttribute = orderItems.getProductAttribute();
             productAttribute.setQuantity(productAttribute.getQuantity() + orderItems.getQuantity());
             productAttribute.setQuantitySold(productAttribute.getQuantitySold() - orderItems.getQuantity());
@@ -331,7 +335,27 @@ public class OrdersServiceImpl implements OrdersService {
 
         int year = now.getYear();
 
-        return ordersRepository.countOrderToDay(today,year);
+        return ordersRepository.countOrderToDay(today, year);
+    }
+
+    @Override
+    public Long getRevenueOfMonth() {
+        LocalDate now = LocalDate.now();
+        int year = now.getYear();
+        int month = now.getMonthValue();
+        return ordersRepository.getRevenueOfMonth(OrderStatus.DELIVERED, month, year);
+    }
+
+    @Override
+    public List<RevenueByDateResponse> getRevenueByDateResponse(LocalDate start, LocalDate end) {
+
+        LocalDateTime startDateTime = start.atStartOfDay();
+        LocalDateTime endDateTime = end.atTime(LocalTime.MAX);
+
+        return ordersRepository.getRevenueByDayBetween(OrderStatus.DELIVERED,startDateTime,endDateTime).stream().map(row -> new RevenueByDateResponse(
+                ((Date) row[0]).toLocalDate(),
+                (Long) row[1]
+        )).collect(Collectors.toList());
     }
 
 }

@@ -30,4 +30,6 @@ public interface ProductsService {
     boolean updateProduct(UpdateProductRequest updateProductRequest);
 
     boolean checkExistsByProductName(String productName, String typeName,String brandName);
+
+    Long getCountProductIsInStock();
 }

@@ -82,5 +82,11 @@ public class AdminProductController {
 
     }
 
+    @GetMapping("/getCountIsInStockProduct")
+    public ResponseEntity<Long> getCountIsInStockProduct()
+    {
+        return ResponseEntity.ok(productsService.getCountProductIsInStock());
+    }
+
 
 }

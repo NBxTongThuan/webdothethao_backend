@@ -197,5 +197,10 @@ public class ProductsServiceImpl implements ProductsService {
         return productsRepository.findProductsByProductNameAndTypeName(productName, typeName,brandName).isPresent();
     }
 
+    @Override
+    public Long getCountProductIsInStock() {
+        return productsRepository.countProductInStock();
+    }
+
 
 }

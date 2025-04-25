@@ -4,11 +4,15 @@ import com.tongthuan.webdothethao_backend.constantvalue.OrderStatus;
 import com.tongthuan.webdothethao_backend.dto.adminRequest.AdminUpdateOrderRequest;
 import com.tongthuan.webdothethao_backend.dto.request.OrderRequest.CancelOrderRequest;
 import com.tongthuan.webdothethao_backend.dto.request.OrderRequest.OrderRequest;
+import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.RevenueByDateResponse;
 import com.tongthuan.webdothethao_backend.entity.Orders;
 import com.tongthuan.webdothethao_backend.entity.Payments;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface OrdersService {
@@ -37,5 +41,9 @@ public interface OrdersService {
     public Page<Orders> adminGetAllOrdersByStatus(Pageable pageable,OrderStatus orderStatus);
 
     Long getTotalToDayOrder();
+
+    Long getRevenueOfMonth();
+
+    List<RevenueByDateResponse> getRevenueByDateResponse(LocalDate start, LocalDate end);
 
 }
