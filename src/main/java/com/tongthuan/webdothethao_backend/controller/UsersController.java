@@ -44,6 +44,7 @@ public class UsersController {
         return usersService.checkExistsByEmail(email);
     }
 
+    //Admin
     @GetMapping("/allUser")
     public ResponseEntity<PagedModel<EntityModel<UserResponse>>> getAllUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size) { // Trả về List<Users>
 

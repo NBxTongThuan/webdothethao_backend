@@ -72,6 +72,21 @@ public class AccountController {
         return ResponseEntity.ok().body("true");
     }
 
+
+    @PutMapping("/unLockAccount")
+    public ResponseEntity<?> unLockAccount(@RequestParam("userId") String userId) {
+        if (userId.equalsIgnoreCase("")) {
+            return ResponseEntity.badRequest().body("nguoi dung khong ton tai");
+        }
+
+        if(accountService.unLockAccount(userId) == null)
+        {
+            return ResponseEntity.badRequest().body("nguoi dung khong ton tai");
+        }
+
+        return ResponseEntity.ok().body("true");
+    }
+
     @PutMapping("/changePassword")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest){
         boolean result = accountService.changePassword(changePasswordRequest);

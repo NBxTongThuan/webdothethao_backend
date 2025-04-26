@@ -75,6 +75,14 @@ public class AccountService {
         return usersRepository.saveAndFlush(user);
     }
 
+    @Transactional
+    public Users unLockAccount(String userId) {
+        Users user = usersRepository.findByUserId(userId);
+        user.setEnable(true);
+        return usersRepository.saveAndFlush(user);
+    }
+
+
 
     private String genUUIDCode() {
         return UUID.randomUUID().toString();
