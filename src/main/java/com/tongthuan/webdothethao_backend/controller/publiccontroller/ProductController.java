@@ -80,5 +80,17 @@ public class ProductController {
     }
 
 
+    @GetMapping("/top4")
+    public ResponseEntity<PagedModel<EntityModel<ProductsResponse>>> findTop4Selling(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<ProductsResponse> productsResponses = productsServiceInterface.findTop4Selling(pageable)
+                .map(ProductsResponse::new);
+        PagedModel<EntityModel<ProductsResponse>> pagedModel = pagedAssembler.toModel(productsResponses);
+
+        return ResponseEntity.ok(pagedModel);
+
+    }
+
 
 }

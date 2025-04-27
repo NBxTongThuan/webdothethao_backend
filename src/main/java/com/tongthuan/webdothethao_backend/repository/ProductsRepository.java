@@ -30,4 +30,7 @@ public interface ProductsRepository extends JpaRepository<Products, String> {
     @Query("SELECT COUNT(p) FROM Products p WHERE p.isInStock = true")
     Long countProductInStock();
 
+    @Query("SELECT p FROM Products p ORDER BY p.quantitySold DESC")
+    Page<Products> findTop4BestSellingProducts(Pageable pageable);
+
 }

@@ -32,4 +32,7 @@ public interface ProductsService {
     boolean checkExistsByProductName(String productName, String typeName,String brandName);
 
     Long getCountProductIsInStock();
+
+    Page<Products> findTop4Selling(Pageable pageable);
+
 }

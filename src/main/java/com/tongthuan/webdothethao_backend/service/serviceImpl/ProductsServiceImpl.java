@@ -202,5 +202,10 @@ public class ProductsServiceImpl implements ProductsService {
         return productsRepository.countProductInStock();
     }
 
+    @Override
+    public Page<Products> findTop4Selling(Pageable pageable) {
+        return productsRepository.findTop4BestSellingProducts(pageable);
+    }
+
 
 }

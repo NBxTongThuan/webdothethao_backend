@@ -18,26 +18,22 @@ public class CartController {
     private CartService cartService;
 
     @PostMapping("/addToCart")
-    public ResponseEntity<?> addItemToCart(@RequestBody AddCartItemRequest cartItemRequest)
-    {
-        ResponseEntity<?> response = cartService.addItemToCart(cartItemRequest);
-        return response;
+    public ResponseEntity<?> addItemToCart(@RequestBody AddCartItemRequest cartItemRequest) {
+        return cartService.addItemToCart(cartItemRequest);
+
     }
 
     @GetMapping("/getListCartItem")
-    public ResponseEntity<List<CartItemReponse>> getListCartItem(@RequestParam("cartId") String cartId)
-    {
-        if(cartId.equals("")){
+    public ResponseEntity<List<CartItemReponse>> getListCartItem(@RequestParam("cartId") String cartId) {
+        if (cartId.equals("")) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok().body(cartService.getListCartItem(cartId).stream().map(CartItemReponse::new).toList());
     }
 
     @DeleteMapping("/deleteCartItem")
-    public ResponseEntity<String> deleteCartItemByID(@RequestParam("cartItemID") String cartItemID)
-    {
-        if(cartService.deleteCartItem(cartItemID) != 0)
-        {
+    public ResponseEntity<String> deleteCartItemByID(@RequestParam("cartItemID") String cartItemID) {
+        if (cartService.deleteCartItem(cartItemID) != 0) {
             return ResponseEntity.ok().body("true");
         }
         return ResponseEntity.badRequest().body("false");
