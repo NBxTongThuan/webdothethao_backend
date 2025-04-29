@@ -5,6 +5,7 @@ import com.tongthuan.webdothethao_backend.service.serviceInterface.UsersService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,21 +32,41 @@ public class JwtFilter extends OncePerRequestFilter{
 
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authHeader = request.getHeader("Authorization");
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+
+
+        String path = request.getRequestURI();
+
+        // ✅ Bỏ qua filter cho /login và các endpoint public khác
+        if (path.equals("/api/auth/login") || path.equals("/api/auth/logout") || path.equals("/api/admin/auth/login")) {
+            System.out.println(" Path: " + request.getRequestURI());
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String token = null;
         String userName = null;
 
-        if(authHeader != null && authHeader.startsWith("Bearer ")){
-            token = authHeader.substring(7);
+        // ✨ Đọc token từ cookie thay vì Authorization header
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equals("token")) {
+                    token = cookie.getValue();
+                }
+            }
+        }
+
+        if (token != null) {
             userName = jwtService.extractUsername(token);
         }
-        if(userName!=null && SecurityContextHolder.getContext().getAuthentication() == null)
-        {
+
+        if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = usersService.loadUserByUsername(userName);
-            if(jwtService.validateToken(token,userDetails))
-            {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+            if (jwtService.validateToken(token, userDetails)) {
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
@@ -53,7 +74,5 @@ public class JwtFilter extends OncePerRequestFilter{
 
         System.out.println("Token: " + token + " | Path: " + request.getRequestURI());
         filterChain.doFilter(request, response);
-
-
     }
 }

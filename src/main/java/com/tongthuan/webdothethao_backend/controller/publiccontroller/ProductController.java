@@ -93,4 +93,27 @@ public class ProductController {
     }
 
 
+    @GetMapping("/topNewestProduct")
+    public ResponseEntity<PagedModel<EntityModel<ProductsResponse>>> findTopNewestProduct(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<ProductsResponse> productsResponses = productsServiceInterface.getNewestProduct(pageable)
+                .map(ProductsResponse::new);
+        PagedModel<EntityModel<ProductsResponse>> pagedModel = pagedAssembler.toModel(productsResponses);
+
+        return ResponseEntity.ok(pagedModel);
+
+    }
+    @GetMapping("/sameProductType")
+    public ResponseEntity<PagedModel<EntityModel<ProductsResponse>>> findSameProductType(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size,@RequestParam("productId")String productId) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<ProductsResponse> productsResponses = productsServiceInterface.getSameProductType(pageable,productId)
+                .map(ProductsResponse::new);
+        PagedModel<EntityModel<ProductsResponse>> pagedModel = pagedAssembler.toModel(productsResponses);
+        return ResponseEntity.ok(pagedModel);
+
+    }
+
+
 }

@@ -1,11 +1,10 @@
-package com.tongthuan.webdothethao_backend.dto.response;
+package com.tongthuan.webdothethao_backend.dto.response.UserResponse;
 
 import com.tongthuan.webdothethao_backend.entity.Users;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Data

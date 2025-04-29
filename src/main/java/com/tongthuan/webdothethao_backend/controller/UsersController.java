@@ -1,10 +1,7 @@
 package com.tongthuan.webdothethao_backend.controller;
 
 import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.UserStatsResponse;
-import com.tongthuan.webdothethao_backend.dto.response.ProductsResponse;
-import com.tongthuan.webdothethao_backend.dto.response.UserResponse;
-import com.tongthuan.webdothethao_backend.entity.Products;
-import com.tongthuan.webdothethao_backend.entity.Users;
+import com.tongthuan.webdothethao_backend.dto.response.UserResponse.UserResponse;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +13,6 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController

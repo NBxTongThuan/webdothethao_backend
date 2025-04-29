@@ -1,6 +1,7 @@
 package com.tongthuan.webdothethao_backend.repository;
 
 import com.tongthuan.webdothethao_backend.entity.Products;
+import com.tongthuan.webdothethao_backend.entity.Types;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,5 +33,11 @@ public interface ProductsRepository extends JpaRepository<Products, String> {
 
     @Query("SELECT p FROM Products p ORDER BY p.quantitySold DESC")
     Page<Products> findTop4BestSellingProducts(Pageable pageable);
+
+    @Query("SELECT p FROM Products p ORDER BY p.createdDate DESC")
+    Page<Products> findTopNewestProduct(Pageable pageable);
+
+    @Query("SELECT p FROM Products p WHERE p.type = :type AND p.productId != :productId")
+    Page<Products> findSameTypeProducts(Pageable pageable, String productId, Types type);
 
 }

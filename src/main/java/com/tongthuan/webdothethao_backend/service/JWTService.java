@@ -1,5 +1,6 @@
 package com.tongthuan.webdothethao_backend.service;
 
+import com.tongthuan.webdothethao_backend.constantvalue.Role;
 import com.tongthuan.webdothethao_backend.entity.Users;
 import com.tongthuan.webdothethao_backend.repository.CartRepository;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.CartService;
@@ -36,8 +37,7 @@ public class JWTService {
 
         if (user != null) {
             claims.put("ROLE", user.getRole().name());
-            claims.put("isActivated", user.isActive());
-            claims.put("cartId", cartRepository.findCartByUserId(user.getUserId()).getCartId());
+            claims.put("CartId", cartRepository.findCartByUserId(user.getUserId()).getCartId());
         }
         return createToken(claims, userName);
 
@@ -94,6 +94,15 @@ public class JWTService {
     public boolean validateToken(String token, UserDetails userDetails) {
         final String userName = extractUsername(token);
         return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    //lấy ROLE
+    public String extractRole(String token){
+        return extractClaim(token, claims -> claims.get("ROLE", String.class));
+    }
+
+    public String extractCartId(String token){
+        return extractClaim(token, claims -> claims.get("CartId",String.class));
     }
 
 }

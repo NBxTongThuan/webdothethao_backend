@@ -42,42 +42,74 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-
-        httpSecurity.authorizeHttpRequests(
-                configure -> configure
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(request -> {
+                    CorsConfiguration configuration = new CorsConfiguration();
+                    configuration.addAllowedOrigin(EndPoints.fe_url); // frontend URL
+                    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+                    configuration.addAllowedHeader("*");
+                    configuration.setAllowCredentials(true); // Bắt buộc cho cookie
+                    return configuration;
+                }))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(configure -> configure
                         .requestMatchers(HttpMethod.GET, EndPoints.PUBLIC_GET_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.POST, EndPoints.PUBLIC_POST_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.POST, EndPoints.CUSTOMER_POST_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.DELETE, EndPoints.PUBLIC_DELETE_ENDPOINTS).permitAll()
+                        .requestMatchers("/api/auth/**").permitAll() // login, register các thứ
                         .requestMatchers(HttpMethod.GET, EndPoints.ADMIN_GET_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.DELETE,EndPoints.PUBLIC_DELETE_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.POST, EndPoints.ADMIN_POST_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.DELETE,EndPoints.CUSTOMER_DELETE_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.PUT,EndPoints.CUSTOMER_PUT_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.PUT,EndPoints.ADMIN_PUT_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.DELETE,EndPoints.ADMIN_DELETE_ENDPOINTS).hasAuthority("ADMIN")
-                        .anyRequest().permitAll()
-        );
-        httpSecurity.cors(
-                cors -> {
-                    cors.configurationSource(
-                            request -> {
-                                CorsConfiguration configuration = new CorsConfiguration();
-                                configuration.addAllowedOrigin(EndPoints.fe_url);
-                                configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "PUT"));
-                                configuration.addAllowedHeader("*");
-                                configuration.setAllowCredentials(true);
-                                return configuration;
-                            });
-                });
-        httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-        httpSecurity.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        httpSecurity.httpBasic(Customizer.withDefaults());
-        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+                        .requestMatchers(HttpMethod.PUT, EndPoints.ADMIN_PUT_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.DELETE, EndPoints.ADMIN_DELETE_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.POST, EndPoints.CUSTOMER_POST_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.PUT, EndPoints.CUSTOMER_PUT_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.DELETE, EndPoints.CUSTOMER_DELETE_ENDPOINTS).permitAll()
+                        .anyRequest().permitAll() // ✨ Bắt buộc phải xác thực mới vào
+                )
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
-
     }
+
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+//
+//        httpSecurity.authorizeHttpRequests(
+//                configure -> configure
+//                        .requestMatchers(HttpMethod.GET, EndPoints.PUBLIC_GET_ENDPOINTS).permitAll()
+//                        .requestMatchers(HttpMethod.POST, EndPoints.PUBLIC_POST_ENDPOINTS).permitAll()
+//                        .requestMatchers(HttpMethod.POST, EndPoints.CUSTOMER_POST_ENDPOINTS).permitAll()
+//                        .requestMatchers(HttpMethod.GET, EndPoints.ADMIN_GET_ENDPOINTS).permitAll()
+//                        .requestMatchers(HttpMethod.DELETE,EndPoints.PUBLIC_DELETE_ENDPOINTS).permitAll()
+//                        .requestMatchers(HttpMethod.POST, EndPoints.ADMIN_POST_ENDPOINTS).permitAll()
+//                        .requestMatchers(HttpMethod.DELETE,EndPoints.CUSTOMER_DELETE_ENDPOINTS).permitAll()
+//                        .requestMatchers(HttpMethod.PUT,EndPoints.CUSTOMER_PUT_ENDPOINTS).permitAll()
+//                        .requestMatchers(HttpMethod.PUT,EndPoints.ADMIN_PUT_ENDPOINTS).permitAll()
+//                        .requestMatchers(HttpMethod.DELETE,EndPoints.ADMIN_DELETE_ENDPOINTS).hasAuthority("ADMIN")
+//                        .anyRequest().permitAll()
+//        );
+//        httpSecurity.cors(
+//                cors -> {
+//                    cors.configurationSource(
+//                            request -> {
+//                                CorsConfiguration configuration = new CorsConfiguration();
+//                                configuration.addAllowedOrigin(EndPoints.fe_url);
+//                                configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "PUT"));
+//                                configuration.addAllowedHeader("*");
+//                                configuration.setAllowCredentials(true);
+//                                return configuration;
+//                            });
+//                });
+//        httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+//        httpSecurity.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+//        httpSecurity.httpBasic(Customizer.withDefaults());
+//        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+//
+//        return httpSecurity.build();
+//
+//    }
 
 
 

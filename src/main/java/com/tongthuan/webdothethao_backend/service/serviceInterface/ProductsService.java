@@ -35,4 +35,8 @@ public interface ProductsService {
 
     Page<Products> findTop4Selling(Pageable pageable);
 
+    Page<Products> getNewestProduct(Pageable pageable);
+
+    Page<Products> getSameProductType(Pageable pageable,String productId);
+
 }

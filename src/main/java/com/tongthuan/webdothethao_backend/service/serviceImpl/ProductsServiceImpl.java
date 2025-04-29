@@ -207,5 +207,16 @@ public class ProductsServiceImpl implements ProductsService {
         return productsRepository.findTop4BestSellingProducts(pageable);
     }
 
+    @Override
+    public Page<Products> getNewestProduct(Pageable pageable) {
+        return productsRepository.findTopNewestProduct(pageable);
+    }
+
+    @Override
+    public Page<Products> getSameProductType(Pageable pageable,String productId) {
+        Products product = productsRepository.findByProductId(productId);
+        return productsRepository.findSameTypeProducts(pageable,productId,product.getType());
+    }
+
 
 }
