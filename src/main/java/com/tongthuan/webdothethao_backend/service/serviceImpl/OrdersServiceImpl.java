@@ -63,6 +63,9 @@ public class OrdersServiceImpl implements OrdersService {
     @Autowired
     private UsersRepository usersRepository;
 
+    @Autowired
+    private NotificationRepository notificationRepository;
+
     //USER
     @Override
     public Orders addCodOrder(OrderRequest orderRequest) {
@@ -118,9 +121,19 @@ public class OrdersServiceImpl implements OrdersService {
         payments.setCreatedDate(LocalDateTime.now());
         payments.setPaymentMethod(PaymentMethod.CASH_ON_DELIVERY);
 
+        //Notification
+        Notifications notification = new Notifications();
+        notification.setContent("Người dùng " + user.getUserName() + " vừa tạo một đơn hàng mới!");
+        notification.setTitle("ĐƠN HÀNG MỚI");
+        notification.setRead(false);
+        notification.setOrder(orders);
+        notification.setUser(user);
+        notification.setCreatedDate(LocalDateTime.now());
+
+
         ordersRepository.saveAndFlush(orders);
         paymentsRepository.saveAndFlush(payments);
-
+        notificationRepository.saveAndFlush(notification);
         return ordersRepository.saveAndFlush(orders);
     }
 
@@ -232,8 +245,18 @@ public class OrdersServiceImpl implements OrdersService {
         payments.setVnpTxnRef(vnpTxnRef);
         payments.setPaymentMethod(PaymentMethod.VN_PAY);
 
+        //Notification
+        Notifications notification = new Notifications();
+        notification.setContent("Người dùng " + user.getUserName() + " vừa tạo một đơn hàng mới!");
+        notification.setTitle("ĐƠN HÀNG MỚI");
+        notification.setRead(false);
+        notification.setOrder(orders);
+        notification.setUser(user);
+        notification.setCreatedDate(LocalDateTime.now());
+
         ordersRepository.saveAndFlush(orders);
         paymentsRepository.saveAndFlush(payments);
+        notificationRepository.saveAndFlush(notification);
 
         return true;
     }
@@ -333,9 +356,12 @@ public class OrdersServiceImpl implements OrdersService {
 
         int today = now.getDayOfMonth();
 
+        int month = now.getMonthValue();
+
         int year = now.getYear();
 
-        return ordersRepository.countOrderToDay(today, year);
+
+        return ordersRepository.countOrderToDay(today, month, year);
     }
 
     @Override
@@ -352,10 +378,21 @@ public class OrdersServiceImpl implements OrdersService {
         LocalDateTime startDateTime = start.atStartOfDay();
         LocalDateTime endDateTime = end.atTime(LocalTime.MAX);
 
-        return ordersRepository.getRevenueByDayBetween(OrderStatus.DELIVERED,startDateTime,endDateTime).stream().map(row -> new RevenueByDateResponse(
+        return ordersRepository.getRevenueByDayBetween(OrderStatus.DELIVERED, startDateTime, endDateTime).stream().map(row -> new RevenueByDateResponse(
                 ((Date) row[0]).toLocalDate(),
                 (Long) row[1]
         )).collect(Collectors.toList());
     }
+
+    @Override
+    public Page<Orders> getNewOrders(Pageable pageable) {
+        LocalDateTime now = LocalDateTime.now();
+        int today = now.getDayOfMonth();
+        int month = now.getMonthValue();
+        int year = now.getYear();
+
+        return ordersRepository.getOrdersToday(pageable,today,month,year);
+    }
+
 
 }

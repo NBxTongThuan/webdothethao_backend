@@ -31,8 +31,17 @@ public class Notifications {
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 
-    @Column(name = "redirect_url")
-    private String redirectUrl;
+    @OneToOne
+    @JoinColumn(name = "order_id")
+    private Orders order;
 
+    @ManyToOne(cascade = {
+            CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH
+    })
+    @JoinColumn(name = "user_id")
+    private Users user;
 
 }

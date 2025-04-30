@@ -76,6 +76,16 @@ public class Users {
     })
     private List<Payments> paymentsList;
 
+
+    @OneToMany(mappedBy = "user",
+            fetch = FetchType.LAZY, cascade = {
+            CascadeType.DETACH,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH,
+            CascadeType.MERGE
+    })
+    private List<Notifications> notificationsList;
+
     public boolean isActive() {
         return isActive;
     }

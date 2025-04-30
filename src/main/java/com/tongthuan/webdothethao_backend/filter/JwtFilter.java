@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Component
-public class JwtFilter extends OncePerRequestFilter{
+public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
     private JWTService jwtService;
@@ -34,7 +34,6 @@ public class JwtFilter extends OncePerRequestFilter{
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-
 
         String path = request.getRequestURI();
 

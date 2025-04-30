@@ -66,7 +66,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, EndPoints.CUSTOMER_POST_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.PUT, EndPoints.CUSTOMER_PUT_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.DELETE, EndPoints.CUSTOMER_DELETE_ENDPOINTS).permitAll()
-                        .anyRequest().permitAll() // ✨ Bắt buộc phải xác thực mới vào
+                        .anyRequest().permitAll() // Bắt buộc phải xác thực mới vào
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

@@ -46,4 +46,6 @@ public interface OrdersService {
 
     List<RevenueByDateResponse> getRevenueByDateResponse(LocalDate start, LocalDate end);
 
+    Page<Orders> getNewOrders(Pageable pageable);
+
 }

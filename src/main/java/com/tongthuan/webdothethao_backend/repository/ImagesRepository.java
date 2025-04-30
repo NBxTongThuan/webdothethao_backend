@@ -19,5 +19,4 @@ public interface ImagesRepository extends JpaRepository<Images, String> {
     @Query(value = "SELECT * FROM images WHERE product_id = :productId LIMIT 1", nativeQuery = true)
     Optional<Images> findFirstImageByProductId(@Param("productId") String productId);
 
-
 }
