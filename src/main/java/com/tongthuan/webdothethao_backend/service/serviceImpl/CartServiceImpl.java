@@ -105,6 +105,11 @@ public class CartServiceImpl implements CartService {
     public int deleteCartItem(String cartItemID) {
         return cartItemsRepository.deleteByCartItemID(cartItemID);
     }
+
+    @Override
+    public boolean deleteAllCartItem(String cartId) {
+        return false;
+    }
 //
 //    @Override
 //    public boolean updateCart(String cartId) {

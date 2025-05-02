@@ -14,7 +14,7 @@ public interface CartService {
 
     public int deleteCartItem(String cartItemId);
 
-
+    public boolean deleteAllCartItem(String cartId);
 
 
 }

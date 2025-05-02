@@ -1,6 +1,8 @@
 package com.tongthuan.webdothethao_backend.repository;
 
 import com.tongthuan.webdothethao_backend.entity.Categories;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,5 +16,15 @@ public interface CategoriesRepository extends JpaRepository<Categories, Integer>
 
     @Query("SELECT c FROM Categories c WHERE c.categoriesName = :categoryName")
     Optional<Categories> findByName(@Param("categoryName") String categoryName);
+
+    @Query("""
+                SELECT c
+                FROM Categories c
+                JOIN c.typesList t
+                JOIN t.productsList p
+                GROUP BY c
+                ORDER BY COUNT(p) DESC
+            """)
+    Page<Categories> findTopCategoriesByProductCount(Pageable pageable);
 
 }

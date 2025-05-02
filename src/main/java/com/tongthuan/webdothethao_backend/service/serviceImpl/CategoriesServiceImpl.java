@@ -89,4 +89,9 @@ public class CategoriesServiceImpl implements CategoriesService {
     public Categories findByName(String categoryName) {
         return categoriesRepository.findByName(categoryName).orElse(null);
     }
+
+    @Override
+    public Page<Categories> findTopCategoriesByProductCount(Pageable pageable) {
+        return categoriesRepository.findTopCategoriesByProductCount(pageable);
+    }
 }

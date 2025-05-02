@@ -67,6 +67,7 @@ public class OrdersServiceImpl implements OrdersService {
     private NotificationRepository notificationRepository;
 
     //USER
+    @Transactional
     @Override
     public Orders addCodOrder(OrderRequest orderRequest) {
 
@@ -111,6 +112,7 @@ public class OrdersServiceImpl implements OrdersService {
             productAttributesRepository.saveAndFlush(productAttribute);
             orderItems.add(orderItems1);
         });
+
         orders.setListOrderItems(orderItems);
         //Payment
         Payments payments = new Payments();
@@ -131,6 +133,10 @@ public class OrdersServiceImpl implements OrdersService {
         notification.setCreatedDate(LocalDateTime.now());
 
 
+        Cart cart = cartRepository.findCartByUserId(user.getUserId());
+        if (cart == null)
+            return null;
+        cartItemsRepository.deleteByCartId(cart.getCartId());
         ordersRepository.saveAndFlush(orders);
         paymentsRepository.saveAndFlush(payments);
         notificationRepository.saveAndFlush(notification);
@@ -254,6 +260,11 @@ public class OrdersServiceImpl implements OrdersService {
         notification.setUser(user);
         notification.setCreatedDate(LocalDateTime.now());
 
+        //
+        Cart cart = cartRepository.findCartByUserId(user.getUserId());
+        if (cart == null)
+            return false;
+        cartItemsRepository.deleteByCartId(cart.getCartId());
         ordersRepository.saveAndFlush(orders);
         paymentsRepository.saveAndFlush(payments);
         notificationRepository.saveAndFlush(notification);
@@ -351,16 +362,10 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Override
     public Long getTotalToDayOrder() {
-
         LocalDate now = LocalDate.now();
-
         int today = now.getDayOfMonth();
-
         int month = now.getMonthValue();
-
         int year = now.getYear();
-
-
         return ordersRepository.countOrderToDay(today, month, year);
     }
 
@@ -391,7 +396,7 @@ public class OrdersServiceImpl implements OrdersService {
         int month = now.getMonthValue();
         int year = now.getYear();
 
-        return ordersRepository.getOrdersToday(pageable,today,month,year);
+        return ordersRepository.getOrdersToday(pageable, today, month, year);
     }
 
 

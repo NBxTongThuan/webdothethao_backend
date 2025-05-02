@@ -29,4 +29,6 @@ public interface CategoriesService {
 
     Categories findByName(String categoryName);
 
+    Page<Categories> findTopCategoriesByProductCount(Pageable pageable);
+
 }

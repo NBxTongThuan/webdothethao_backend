@@ -1,5 +1,6 @@
 package com.tongthuan.webdothethao_backend.entity;
 
+import com.tongthuan.webdothethao_backend.constantvalue.ProductGender;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -85,6 +86,9 @@ public class Products {
     })
     private List<Reviews> reviewsList;
 
+    @Column(name = "gender")
+    @Enumerated(EnumType.STRING)
+    private ProductGender productGender;
 
 
 }
