@@ -16,7 +16,7 @@ public class UpdateProductRequest {
     private String productId;
     private String productName;
     private String description;
-    private double price;
+    private Long price;
     private int brandId;
     private int typeId;
     private List<UpdateImageRequest> listUpdateImage;

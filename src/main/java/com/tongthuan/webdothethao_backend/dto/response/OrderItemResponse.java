@@ -25,7 +25,7 @@ public class OrderItemResponse {
 
     public OrderItemResponse(OrderItems orderItems) {
         this.orderItemId = orderItems.getOrderItemId();
-        this.price = orderItems.getPrice();
+        this.price = orderItems.getFinalPrice();
         this.quantity = orderItems.getQuantity();
         this.isReviewed = orderItems.isReviewed();
         this.orderId = orderItems.getOrder().getOrderId();

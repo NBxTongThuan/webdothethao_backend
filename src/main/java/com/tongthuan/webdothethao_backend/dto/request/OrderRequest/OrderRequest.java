@@ -9,9 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderRequest {
 
-    private String userName;
-    private Long totalPrice;
-    private Long shipFee;
     private String orderNote;
     private String toAddress;
     private String toProvince;
@@ -20,6 +17,5 @@ public class OrderRequest {
     private String toPhone;
     private String toName;
     private String toEmail;
-    private OrderItemRequest[] orderItems;
 
 }

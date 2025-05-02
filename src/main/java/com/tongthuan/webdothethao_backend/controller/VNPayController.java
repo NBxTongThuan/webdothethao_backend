@@ -24,9 +24,9 @@ public class VNPayController {
     private final VnPayService vnpayService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createPayment(@RequestBody OrderRequest orderRequest) {
+    public ResponseEntity<?> createPayment(@RequestBody OrderRequest orderRequest, HttpServletRequest request) {
         try {
-            String url = vnpayService.createPaymentUrl(orderRequest);
+            String url = vnpayService.createPaymentUrl(orderRequest,request);
             return ResponseEntity.ok(Map.of("paymentUrl", url));
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error: " + e.getMessage());

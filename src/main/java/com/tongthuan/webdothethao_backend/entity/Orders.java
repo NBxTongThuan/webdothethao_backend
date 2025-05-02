@@ -24,6 +24,12 @@ public class Orders {
     @Column(name = "ship_fee")
     private Long shipFee;
 
+    @Column(name = "final_price")
+    private Long finalPrice;
+
+    @Column(name = "total_money_off")
+    private Long totalMoneyOff;
+
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private OrderStatus status;

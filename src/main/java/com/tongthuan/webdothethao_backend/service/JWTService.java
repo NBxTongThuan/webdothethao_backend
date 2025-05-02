@@ -9,6 +9,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -41,6 +43,17 @@ public class JWTService {
         }
         return createToken(claims, userName);
 
+    }
+
+    public String getTokenFromCookie(HttpServletRequest request) {
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("token".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return "";
     }
 
     //    Tạo token dựa trên Map và userName
@@ -97,12 +110,12 @@ public class JWTService {
     }
 
     //lấy ROLE
-    public String extractRole(String token){
+    public String extractRole(String token) {
         return extractClaim(token, claims -> claims.get("ROLE", String.class));
     }
 
-    public String extractCartId(String token){
-        return extractClaim(token, claims -> claims.get("CartId",String.class));
+    public String extractCartId(String token) {
+        return extractClaim(token, claims -> claims.get("CartId", String.class));
     }
 
 }

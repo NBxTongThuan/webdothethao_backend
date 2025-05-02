@@ -9,11 +9,12 @@ import com.tongthuan.webdothethao_backend.dto.request.OrderRequest.OrderRequest;
 import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.RevenueByDateResponse;
 import com.tongthuan.webdothethao_backend.entity.*;
 import com.tongthuan.webdothethao_backend.repository.*;
+import com.tongthuan.webdothethao_backend.service.JWTService;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.OrdersService;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.ProductAttributeService;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.UsersService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -66,24 +67,40 @@ public class OrdersServiceImpl implements OrdersService {
     @Autowired
     private NotificationRepository notificationRepository;
 
+    @Autowired
+    private JWTService jwtService;
+
     //USER
     @Transactional
     @Override
-    public Orders addCodOrder(OrderRequest orderRequest) {
+    public Orders addCodOrder(OrderRequest orderRequest, HttpServletRequest request) {
 
+        String token = jwtService.getTokenFromCookie(request);
 
-        Users user = usersService.findByUserName(orderRequest.getUserName());
+        if (jwtService.isTokenExpired(token))
+            return null;
+
+        if (token.equalsIgnoreCase(""))
+            return null;
+
+        Users user = usersService.findByUserName(jwtService.extractUsername(token));
         if (user == null) {
             return null;
         }
+
+        Cart cart = cartRepository.findCartByUserId(user.getUserId());
+        if (cart == null)
+            return null;
         Orders orders = new Orders();
         orders.setUser(user);
         orders.setCreatedDate(LocalDateTime.now());
         orders.setDateExpected(LocalDateTime.now().plusDays(3));
         orders.setOrderNote(orderRequest.getOrderNote());
         orders.setStatus(OrderStatus.PENDING);
-        orders.setTotalPrice(orderRequest.getTotalPrice());
-        orders.setShipFee(orderRequest.getShipFee());
+        orders.setTotalPrice(getTotalPrice(cart.getCartId()));
+        orders.setTotalMoneyOff(getTotalMoneyOff(cart.getCartId()));
+        orders.setFinalPrice(getFinalPrice(cart.getCartId()));
+        orders.setShipFee(30000L);
         orders.setToProvince(orderRequest.getToProvince());
         orders.setToDistrict(orderRequest.getToDistrict());
         orders.setToWard(orderRequest.getToWard());
@@ -93,24 +110,22 @@ public class OrdersServiceImpl implements OrdersService {
         orders.setToPhone(orderRequest.getToPhone());
 
         //orderDetails
-        List<OrderItems> orderItems = new ArrayList<>();
-        Arrays.stream(orderRequest.getOrderItems()).forEach(item -> {
-            OrderItems orderItems1 = new OrderItems();
-            orderItems1.setOrder(orders);
-            orderItems1.setPrice(item.getPrice());
+        //orderDetails
+        List<OrderItems> orderItems = createOrderItemsList(cart.getCartId());
+        orderItems.forEach(item -> {
 
-            ProductAttributes productAttribute = productAttributeService.findByProductAttributeId(item.getProductAttributeId());
+            ProductAttributes productAttribute = item.getProductAttribute();
             if (productAttribute == null) {
                 return;
             }
-            orderItems1.setProductAttribute(
-                    productAttribute
-            );
-            orderItems1.setQuantity(item.getQuantity());
             productAttribute.setQuantity(productAttribute.getQuantity() - item.getQuantity());
             productAttribute.setQuantitySold(productAttribute.getQuantitySold() + item.getQuantity());
+            Products product = productAttribute.getProduct();
+            product.setQuantitySold(product.getQuantitySold() + item.getQuantity());
+            item.setOrder(orders);
+            productsRepository.saveAndFlush(product);
             productAttributesRepository.saveAndFlush(productAttribute);
-            orderItems.add(orderItems1);
+
         });
 
         orders.setListOrderItems(orderItems);
@@ -118,7 +133,7 @@ public class OrdersServiceImpl implements OrdersService {
         Payments payments = new Payments();
         payments.setOrder(orders);
         payments.setUser(user);
-        payments.setAmount(orderRequest.getTotalPrice());
+        payments.setAmount(getFinalPrice(cart.getCartId()));
         payments.setStatus(PaymentStatus.PENDING);
         payments.setCreatedDate(LocalDateTime.now());
         payments.setPaymentMethod(PaymentMethod.CASH_ON_DELIVERY);
@@ -133,9 +148,6 @@ public class OrdersServiceImpl implements OrdersService {
         notification.setCreatedDate(LocalDateTime.now());
 
 
-        Cart cart = cartRepository.findCartByUserId(user.getUserId());
-        if (cart == null)
-            return null;
         cartItemsRepository.deleteByCartId(cart.getCartId());
         ordersRepository.saveAndFlush(orders);
         paymentsRepository.saveAndFlush(payments);
@@ -193,12 +205,7 @@ public class OrdersServiceImpl implements OrdersService {
 
     //VNPay
     @Override
-    public boolean createVNPayOrder(OrderRequest orderRequest, String vnpTxnRef) {
-
-        Users user = usersRepository.findByUserName(orderRequest.getUserName()).orElse(null);
-
-        if (user == null)
-            return false;
+    public Orders createVNPayOrder(OrderRequest orderRequest, Users user, Cart cart, String vnpTxnRef) {
 
         Orders orders = new Orders();
         orders.setUser(user);
@@ -207,8 +214,10 @@ public class OrdersServiceImpl implements OrdersService {
 
         orders.setOrderNote(orderRequest.getOrderNote());
         orders.setStatus(OrderStatus.PENDING);
-        orders.setTotalPrice(orderRequest.getTotalPrice());
-        orders.setShipFee(orderRequest.getShipFee());
+        orders.setTotalPrice(getTotalPrice(cart.getCartId()));
+        orders.setTotalMoneyOff(getTotalMoneyOff(cart.getCartId()));
+        orders.setFinalPrice(getFinalPrice(cart.getCartId()));
+        orders.setShipFee(30000L);
         orders.setToProvince(orderRequest.getToProvince());
         orders.setToDistrict(orderRequest.getToDistrict());
         orders.setToWard(orderRequest.getToWard());
@@ -218,38 +227,34 @@ public class OrdersServiceImpl implements OrdersService {
         orders.setToPhone(orderRequest.getToPhone());
 
         //orderDetails
-        List<OrderItems> orderItems = new ArrayList<>();
-        Arrays.stream(orderRequest.getOrderItems()).forEach(item -> {
-            OrderItems orderItems1 = new OrderItems();
-            orderItems1.setOrder(orders);
-            orderItems1.setPrice(item.getPrice());
+        List<OrderItems> orderItems = createOrderItemsList(cart.getCartId());
+        orderItems.forEach(item -> {
 
-            ProductAttributes productAttribute = productAttributeService.findByProductAttributeId(item.getProductAttributeId());
+            ProductAttributes productAttribute = item.getProductAttribute();
             if (productAttribute == null) {
                 return;
             }
-            orderItems1.setProductAttribute(
-                    productAttribute
-            );
-            orderItems1.setQuantity(item.getQuantity());
             productAttribute.setQuantity(productAttribute.getQuantity() - item.getQuantity());
             productAttribute.setQuantitySold(productAttribute.getQuantitySold() + item.getQuantity());
             Products product = productAttribute.getProduct();
             product.setQuantitySold(product.getQuantitySold() + item.getQuantity());
+            item.setOrder(orders);
             productsRepository.saveAndFlush(product);
             productAttributesRepository.saveAndFlush(productAttribute);
-            orderItems.add(orderItems1);
+
         });
         orders.setListOrderItems(orderItems);
+        System.out.println("return true 1");
         //Payment
         Payments payments = new Payments();
         payments.setOrder(orders);
         payments.setStatus(PaymentStatus.PENDING);
         payments.setCreatedDate(LocalDateTime.now());
-        payments.setAmount(orderRequest.getTotalPrice());
+        payments.setAmount(getFinalPrice(cart.getCartId()));
         payments.setUser(user);
         payments.setVnpTxnRef(vnpTxnRef);
         payments.setPaymentMethod(PaymentMethod.VN_PAY);
+
 
         //Notification
         Notifications notification = new Notifications();
@@ -260,16 +265,12 @@ public class OrdersServiceImpl implements OrdersService {
         notification.setUser(user);
         notification.setCreatedDate(LocalDateTime.now());
 
-        //
-        Cart cart = cartRepository.findCartByUserId(user.getUserId());
-        if (cart == null)
-            return false;
         cartItemsRepository.deleteByCartId(cart.getCartId());
         ordersRepository.saveAndFlush(orders);
         paymentsRepository.saveAndFlush(payments);
         notificationRepository.saveAndFlush(notification);
 
-        return true;
+        return orders;
     }
 
     public void handleCancelVNPayOrder(Payments payment) {
@@ -397,6 +398,61 @@ public class OrdersServiceImpl implements OrdersService {
         int year = now.getYear();
 
         return ordersRepository.getOrdersToday(pageable, today, month, year);
+    }
+
+
+    public long getTotalPrice(String cartId) {
+        long totalPrice = 0;
+        List<CartItems> cartItems = cartItemsRepository.findByCartId(cartId);
+        if (!cartItems.isEmpty()) {
+            for (CartItems cartItem : cartItems) {
+                Products product = cartItem.getProductAttribute().getProduct();
+                totalPrice += product.getPrice() * cartItem.getQuantity();
+            }
+        }
+        return totalPrice;
+    }
+
+    public long getTotalMoneyOff(String cartId) {
+        long totalMoneyOff = 0L;
+        List<CartItems> cartItems = cartItemsRepository.findByCartId(cartId);
+        if (!cartItems.isEmpty()) {
+            for (CartItems cartItem : cartItems) {
+                Products product = cartItem.getProductAttribute().getProduct();
+                totalMoneyOff += product.getMoneyOff() > 0 ? product.getMoneyOff() * cartItem.getQuantity() : 0L;
+            }
+        }
+        return totalMoneyOff;
+    }
+
+    public long getFinalPrice(String cartId) {
+        long finalPrice = 0L;
+        List<CartItems> cartItems = cartItemsRepository.findByCartId(cartId);
+        if (!cartItems.isEmpty()) {
+            for (CartItems cartItem : cartItems) {
+                Products product = cartItem.getProductAttribute().getProduct();
+                finalPrice += product.getMoneyOff() > 0 ? ((product.getPrice() - product.getMoneyOff()) * cartItem.getQuantity()) : (product.getPrice() * cartItem.getQuantity());
+            }
+        }
+        return finalPrice;
+    }
+
+    public List<OrderItems> createOrderItemsList(String cartId) {
+        List<OrderItems> orderItemsList = new ArrayList<>();
+        List<CartItems> cartItems = cartItemsRepository.findByCartId(cartId);
+        if (!cartItems.isEmpty()) {
+            for (CartItems cartItem : cartItems) {
+                OrderItems orderItems = new OrderItems();
+                orderItems.setReviewed(false);
+                orderItems.setQuantity(cartItem.getQuantity());
+                orderItems.setProductAttribute(cartItem.getProductAttribute());
+                orderItems.setMoneyOffPerOneProduct(cartItem.getProductAttribute().getProduct().getMoneyOff());
+                orderItems.setOriginalPrice(cartItem.getPrice());
+                orderItems.setFinalPrice(cartItem.getPrice() - cartItem.getProductAttribute().getProduct().getMoneyOff());
+                orderItemsList.add(orderItems);
+            }
+        }
+        return orderItemsList;
     }
 
 

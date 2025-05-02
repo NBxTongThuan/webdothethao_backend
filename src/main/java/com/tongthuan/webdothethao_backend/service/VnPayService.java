@@ -5,13 +5,10 @@ import com.tongthuan.webdothethao_backend.constantvalue.OrderStatus;
 import com.tongthuan.webdothethao_backend.constantvalue.PaymentMethod;
 import com.tongthuan.webdothethao_backend.constantvalue.PaymentStatus;
 import com.tongthuan.webdothethao_backend.dto.request.OrderRequest.OrderRequest;
-import com.tongthuan.webdothethao_backend.entity.Orders;
-import com.tongthuan.webdothethao_backend.entity.Payments;
-import com.tongthuan.webdothethao_backend.entity.Users;
-import com.tongthuan.webdothethao_backend.repository.OrdersRepository;
-import com.tongthuan.webdothethao_backend.repository.PaymentsRepository;
-import com.tongthuan.webdothethao_backend.repository.UsersRepository;
+import com.tongthuan.webdothethao_backend.entity.*;
+import com.tongthuan.webdothethao_backend.repository.*;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.OrdersService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +27,16 @@ import java.util.*;
 @RequiredArgsConstructor
 public class VnPayService {
 
+
+    @Autowired
+    private final CartItemsRepository cartItemsRepository;
+
+    @Autowired
+    private final CartRepository cartRepository;
+
+    @Autowired
+    private final JWTService jwtService;
+
     @Autowired
     private final VNPayConfig vnpayConfig;
 
@@ -45,13 +52,27 @@ public class VnPayService {
     @Autowired
     private final OrdersRepository ordersRepository;
 
-    public String createPaymentUrl(OrderRequest orderRequest) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    public String createPaymentUrl(OrderRequest orderRequest, HttpServletRequest request) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         String vnpTxnRef = "VNP_" + System.currentTimeMillis();
         String orderInfo = "Thanh toan don hang " + vnpTxnRef;
 
-        boolean result = ordersService.createVNPayOrder(orderRequest, vnpTxnRef);
+        String token = jwtService.getTokenFromCookie(request);
+        if (token.equalsIgnoreCase(""))
+            return "";
 
-        if (!result)
+
+        String userName = jwtService.extractUsername(token);
+        Users user = usersRepository.findByUserName(userName).orElse(null);
+        if (user == null) {
+            return "";
+        }
+
+        Cart cart = cartRepository.findCartByUserId(user.getUserId());
+        if (cart == null)
+            return "";
+
+        Orders order = ordersService.createVNPayOrder(orderRequest, user, cart, vnpTxnRef);
+        if (order == null)
             return "";
 
         // 2. Tạo param gửi VNPAY
@@ -59,14 +80,14 @@ public class VnPayService {
         vnpParams.put("vnp_Version", "2.1.0");
         vnpParams.put("vnp_Command", "pay");
         vnpParams.put("vnp_TmnCode", vnpayConfig.getTmnCode());
-        vnpParams.put("vnp_Amount", String.valueOf((long) (orderRequest.getTotalPrice() * 100)));
+        vnpParams.put("vnp_Amount", String.valueOf((long) ((order.getFinalPrice() + order.getShipFee()) * 100)));
         vnpParams.put("vnp_CurrCode", "VND");
         vnpParams.put("vnp_TxnRef", vnpTxnRef);
         vnpParams.put("vnp_OrderInfo", orderInfo);
         vnpParams.put("vnp_OrderType", "other");
         vnpParams.put("vnp_Locale", "vn");
         vnpParams.put("vnp_ReturnUrl", vnpayConfig.getReturnUrl());
-        vnpParams.put("vnp_IpAddr", "127.0.0.1"); // hoặc lấy từ request
+        vnpParams.put("vnp_IpAddr", "127.0.0.1");
         vnpParams.put("vnp_CreateDate", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));
 
         // 3. Sort & build query
@@ -171,6 +192,22 @@ public class VnPayService {
             hex.append(String.format("%02x", b));
         }
         return hex.toString();
+    }
+
+    public long getFinalPrice(String cartId) {
+        long finalPrice = 0;
+        List<CartItems> cartItems = cartItemsRepository.findByCartId(cartId);
+        if (!cartItems.isEmpty()) {
+            System.out.println("cart item !null");
+            for (CartItems cartItem : cartItems) {
+                Products product = cartItem.getProductAttribute().getProduct();
+                System.out.println("product money off:" + product.getMoneyOff());
+                System.out.println("product price " + product.getPrice());
+                System.out.println("product name" + product.getProductName());
+                finalPrice += product.getMoneyOff() > 0 ? ((product.getPrice() - product.getMoneyOff()) * cartItem.getQuantity()) : (product.getPrice() * cartItem.getQuantity());
+            }
+        }
+        return finalPrice;
     }
 
     public String handlePaymentReturn(Map<String, String> vnpParams) throws NoSuchAlgorithmException {

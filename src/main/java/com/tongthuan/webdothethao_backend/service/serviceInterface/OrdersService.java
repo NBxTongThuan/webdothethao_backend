@@ -5,8 +5,11 @@ import com.tongthuan.webdothethao_backend.dto.adminRequest.AdminUpdateOrderReque
 import com.tongthuan.webdothethao_backend.dto.request.OrderRequest.CancelOrderRequest;
 import com.tongthuan.webdothethao_backend.dto.request.OrderRequest.OrderRequest;
 import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.RevenueByDateResponse;
+import com.tongthuan.webdothethao_backend.entity.Cart;
 import com.tongthuan.webdothethao_backend.entity.Orders;
 import com.tongthuan.webdothethao_backend.entity.Payments;
+import com.tongthuan.webdothethao_backend.entity.Users;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -19,7 +22,7 @@ public interface OrdersService {
 
 //    forUser
 
-    public Orders addCodOrder(OrderRequest orderRequest);
+    public Orders addCodOrder(OrderRequest orderRequest,HttpServletRequest request);
 
     public Page<Orders> findByUserName(String userName, Pageable pageable);
 
@@ -29,7 +32,7 @@ public interface OrdersService {
 
     public boolean cancelingOrder(CancelOrderRequest cancelOrderRequest);
 
-    public boolean createVNPayOrder(OrderRequest orderRequest, String vnpTxnRef);
+    public Orders createVNPayOrder(OrderRequest orderRequest, Users user, Cart cart, String vnpTxnRef);
 
     public void handleCancelVNPayOrder(Payments payment);
 

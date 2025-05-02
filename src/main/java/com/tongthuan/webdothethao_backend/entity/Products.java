@@ -30,7 +30,7 @@ public class Products {
     private int quantitySold;
 
     @Column(name = "price")
-    private double price;
+    private long price;
 
     @Column(name = "is_in_stock")
     private boolean isInStock;
@@ -90,5 +90,7 @@ public class Products {
     @Enumerated(EnumType.STRING)
     private ProductGender productGender;
 
+    @Column(name = "money_off")
+    private long moneyOff;
 
 }

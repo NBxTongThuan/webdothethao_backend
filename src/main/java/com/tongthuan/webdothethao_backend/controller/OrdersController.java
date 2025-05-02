@@ -7,6 +7,7 @@ import com.tongthuan.webdothethao_backend.dto.request.OrderRequest.OrderRequest;
 import com.tongthuan.webdothethao_backend.dto.response.OrderResponse;
 import com.tongthuan.webdothethao_backend.entity.Orders;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.OrdersService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,8 +30,8 @@ public class OrdersController {
     private PagedResourcesAssembler<OrderResponse> orderResponsePagedResourcesAssembler;
 
     @PostMapping("/codOrder")
-    public ResponseEntity<?> orderCOD(@RequestBody OrderRequest orderRequest) {
-        if (ordersService.addCodOrder(orderRequest) == null) {
+    public ResponseEntity<?> orderCOD(@RequestBody OrderRequest orderRequest, HttpServletRequest request) {
+        if (ordersService.addCodOrder(orderRequest,request) == null) {
             return ResponseEntity.badRequest().body("Dat hang that bai!");
         }
         return ResponseEntity.ok().body("Dat hang thanh cong");
