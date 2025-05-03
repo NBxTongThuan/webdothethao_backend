@@ -16,6 +16,7 @@ public class ProductsResponse{
     private String productId;
     private String productName;
     private String description;
+    private long moneyOff;
     private int quantitySold;
     private double price;
 
@@ -23,6 +24,7 @@ public class ProductsResponse{
         this.productId = products.getProductId();
         this.productName = products.getProductName();
         this.description = products.getDescription();
+        this.moneyOff = products.getMoneyOff();
         this.quantitySold = products.getQuantitySold();
         this.price = products.getPrice();
     }

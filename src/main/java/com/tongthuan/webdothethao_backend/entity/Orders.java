@@ -19,16 +19,16 @@ public class Orders {
     private String orderId;
 
     @Column(name = "total_price")
-    private Long totalPrice;
+    private long totalPrice;
 
     @Column(name = "ship_fee")
-    private Long shipFee;
+    private long shipFee;
 
     @Column(name = "final_price")
-    private Long finalPrice;
+    private long finalPrice;
 
     @Column(name = "total_money_off")
-    private Long totalMoneyOff;
+    private long totalMoneyOff;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)

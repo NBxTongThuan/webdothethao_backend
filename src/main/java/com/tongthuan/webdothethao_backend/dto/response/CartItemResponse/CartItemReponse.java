@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 public class CartItemReponse {
 
     private String cartItemId;
-    private double price;
+    private long price;
+    private long moneyOff;
     private int quantity;
     private String productAttributeId;
     private String productId;
@@ -25,6 +26,7 @@ public class CartItemReponse {
     public CartItemReponse(CartItems cartItems) {
         this.cartItemId = cartItems.getCartItemId();
         this.price = cartItems.getPrice();
+        this.moneyOff = cartItems.getProductAttribute().getProduct().getMoneyOff();
         this.quantity = cartItems.getQuantity();
         this.productAttributeId = cartItems.getProductAttribute().getProductAttributeId();
         this.productId = cartItems.getProductAttribute().getProduct().getProductId();

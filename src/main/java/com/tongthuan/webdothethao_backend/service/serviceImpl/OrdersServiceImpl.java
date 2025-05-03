@@ -147,7 +147,6 @@ public class OrdersServiceImpl implements OrdersService {
         notification.setUser(user);
         notification.setCreatedDate(LocalDateTime.now());
 
-
         cartItemsRepository.deleteByCartId(cart.getCartId());
         ordersRepository.saveAndFlush(orders);
         paymentsRepository.saveAndFlush(payments);
@@ -434,7 +433,7 @@ public class OrdersServiceImpl implements OrdersService {
                 finalPrice += product.getMoneyOff() > 0 ? ((product.getPrice() - product.getMoneyOff()) * cartItem.getQuantity()) : (product.getPrice() * cartItem.getQuantity());
             }
         }
-        return finalPrice;
+        return finalPrice + 30000L;
     }
 
     public List<OrderItems> createOrderItemsList(String cartId) {

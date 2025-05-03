@@ -27,8 +27,10 @@ public class OrderResponse {
     private String toAddress;
     private String orderNote;
     private String orderNoteCanceled;
-    private double totalPrice;
-    private double shipFee;
+    private long totalPrice;
+    private long shipFee;
+    private long totalMoneyOff;
+    private long finalPrice;
     private LocalDateTime dateReceive;
     private LocalDateTime dateExpected;
     private LocalDateTime dateCancel;
@@ -48,6 +50,8 @@ public class OrderResponse {
         this.orderNoteCanceled = order.getOrderNoteCanceled();
         this.totalPrice = order.getTotalPrice();
         this.shipFee = order.getShipFee();
+        this.totalMoneyOff = order.getTotalMoneyOff();
+        this.finalPrice = order.getFinalPrice();
         this.dateReceive = order.getDateReceive();
         this.dateExpected = order.getDateExpected();
         this.dateCancel = order.getDateCanceled();

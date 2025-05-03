@@ -13,19 +13,23 @@ import lombok.NoArgsConstructor;
 public class OrderItemResponse {
 
     private String orderItemId;
-    private double price;
+    private long finalPrice;
+    private long originalPrice;
     private int quantity;
     private boolean isReviewed;
     private String orderId;
     private Color color;
     private String size;
+    private long moneyOffPerOneProduct;
     private String productName;
     private String productId;
     private String productAttributeId;
 
     public OrderItemResponse(OrderItems orderItems) {
         this.orderItemId = orderItems.getOrderItemId();
-        this.price = orderItems.getFinalPrice();
+        this.finalPrice = orderItems.getFinalPrice();
+        this.originalPrice =  orderItems.getOriginalPrice();
+        this.moneyOffPerOneProduct = orderItems.getMoneyOffPerOneProduct();
         this.quantity = orderItems.getQuantity();
         this.isReviewed = orderItems.isReviewed();
         this.orderId = orderItems.getOrder().getOrderId();

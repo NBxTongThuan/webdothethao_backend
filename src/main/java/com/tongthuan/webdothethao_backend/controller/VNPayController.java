@@ -53,9 +53,6 @@ public class VNPayController {
             vnpParams.put(param, request.getParameter(param));
         }
 
-        // Xử lý thanh toán
-
-        // Trả về html hoặc redirect FE tùy mày
 //        return ResponseEntity.ok(vnpayService.handlePaymentReturn(vnpParams));
        String result = vnpayService.handlePaymentReturn(vnpParams);
         String redirectUrl = "http://localhost:3000/payment-return/" + (result);

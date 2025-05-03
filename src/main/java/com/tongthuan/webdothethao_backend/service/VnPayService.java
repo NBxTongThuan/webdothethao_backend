@@ -80,7 +80,7 @@ public class VnPayService {
         vnpParams.put("vnp_Version", "2.1.0");
         vnpParams.put("vnp_Command", "pay");
         vnpParams.put("vnp_TmnCode", vnpayConfig.getTmnCode());
-        vnpParams.put("vnp_Amount", String.valueOf((long) ((order.getFinalPrice() + order.getShipFee()) * 100)));
+        vnpParams.put("vnp_Amount", String.valueOf((long) (order.getFinalPrice() * 100)));
         vnpParams.put("vnp_CurrCode", "VND");
         vnpParams.put("vnp_TxnRef", vnpTxnRef);
         vnpParams.put("vnp_OrderInfo", orderInfo);
@@ -260,7 +260,7 @@ public class VnPayService {
             return "success";
         } else {
             ordersService.handleCancelVNPayOrder(payment);
-            return "success";
+            return "error";
         }
     }
 
