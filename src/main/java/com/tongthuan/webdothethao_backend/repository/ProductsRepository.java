@@ -40,4 +40,8 @@ public interface ProductsRepository extends JpaRepository<Products, String> {
     @Query("SELECT p FROM Products p WHERE p.type = :type AND p.productId != :productId")
     Page<Products> findSameTypeProducts(Pageable pageable, String productId, Types type);
 
+    @Query("SELECT p FROM Products p WHERE p.moneyOff > 0")
+    Page<Products> findDiscountingProduct(Pageable pageable);
+
+
 }

@@ -16,7 +16,7 @@ public class OrderItemResponse {
     private long finalPrice;
     private long originalPrice;
     private int quantity;
-    private boolean isReviewed;
+    private boolean reviewed;
     private String orderId;
     private Color color;
     private String size;
@@ -31,7 +31,7 @@ public class OrderItemResponse {
         this.originalPrice =  orderItems.getOriginalPrice();
         this.moneyOffPerOneProduct = orderItems.getMoneyOffPerOneProduct();
         this.quantity = orderItems.getQuantity();
-        this.isReviewed = orderItems.isReviewed();
+        this.reviewed = orderItems.isReviewed();
         this.orderId = orderItems.getOrder().getOrderId();
         this.color = orderItems.getProductAttribute().getColor();
         this.size = orderItems.getProductAttribute().getSize();

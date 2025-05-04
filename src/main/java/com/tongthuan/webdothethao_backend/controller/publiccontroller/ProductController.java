@@ -115,5 +115,15 @@ public class ProductController {
 
     }
 
+    @GetMapping("/discountingProduct")
+    public ResponseEntity<PagedModel<EntityModel<ProductsResponse>>> findDiscountingProducts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<ProductsResponse> productsResponses = productsServiceInterface.getDiscountingProducts(pageable)
+                .map(ProductsResponse::new);
+        PagedModel<EntityModel<ProductsResponse>> pagedModel = pagedAssembler.toModel(productsResponses);
+        return ResponseEntity.ok(pagedModel);
+
+    }
 
 }

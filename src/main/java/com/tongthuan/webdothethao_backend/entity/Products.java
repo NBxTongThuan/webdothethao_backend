@@ -93,4 +93,7 @@ public class Products {
     @Column(name = "money_off")
     private long moneyOff;
 
+    @Column(name = "import_price")
+    private long importPrice;
+
 }

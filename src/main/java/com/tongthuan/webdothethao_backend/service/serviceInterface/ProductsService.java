@@ -39,4 +39,8 @@ public interface ProductsService {
 
     Page<Products> getSameProductType(Pageable pageable,String productId);
 
+    Page<Products> getDiscountingProducts(Pageable pageable);
+
+    boolean updateDiscountPrice(String productId, long moneyOff);
+
 }

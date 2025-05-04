@@ -34,10 +34,42 @@ public class AdminProductController {
         Pageable pageable = PageRequest.of(page, size);
         Page<AdminProductsResponse> productsPage = productsService.getAllProducts(pageable)
                 .map(AdminProductsResponse::new);
-        // Convert Page<ProductsResponse> to PagedModel<EntityModel<ProductsResponse>>
+
         PagedModel<EntityModel<AdminProductsResponse>> pagedModel = productsResponsePagedResourcesAssembler.toModel(productsPage);
         return ResponseEntity.ok(pagedModel);
     }
+
+    @GetMapping("/getDiscountingProducts")
+    public ResponseEntity<PagedModel<EntityModel<AdminProductsResponse>>> getDiscountingProduct(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<AdminProductsResponse> productsPage = productsService.getDiscountingProducts(pageable)
+                .map(AdminProductsResponse::new);
+
+        PagedModel<EntityModel<AdminProductsResponse>> pagedModel = productsResponsePagedResourcesAssembler.toModel(productsPage);
+        return ResponseEntity.ok(pagedModel);
+    }
+
+    @PutMapping("/updateDiscountingPrice")
+    public ResponseEntity<Boolean> updateDiscountingPrice(@RequestParam("productId") String productId, @RequestParam("moneyOff") long moneyOff) {
+        boolean result = productsService.updateDiscountPrice(productId, moneyOff);
+        if (result) {
+            return ResponseEntity.ok(true);
+        }
+        return ResponseEntity.badRequest().body(false);
+    }
+
+    @PutMapping("/stoppingDiscount")
+    public ResponseEntity<Boolean> stoppingDiscount(@RequestParam("productId") String productId) {
+        boolean result = productsService.updateDiscountPrice(productId, 0);
+        if (result) {
+            return ResponseEntity.ok(true);
+        }
+        return ResponseEntity.badRequest().body(false);
+    }
+
 
     @PostMapping("/addProduct")
     public ResponseEntity<Boolean> addProduct(@RequestBody ProductRequest productRequest) {
@@ -64,27 +96,24 @@ public class AdminProductController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Boolean> updateProduct(@RequestBody UpdateProductRequest updateProductRequest)
-    {
-        boolean result =productsService.updateProduct(updateProductRequest);
-        if(!result)
+    public ResponseEntity<Boolean> updateProduct(@RequestBody UpdateProductRequest updateProductRequest) {
+        boolean result = productsService.updateProduct(updateProductRequest);
+        if (!result)
             return ResponseEntity.ok(false);
         return ResponseEntity.ok(true);
     }
 
     @PostMapping("/checkExists")
-    public ResponseEntity<Boolean> checkExistsByProductNameTypeNameBrandName(@RequestBody CheckProductExistsRequest checkProductExistsRequest)
-    {
-        boolean result = productsService.checkExistsByProductName(checkProductExistsRequest.getProductName(),checkProductExistsRequest.getTypeName(),checkProductExistsRequest.getBrandName());
-        if(!result)
+    public ResponseEntity<Boolean> checkExistsByProductNameTypeNameBrandName(@RequestBody CheckProductExistsRequest checkProductExistsRequest) {
+        boolean result = productsService.checkExistsByProductName(checkProductExistsRequest.getProductName(), checkProductExistsRequest.getTypeName(), checkProductExistsRequest.getBrandName());
+        if (!result)
             return ResponseEntity.ok(false);
         return ResponseEntity.ok(true);
 
     }
 
     @GetMapping("/getCountIsInStockProduct")
-    public ResponseEntity<Long> getCountIsInStockProduct()
-    {
+    public ResponseEntity<Long> getCountIsInStockProduct() {
         return ResponseEntity.ok(productsService.getCountProductIsInStock());
     }
 

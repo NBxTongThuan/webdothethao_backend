@@ -218,5 +218,20 @@ public class ProductsServiceImpl implements ProductsService {
         return productsRepository.findSameTypeProducts(pageable,productId,product.getType());
     }
 
+    @Override
+    public Page<Products> getDiscountingProducts(Pageable pageable) {
+        return productsRepository.findDiscountingProduct(pageable);
+    }
+
+    @Override
+    public boolean updateDiscountPrice(String productId, long moneyOff) {
+        Products product = productsRepository.findByProductId(productId);
+        if(product == null)
+            return false;
+        product.setMoneyOff(moneyOff);
+        productsRepository.save(product);
+        return true;
+    }
+
 
 }
