@@ -74,9 +74,6 @@ public class Orders {
     @Column(name = "date_canceled")
     private LocalDateTime dateCanceled;
 
-//    @Column(name = "deleted")
-//    private boolean deleted;
-
     @ManyToOne(cascade = {
             CascadeType.DETACH,
             CascadeType.MERGE,

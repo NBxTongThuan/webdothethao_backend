@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderRequest {
-
     private String orderNote;
     private String toAddress;
     private String toProvince;
@@ -16,6 +15,4 @@ public class OrderRequest {
     private String toWard;
     private String toPhone;
     private String toName;
-    private String toEmail;
-
 }

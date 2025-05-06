@@ -105,7 +105,7 @@ public class OrdersServiceImpl implements OrdersService {
         orders.setToDistrict(orderRequest.getToDistrict());
         orders.setToWard(orderRequest.getToWard());
         orders.setToAddress(orderRequest.getToAddress());
-        orders.setToEmail(orderRequest.getToEmail());
+        orders.setToEmail(user.getEmail());
         orders.setToName(orderRequest.getToName());
         orders.setToPhone(orderRequest.getToPhone());
 
@@ -221,7 +221,7 @@ public class OrdersServiceImpl implements OrdersService {
         orders.setToDistrict(orderRequest.getToDistrict());
         orders.setToWard(orderRequest.getToWard());
         orders.setToAddress(orderRequest.getToAddress());
-        orders.setToEmail(orderRequest.getToEmail());
+        orders.setToEmail(user.getEmail());
         orders.setToName(orderRequest.getToName());
         orders.setToPhone(orderRequest.getToPhone());
 

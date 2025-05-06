@@ -43,4 +43,6 @@ public interface ProductsService {
 
     boolean updateDiscountPrice(String productId, long moneyOff);
 
+    Page<Products> getInStockProducts(Pageable pageable);
+
 }

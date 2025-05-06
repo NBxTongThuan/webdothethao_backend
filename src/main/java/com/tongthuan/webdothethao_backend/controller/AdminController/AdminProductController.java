@@ -4,6 +4,7 @@ import com.tongthuan.webdothethao_backend.dto.adminRequest.CheckProductExistsReq
 import com.tongthuan.webdothethao_backend.dto.adminRequest.UpdateProductRequest;
 import com.tongthuan.webdothethao_backend.dto.request.ProductRequest.ProductRequest;
 import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.AdminProductsResponse;
+import com.tongthuan.webdothethao_backend.dto.response.ProductsResponse;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -115,6 +116,17 @@ public class AdminProductController {
     @GetMapping("/getCountIsInStockProduct")
     public ResponseEntity<Long> getCountIsInStockProduct() {
         return ResponseEntity.ok(productsService.getCountProductIsInStock());
+    }
+
+    @GetMapping("/getInStockProducts")
+    public ResponseEntity<PagedModel<EntityModel<AdminProductsResponse>>> getInStockProducts(@RequestParam(defaultValue = "0") int page,
+                                                                                             @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<AdminProductsResponse> productsPage = productsService.getInStockProducts(pageable)
+                .map(AdminProductsResponse::new);
+
+        PagedModel<EntityModel<AdminProductsResponse>> pagedModel = productsResponsePagedResourcesAssembler.toModel(productsPage);
+        return ResponseEntity.ok(pagedModel);
     }
 
 

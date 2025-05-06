@@ -43,5 +43,7 @@ public interface ProductsRepository extends JpaRepository<Products, String> {
     @Query("SELECT p FROM Products p WHERE p.moneyOff > 0")
     Page<Products> findDiscountingProduct(Pageable pageable);
 
+    @Query("SELECT p FROM Products p WHERE p.isInStock = true AND p.moneyOff = 0")
+    Page<Products> findInStockProducts(Pageable pageable);
 
 }

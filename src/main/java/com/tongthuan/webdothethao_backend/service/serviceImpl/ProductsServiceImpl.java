@@ -233,5 +233,8 @@ public class ProductsServiceImpl implements ProductsService {
         return true;
     }
 
-
+    @Override
+    public Page<Products> getInStockProducts(Pageable pageable) {
+        return productsRepository.findInStockProducts(pageable);
+    }
 }

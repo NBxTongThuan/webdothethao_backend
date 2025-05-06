@@ -86,6 +86,16 @@ public class Users {
     })
     private List<Notifications> notificationsList;
 
+
+    @OneToMany(mappedBy = "user",
+    fetch = FetchType.LAZY,cascade = {
+            CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH
+    })
+    private List<Address> addressList;
+
     public boolean isActive() {
         return isActive;
     }
