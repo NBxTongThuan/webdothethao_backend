@@ -24,6 +24,14 @@ public class AddressController {
         return ResponseEntity.ok().body(addressService.findByUser(request).stream().map(AddressResponse::new).toList());
     }
 
+    @DeleteMapping("/deleteById")
+    public ResponseEntity<Boolean> deleteById(@RequestParam("addressId")String addressId,HttpServletRequest request){
+        boolean result = addressService.deleteAddress(addressId,request);
+        if(!result)
+            return ResponseEntity.badRequest().body(false);
+        return ResponseEntity.ok(true);
+    }
+
     @PostMapping("/addAddress")
     public ResponseEntity<Boolean> addAddress(AddAddressRequest addAddressRequest, HttpServletRequest request)
     {

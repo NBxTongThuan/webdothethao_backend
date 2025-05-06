@@ -15,6 +15,6 @@ public interface AddressService {
 
     List<Address> findByUser(HttpServletRequest request);
 
-
+    boolean deleteAddress(String addressId, HttpServletRequest request);
 
 }

@@ -25,6 +25,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Autowired
     private AddressRepository addressRepository;
+
     @Override
     public boolean AddAddress(AddAddressRequest addAddressRequest, HttpServletRequest request) {
 
@@ -55,7 +56,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public boolean updateAddress(UpdateAddressRequest updateAddressRequest,HttpServletRequest request) {
+    public boolean updateAddress(UpdateAddressRequest updateAddressRequest, HttpServletRequest request) {
         String token = jwtService.getTokenFromCookie(request);
 
         if (token.equalsIgnoreCase(""))
@@ -70,10 +71,17 @@ public class AddressServiceImpl implements AddressService {
         }
 
         Address address = addressRepository.findById(updateAddressRequest.getAddressId()).orElse(null);
-        if(address == null)
+        if (address == null)
             return false;
 
-
+        address.setToName(updateAddressRequest.getToName());
+        address.setToProvince(updateAddressRequest.getToProvince());
+        address.setToAddress(updateAddressRequest.getToAddress());
+        address.setToPhone(updateAddressRequest.getToPhone());
+        address.setToWard(updateAddressRequest.getToWard());
+        address.setToDistrict(address.getToDistrict());
+        addressRepository.saveAndFlush(address);
+        return true;
 
     }
 
@@ -81,10 +89,10 @@ public class AddressServiceImpl implements AddressService {
     public List<Address> findByUser(HttpServletRequest request) {
 
         String token = jwtService.getTokenFromCookie(request);
-        if(jwtService.isTokenExpired(token))
+        if (jwtService.isTokenExpired(token))
             return null;
 
-        if(token.equalsIgnoreCase(""))
+        if (token.equalsIgnoreCase(""))
             return null;
         Users user = usersService.findByUserName(jwtService.extractUsername(token));
         if (user == null) {
@@ -92,6 +100,24 @@ public class AddressServiceImpl implements AddressService {
         }
 
         return addressRepository.findByUserName(user.getUserName());
+    }
+
+    @Override
+    public boolean deleteAddress(String addressId, HttpServletRequest request) {
+        String token = jwtService.getTokenFromCookie(request);
+
+        if (token.equalsIgnoreCase(""))
+            return false;
+
+        if (jwtService.isTokenExpired(token))
+            return false;
+
+        Address address = addressRepository.findById(addressId).orElse(null);
+        if (address == null)
+            return false;
+        addressRepository.deleteById(addressId);
+        return true;
+
     }
 
 
