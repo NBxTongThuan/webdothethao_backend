@@ -77,10 +77,11 @@ public class OrdersServiceImpl implements OrdersService {
 
         String token = jwtService.getTokenFromCookie(request);
 
-        if (jwtService.isTokenExpired(token))
-            return null;
 
         if (token.equalsIgnoreCase(""))
+            return null;
+
+        if (jwtService.isTokenExpired(token))
             return null;
 
         Users user = usersService.findByUserName(jwtService.extractUsername(token));
