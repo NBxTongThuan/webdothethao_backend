@@ -1,5 +1,6 @@
 package com.tongthuan.webdothethao_backend.controller;
 
+import com.tongthuan.webdothethao_backend.dto.UpdateAddressRequest;
 import com.tongthuan.webdothethao_backend.dto.request.AddAddressRequest;
 import com.tongthuan.webdothethao_backend.dto.response.AddressResponse;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.AddressService;
@@ -33,9 +34,18 @@ public class AddressController {
     }
 
     @PostMapping("/addAddress")
-    public ResponseEntity<Boolean> addAddress(AddAddressRequest addAddressRequest, HttpServletRequest request)
+    public ResponseEntity<Boolean> addAddress(@RequestBody AddAddressRequest addAddressRequest, HttpServletRequest request)
     {
         boolean result = addressService.AddAddress(addAddressRequest,request);
+        if(!result)
+            return ResponseEntity.badRequest().body(false);
+        return ResponseEntity.ok(true);
+    }
+
+    @PutMapping("/updateAddress")
+    public ResponseEntity<Boolean> updateAddress(@RequestBody UpdateAddressRequest updateAddressRequest, HttpServletRequest request)
+    {
+        boolean result = addressService.updateAddress(updateAddressRequest,request);
         if(!result)
             return ResponseEntity.badRequest().body(false);
         return ResponseEntity.ok(true);

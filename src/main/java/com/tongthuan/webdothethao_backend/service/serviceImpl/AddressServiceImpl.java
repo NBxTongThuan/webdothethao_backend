@@ -79,7 +79,7 @@ public class AddressServiceImpl implements AddressService {
         address.setToAddress(updateAddressRequest.getToAddress());
         address.setToPhone(updateAddressRequest.getToPhone());
         address.setToWard(updateAddressRequest.getToWard());
-        address.setToDistrict(address.getToDistrict());
+        address.setToDistrict(updateAddressRequest.getToDistrict());
         addressRepository.saveAndFlush(address);
         return true;
 

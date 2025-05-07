@@ -62,6 +62,4 @@ public class Reviews {
     @JoinColumn(name = "product_attribute_id",nullable = false)
     private ProductAttributes productAttribute;
 
-
-
 }
