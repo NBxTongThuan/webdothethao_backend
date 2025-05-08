@@ -32,8 +32,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider(UsersService userService)
-    {
+    public DaoAuthenticationProvider authenticationProvider(UsersService userService) {
         DaoAuthenticationProvider dap = new DaoAuthenticationProvider();
         dap.setUserDetailsService(userService);
         dap.setPasswordEncoder(passwordEncoder());
@@ -57,16 +56,22 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(configure -> configure
                         .requestMatchers(HttpMethod.GET, EndPoints.PUBLIC_GET_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.POST, EndPoints.PUBLIC_POST_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.DELETE, EndPoints.PUBLIC_DELETE_ENDPOINTS).permitAll()
-                        .requestMatchers("/api/auth/**").permitAll() // login, register các thứ
-                        .requestMatchers(HttpMethod.GET, EndPoints.ADMIN_GET_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.POST, EndPoints.ADMIN_POST_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.PUT, EndPoints.ADMIN_PUT_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.DELETE, EndPoints.ADMIN_DELETE_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.POST, EndPoints.CUSTOMER_POST_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.PUT, EndPoints.CUSTOMER_PUT_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.DELETE, EndPoints.CUSTOMER_DELETE_ENDPOINTS).permitAll()
-                        .anyRequest().permitAll() // Bắt buộc phải xác thực mới vào
+                        .requestMatchers(HttpMethod.PUT, EndPoints.PUBLIC_PUT_ENDPOINTS).permitAll()
+
+                        .requestMatchers(HttpMethod.GET, EndPoints.CUSTOMER_GET_ENDPOINTS).hasAuthority("CUSTOMER")
+                        .requestMatchers(HttpMethod.POST, EndPoints.CUSTOMER_POST_ENDPOINTS).hasAuthority("CUSTOMER")
+                        .requestMatchers(HttpMethod.PUT, EndPoints.CUSTOMER_PUT_ENDPOINTS).hasAuthority("CUSTOMER")
+                        .requestMatchers(HttpMethod.DELETE, EndPoints.CUSTOMER_DELETE_ENDPOINTS).hasAuthority("CUSTOMER")
+
+                        .requestMatchers(HttpMethod.GET, EndPoints.ADMIN_GET_ENDPOINTS).hasAnyAuthority("ADMIN","STAFF")
+                        .requestMatchers(HttpMethod.POST, EndPoints.ADMIN_POST_ENDPOINTS).hasAnyAuthority("ADMIN","STAFF")
+                        .requestMatchers(HttpMethod.PUT, EndPoints.ADMIN_PUT_ENDPOINTS).hasAnyAuthority("ADMIN","STAFF")
+                        .requestMatchers(HttpMethod.DELETE, EndPoints.ADMIN_DELETE_ENDPOINTS).hasAnyAuthority("ADMIN","STAFF")
+
+                        .requestMatchers(HttpMethod.GET,EndPoints.HAS_ROLE_GET_ENDPOINTS).hasAnyAuthority("ADMIN","CUSTOMER","STAFF")
+                        .requestMatchers(HttpMethod.POST,EndPoints.HAS_ROLE_POST_ENDPOINTS).hasAnyAuthority("ADMIN","CUSTOMER","STAFF")
+
+                        .anyRequest().authenticated() // Bắt buộc phải xác thực mới vào
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -112,14 +117,11 @@ public class SecurityConfiguration {
 //    }
 
 
-
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-    {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) {
         try {
-                return authenticationConfiguration.getAuthenticationManager();
-        }catch (Exception e)
-        {
+            return authenticationConfiguration.getAuthenticationManager();
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

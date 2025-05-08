@@ -29,7 +29,7 @@ public class OrdersController {
     @Autowired
     private PagedResourcesAssembler<OrderResponse> orderResponsePagedResourcesAssembler;
 
-    @PostMapping("/codOrder")
+    @PostMapping("/cod-order")
     public ResponseEntity<?> orderCOD(@RequestBody OrderRequest orderRequest, HttpServletRequest request) {
         if (ordersService.addCodOrder(orderRequest,request) == null) {
             return ResponseEntity.badRequest().body("Dat hang that bai!");
@@ -37,7 +37,7 @@ public class OrdersController {
         return ResponseEntity.ok().body("Dat hang thanh cong");
     }
 
-    @GetMapping("/myOrders")
+    @GetMapping("/my-orders")
     public ResponseEntity<PagedModel<EntityModel<OrderResponse>>> getOrdersByUserName(
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size, @RequestParam("userName") String userName,
             @RequestParam("orderStatus") String orderStatus
@@ -62,7 +62,7 @@ public class OrdersController {
 
     }
 
-    @GetMapping("/getOrderByOrderId")
+    @GetMapping("/get-by-id")
     public ResponseEntity<OrderResponse> getOrderByOrderId(@RequestParam("orderId") String orderId)
     {
         Orders orders = ordersService.findByOrderId(orderId).orElse(null);
@@ -75,7 +75,7 @@ public class OrdersController {
 
 
 
-    @PutMapping("/cancelOrder")
+    @PutMapping("/cancel")
     public ResponseEntity<?> cancelingOrder(@RequestBody CancelOrderRequest cancelOrderRequest)
     {
         if(cancelOrderRequest.getOrderId().equalsIgnoreCase(""))

@@ -24,7 +24,7 @@ public class AdminNotificationController {
     @Autowired
     private PagedResourcesAssembler<NotificationsResponse> notificationsResponsePagedResourcesAssembler;
 
-    @GetMapping("/unreadNotification")
+    @GetMapping("/get-unread")
     public ResponseEntity<PagedModel<EntityModel<NotificationsResponse>>> findUnReadNotification(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size) {
         Pageable pageable = PageRequest.of(page, size,Sort.by(Sort.Direction.DESC, "createdDate"));
         Page<NotificationsResponse> notificationsResponses = notificationService.getUnReadNotifications(pageable).map(NotificationsResponse::new);
@@ -33,7 +33,7 @@ public class AdminNotificationController {
 
     }
 
-    @GetMapping("/getAllNotification")
+    @GetMapping("/get-all")
     public ResponseEntity<PagedModel<EntityModel<NotificationsResponse>>> findAllNotification(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size) {
         Pageable pageable = PageRequest.of(page, size,Sort.by(Sort.Direction.DESC, "createdDate"));
         Page<NotificationsResponse> notificationsResponses = notificationService.findAll(pageable).map(NotificationsResponse::new);
@@ -42,7 +42,7 @@ public class AdminNotificationController {
 
     }
 
-    @PutMapping("/setIsRead")
+    @PutMapping("/set-read")
     public ResponseEntity<Boolean> setIsRead(@RequestParam("notificationId") String notificationId) {
         return ResponseEntity.ok(notificationService.setIsRead(notificationId));
     }

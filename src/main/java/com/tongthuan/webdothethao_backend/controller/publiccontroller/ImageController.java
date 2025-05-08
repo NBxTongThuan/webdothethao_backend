@@ -17,7 +17,7 @@ public class ImageController {
     @Autowired
     private ImagesService imagesService;
 
-    @GetMapping("/getListImages")
+    @GetMapping("/get-all-by-product-id")
     public ResponseEntity<List<ImageResponse>> getAllByProductId(@RequestParam("productId") String productId)
     {
         if(productId.equals(""))
@@ -27,7 +27,7 @@ public class ImageController {
         return ResponseEntity.ok().body(imagesService.findByProductId(productId).stream().map(ImageResponse::new).toList());
     }
 
-    @GetMapping("/getFirstImage")
+    @GetMapping("/first-image-of-product")
     public ResponseEntity<Optional<ImageResponse>> getFirstImages(@RequestParam("productId") String productId){
         if(productId.equals(""))
         {

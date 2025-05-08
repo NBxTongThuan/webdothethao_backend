@@ -23,7 +23,7 @@ public class AdminReviewController {
     @Autowired
     private PagedResourcesAssembler<SeeReviewResponse> seeReviewResponsePagedResourcesAssembler;
 
-    @GetMapping("/getAllReviews")
+    @GetMapping("/get-page")
     public ResponseEntity<PagedModel<EntityModel<SeeReviewResponse>>> getAllReviews(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "1") int size)
     {
         Pageable pageable = PageRequest.of(page, size);

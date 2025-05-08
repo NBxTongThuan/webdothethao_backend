@@ -1,4 +1,4 @@
-package com.tongthuan.webdothethao_backend.controller;
+package com.tongthuan.webdothethao_backend.controller.AdminController;
 
 import com.tongthuan.webdothethao_backend.dto.response.PaymentResponse;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.PaymentService;
@@ -10,8 +10,8 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/payment")
-public class PaymentController {
+@RequestMapping("/api/admin/payment")
+public class AdminPaymentController {
 
     @Autowired
     private PaymentService paymentService;

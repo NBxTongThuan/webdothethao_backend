@@ -6,7 +6,7 @@ import org.springframework.web.client.RestTemplate;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/vn/address")
 @CrossOrigin(origins = "*")
 public class AddressVNController {
 

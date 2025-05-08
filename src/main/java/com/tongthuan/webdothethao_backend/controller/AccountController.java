@@ -36,74 +36,19 @@ public class AccountController {
     @Autowired
     JWTService jwtService;
 
-    @PostMapping("/Register")
+    @PostMapping("/register")
     public ResponseEntity<?> registerNewAccount(@Validated @RequestBody Users user) {
         ResponseEntity<?> response = accountService.registerAccount(user);
         return response;
     }
 
-    @GetMapping("/Active")
+    @GetMapping("/active")
     public ResponseEntity<?> activeAccount(@RequestParam("email") String email, @RequestParam("activeCode") String activeCode) {
         ResponseEntity<?> response = accountService.activeAccount(email, activeCode);
         return response;
     }
 
-//    @PostMapping("/Login")
-//    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
-//        try {
-//            Authentication authentication = authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(loginRequest.getUserName(), loginRequest.getPassWord()));
-//            if (authentication.isAuthenticated()) {
-//                final String jwtToken = jwtService.generateToken(loginRequest.getUserName());
-//
-//
-//                Cookie cookie = new Cookie("token", jwtToken);
-//                cookie.setHttpOnly(true);
-//                cookie.setSecure(true); // nếu dev local thì có thể tạm để false
-//                cookie.setPath("/");
-//                cookie.setMaxAge(7 * 24 * 60 * 60); // 7 ngày
-//
-//                response.addCookie(cookie);
-//
-//                return ResponseEntity.ok().body(
-//                        Map.of("statusCode", ResponseCode.SUCCESS,
-//                                "message", "Đăng nhập thành công")
-//                );
-//            }
-//        } catch (AuthenticationException e) {
-//            return ResponseEntity.badRequest().body("Tên đăng nhập hoặc mật khẩu không chính xác");
-//        }
-//        return ResponseEntity.badRequest().body("Xác thực không thành công");
-//    }
-
-    @DeleteMapping("/lockAccount")
-    public ResponseEntity<?> lockAccount(@RequestParam("userId") String userId) {
-        if (userId.equalsIgnoreCase("")) {
-            return ResponseEntity.badRequest().body("nguoi dung khong ton tai");
-        }
-
-        if (accountService.lockAccount(userId) == null) {
-            return ResponseEntity.badRequest().body("nguoi dung khong ton tai");
-        }
-
-        return ResponseEntity.ok().body("true");
-    }
-
-
-    @PutMapping("/unLockAccount")
-    public ResponseEntity<?> unLockAccount(@RequestParam("userId") String userId) {
-        if (userId.equalsIgnoreCase("")) {
-            return ResponseEntity.badRequest().body("nguoi dung khong ton tai");
-        }
-
-        if (accountService.unLockAccount(userId) == null) {
-            return ResponseEntity.badRequest().body("nguoi dung khong ton tai");
-        }
-
-        return ResponseEntity.ok().body("true");
-    }
-
-    @PutMapping("/changePassword")
+    @PutMapping("/change-password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
         boolean result = accountService.changePassword(changePasswordRequest);
 
@@ -113,7 +58,7 @@ public class AccountController {
 
     }
 
-    @GetMapping("/forgotPassword")
+    @GetMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestParam("email") String email) {
         if (!accountService.forgotPassword(email))
             return ResponseEntity.badRequest().body("email khong ton tai hoac gap loi trong qua trinh xu ly!");
@@ -121,7 +66,7 @@ public class AccountController {
     }
 
 
-    @PostMapping("/resetPassword")
+    @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
         if (!accountService.resetPassword(resetPasswordRequest))
             return ResponseEntity.badRequest().build();

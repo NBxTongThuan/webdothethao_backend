@@ -21,7 +21,7 @@ public class ReviewController {
     private ReviewsService reviewsService;
 
 
-    @GetMapping("/getListReviews")
+    @GetMapping("/get-list-by-product-id")
     public ResponseEntity<List<GetReviewResponse>> getListReviewsByProductID(@RequestParam("productId") String productId) {
         if (productId.equalsIgnoreCase(""))
             return ResponseEntity.badRequest().build();
@@ -29,7 +29,7 @@ public class ReviewController {
     }
 
 
-    @PostMapping("/addReview")
+    @PostMapping("/add")
     public ResponseEntity<?> addReview(@RequestBody AddReviewRequest reviewRequest) {
        boolean result = reviewsService.addReviews(reviewRequest);
         if (!result)
@@ -37,7 +37,7 @@ public class ReviewController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/seeAReview")
+    @GetMapping("/see-review")
     public ResponseEntity<SeeReviewResponse> getReviewByOrderItemId(@RequestParam("orderItemId") String orderItemId)
     {
         if(orderItemId.equalsIgnoreCase(""))
@@ -53,7 +53,7 @@ public class ReviewController {
         return ResponseEntity.ok().body(new SeeReviewResponse(review));
     }
 
-    @PutMapping("/updateReview")
+    @PutMapping("/update")
     public ResponseEntity<?> updateReview(@RequestBody UpdateReviewRequest updateReviewRequest)
     {
         boolean result = reviewsService.updateReview(updateReviewRequest);

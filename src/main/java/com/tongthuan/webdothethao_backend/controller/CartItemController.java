@@ -11,13 +11,13 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/cartItem")
+@RequestMapping("/api/cart-item")
 public class CartItemController {
 
     @Autowired
     private CartItemService cartItemService;
 
-    @PutMapping("/updateQuantity")
+    @PutMapping("/update-quantity")
     public ResponseEntity<?> updateQuantity(@RequestBody UpdateCartItemRequest updateCartItemRequest)
     {
         boolean result = cartItemService.updateCartItem(updateCartItemRequest);

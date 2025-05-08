@@ -27,7 +27,7 @@ public class AdminTypeController {
     @Autowired
     private PagedResourcesAssembler<TypeResponse> pagedResourcesAssembler;
 
-    @GetMapping("/getAllType")
+    @GetMapping("/get-page")
     public ResponseEntity<PagedModel<EntityModel<TypeResponse>>> getAllType(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size) {
 
 
@@ -42,7 +42,7 @@ public class AdminTypeController {
         return ResponseEntity.ok(pagedModel);
     }
 
-    @GetMapping("/getTypeByCategoryName")
+    @GetMapping("/get-by-category-name")
     public ResponseEntity<List<TypeResponse>> getTypesByCategoryName(@RequestParam("categoryName") String categoryName) {
 
         if(categoryName.equalsIgnoreCase(""))
@@ -51,7 +51,7 @@ public class AdminTypeController {
         return ResponseEntity.ok(typeService.getTypesByCategoryName(categoryName).stream().map(TypeResponse::new).toList());
     }
 
-    @GetMapping("/checkExistsType")
+    @GetMapping("/check-exists")
     public ResponseEntity<?> checkExistsByIdAndCategoryId(@RequestParam("typeName") String typeName, @RequestParam("categoryName") String categoryName) {
         boolean result = typeService.checkExists(typeName, categoryName);
         if (!result)
@@ -59,7 +59,7 @@ public class AdminTypeController {
         return ResponseEntity.ok(true);
     }
 
-    @PostMapping("/addTypes")
+    @PostMapping("/add")
     public ResponseEntity<?> addType(@RequestBody AddTypesRequest addTypesRequest) {
         if (addTypesRequest == null)
             return ResponseEntity.badRequest().build();
@@ -69,7 +69,7 @@ public class AdminTypeController {
         return ResponseEntity.ok(true);
     }
 
-    @DeleteMapping("/disableType")
+    @DeleteMapping("/disable")
     public ResponseEntity<?> disableType(@RequestParam("typeId") int typeId) {
         boolean result = typeService.disableType(typeId);
         if(!result)
@@ -77,7 +77,7 @@ public class AdminTypeController {
         return ResponseEntity.ok(true);
     }
 
-    @PutMapping("/enableType")
+    @PutMapping("/enable")
     public ResponseEntity<?> enableType(@RequestParam("typeId") int typeId) {
         boolean result = typeService.enableType(typeId);
         if(!result)
@@ -85,7 +85,7 @@ public class AdminTypeController {
         return ResponseEntity.ok(true);
     }
 
-    @PutMapping("/updateType")
+    @PutMapping("/update")
     public ResponseEntity<?> enableType(@RequestBody UpdateTypeRequest updateTypeRequest) {
         boolean result = typeService.updateType(updateTypeRequest);
         if(!result)

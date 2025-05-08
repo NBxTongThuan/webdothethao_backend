@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/payment/vnpay")
+@RequestMapping("/api/payment/vn-pay")
 @RequiredArgsConstructor
 public class VNPayController {
 
@@ -33,7 +33,7 @@ public class VNPayController {
         }
     }
 
-    @PostMapping("/reCreate")
+    @PostMapping("/re-create")
     public ResponseEntity<?> reCreatePayment(@RequestParam("paymentId") String paymentId) {
         try {
             String url = vnpayService.reCreatePaymentUrl(paymentId);

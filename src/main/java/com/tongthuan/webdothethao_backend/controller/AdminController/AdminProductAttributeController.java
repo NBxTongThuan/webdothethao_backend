@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/admin/productAttribute")
+@RequestMapping("/api/admin/product-attribute")
 public class AdminProductAttributeController {
 
     @Autowired
@@ -25,7 +25,7 @@ public class AdminProductAttributeController {
     @Autowired
     private PagedResourcesAssembler<AdminProductAttributeResponse> adminProductAttributeResponsePagedResourcesAssembler;
 
-    @GetMapping("/getAllProductAttributeByProductId")
+    @GetMapping("/get-page-by-product-id")
     public ResponseEntity<PagedModel<EntityModel<AdminProductAttributeResponse>>> getAllProductAttributeByProductId(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size , @RequestParam("productId") String productId) {
         if (productId.equalsIgnoreCase("")) {
             return ResponseEntity.badRequest().build();
@@ -41,7 +41,7 @@ public class AdminProductAttributeController {
         return ResponseEntity.ok().body(pagedModel);
     }
 
-    @PostMapping("/addProductAttribute")
+    @PostMapping("/add")
     public ResponseEntity<Boolean> addProductAttribute(@RequestBody AddProductAttributeRequest  addProductAttributeRequest)
     {
         boolean result = productAttributeService.addProductAttribute(addProductAttributeRequest);
@@ -50,7 +50,7 @@ public class AdminProductAttributeController {
         return ResponseEntity.ok(true);
     }
 
-    @PutMapping("/updateProductAttribute")
+    @PutMapping("/update")
     public ResponseEntity<Boolean> updateProductAttribute(@RequestBody UpdateProductAttributeRequest updateProductAttributeRequest)
     {
         boolean result = productAttributeService.updateProductAttribute(updateProductAttributeRequest);
@@ -59,7 +59,7 @@ public class AdminProductAttributeController {
         return ResponseEntity.ok(true);
     }
 
-    @PutMapping("/enableProductAttribute")
+    @PutMapping("/enable")
     public ResponseEntity<Boolean> enableProductAttribute(@RequestParam("productAttributeId") String productAttributeId)
     {
         boolean result = productAttributeService.enableProductAttribute(productAttributeId);
@@ -68,7 +68,7 @@ public class AdminProductAttributeController {
         return ResponseEntity.ok(true);
     }
 
-    @DeleteMapping("/disableProductAttribute")
+    @DeleteMapping("/disable")
     public ResponseEntity<Boolean> disableProductAttribute(@RequestParam("productAttributeId") String productAttributeId)
     {
         boolean result = productAttributeService.disableProductAttribute(productAttributeId);

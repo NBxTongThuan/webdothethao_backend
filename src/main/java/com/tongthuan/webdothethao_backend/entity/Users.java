@@ -96,6 +96,15 @@ public class Users {
     })
     private List<Address> addressList;
 
+    @OneToMany(mappedBy = "user",
+            fetch = FetchType.LAZY,cascade = {
+            CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH
+    })
+    private List<ChatBoxMessages> chatBoxMessagesList;
+
     public boolean isActive() {
         return isActive;
     }

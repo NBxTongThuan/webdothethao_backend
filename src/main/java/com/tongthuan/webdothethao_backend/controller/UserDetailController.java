@@ -12,13 +12,13 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/userDetail")
+@RequestMapping("/api/user-detail")
 public class UserDetailController {
 
     @Autowired
     private UserDetailService userDetailService;
 
-    @GetMapping("/getUserDetailByUserName")
+    @GetMapping("/get-by-name")
     public ResponseEntity<Optional<UserDetailResponse>> getUserDetailByUserName(@RequestParam("userName") String userName) {
         if (userName.equalsIgnoreCase("")) {
             return ResponseEntity.badRequest().build();
@@ -26,7 +26,7 @@ public class UserDetailController {
         return ResponseEntity.ok().body(userDetailService.findByUserName(userName).map(UserDetailResponse::new));
     }
 
-    @PutMapping("/updateUserDetail")
+    @PutMapping("/update")
     public ResponseEntity<?> updateUserDetail(@RequestBody UserDetailRequest userDetailRequest)
     {
         UserDetail userDetails = userDetailService.updateUserDetail(userDetailRequest);

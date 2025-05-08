@@ -4,6 +4,7 @@ import com.tongthuan.webdothethao_backend.constantvalue.OrderStatus;
 import com.tongthuan.webdothethao_backend.dto.adminRequest.AdminUpdateOrderRequest;
 import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.RevenueByDateResponse;
 import com.tongthuan.webdothethao_backend.dto.response.OrderResponse;
+import com.tongthuan.webdothethao_backend.entity.Orders;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,7 +32,7 @@ public class AdminOrdersController {
     @Autowired
     private PagedResourcesAssembler<OrderResponse> orderResponsePagedResourcesAssembler;
 
-    @GetMapping("/getAllOrder")
+    @GetMapping("/get-all")
     public ResponseEntity<PagedModel<EntityModel<OrderResponse>>> getAllOrder(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size, @RequestParam("orderStatus") String orderStatus) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
         Page<OrderResponse> orderResponses;
@@ -47,7 +48,7 @@ public class AdminOrdersController {
 
     }
 
-    @PutMapping("/updateOrder")
+    @PutMapping("/update")
     public ResponseEntity<?> updateOrderByOrderId(@RequestBody AdminUpdateOrderRequest adminUpdateOrderRequest) {
         boolean result = ordersService.adminUpdateOrderByOrderId(adminUpdateOrderRequest);
         if (result)
@@ -55,29 +56,40 @@ public class AdminOrdersController {
         return ResponseEntity.badRequest().body("gap loi trong qua trinh xu ly!");
     }
 
-    @GetMapping("/totalOrderToday")
+    @GetMapping("/total-today")
     public ResponseEntity<Long> getTotalOrderToday() {
         return ResponseEntity.ok(ordersService.getTotalToDayOrder());
     }
 
-    @GetMapping("/getRevenueOfMonth")
+    @GetMapping("/revenue-of-month")
     public ResponseEntity<Long> getRevenueOfMonth() {
         return ResponseEntity.ok(ordersService.getRevenueOfMonth());
     }
 
 
-    @GetMapping("/getRevenueByDate")
+    @GetMapping("/revenue-by-date")
     public ResponseEntity<List<RevenueByDateResponse>> getRevenueByDate(@RequestParam("start") LocalDate start, @RequestParam("end") LocalDate end) {
         return ResponseEntity.ok(ordersService.getRevenueByDateResponse(start, end));
     }
 
-    @GetMapping("/getNewOrders")
+    @GetMapping("/new")
     public ResponseEntity<PagedModel<EntityModel<OrderResponse>>> getOrderOfMonth(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
         Page<OrderResponse> orderResponses = ordersService.getNewOrders(pageable).map(OrderResponse::new);
 
         PagedModel<EntityModel<OrderResponse>> pagedModel = orderResponsePagedResourcesAssembler.toModel(orderResponses);
         return ResponseEntity.ok(pagedModel);
+    }
+
+    @GetMapping("/get-by-id")
+    public ResponseEntity<OrderResponse> getOrderByOrderId(@RequestParam("orderId") String orderId)
+    {
+        Orders orders = ordersService.findByOrderId(orderId).orElse(null);
+        if(orders == null)
+        {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(new OrderResponse(orders));
     }
 
 

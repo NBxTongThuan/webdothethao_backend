@@ -31,7 +31,7 @@ public class CategoriesController {
         return ResponseEntity.ok().body(categoriesService.findALl().stream().map(CategoryResponse::new).toList());
     }
 
-    @GetMapping("/top4Category")
+    @GetMapping("/top-4")
     public ResponseEntity<PagedModel<EntityModel<CategoryResponse>>> getTopCategory(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<CategoryResponse> categoryResponses = categoriesService.findTopCategoriesByProductCount(pageable).map(CategoryResponse::new);

@@ -29,13 +29,13 @@ public class AdminCategoryController {
     @Autowired
     private PagedResourcesAssembler<CategoryResponse> pagedResourcesAssembler;
 
-    @GetMapping("/findAll")
+    @GetMapping("/find-all")
     public ResponseEntity<List<CategoryResponse>> findAllCategory()
     {
         return ResponseEntity.ok(categoriesService.findALl().stream().map(CategoryResponse::new).toList());
     }
 
-    @GetMapping("/getById")
+    @GetMapping("/get-by-id")
     public ResponseEntity<CategoryResponse> findById(@RequestParam("categoryId") int categoryId) {
         Categories category = categoriesService.findById(categoryId).orElse(null);
         if (category == null)
@@ -43,7 +43,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok(new CategoryResponse(category));
     }
 
-    @GetMapping("/getByCategoryName")
+    @GetMapping("/get-by-name")
     public ResponseEntity<CategoryResponse> findByName(@RequestParam("categoryName") String categoryName) {
         Categories category = categoriesService.findByName(categoryName);
         if (category == null)
@@ -51,7 +51,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok(new CategoryResponse(category));
     }
 
-    @GetMapping("/getAllCategory")
+    @GetMapping("/get-page")
     public ResponseEntity<PagedModel<EntityModel<CategoryResponse>>> getAllCategory(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<CategoryResponse> categoryResponses = categoriesService.findAllPage(pageable).map(CategoryResponse::new);
@@ -61,7 +61,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok(pagedModel);
     }
 
-    @GetMapping("/checkCategoryExists")
+    @GetMapping("/check-exists")
     public ResponseEntity<Boolean> checkExists(@RequestParam("categoryName") String categoryName) {
 
         if (categoryName.equalsIgnoreCase("")) {
@@ -71,7 +71,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/addCategory")
+    @PostMapping("/add")
     public ResponseEntity<?> addCategory(@RequestBody AddCategoryRequest addCategoryRequest) {
         if (addCategoryRequest == null)
             return ResponseEntity.badRequest().body(false);
@@ -79,7 +79,7 @@ public class AdminCategoryController {
 
     }
 
-    @DeleteMapping("/disableCategory")
+    @DeleteMapping("/disable")
     public ResponseEntity<?> disableCategoryById(@RequestParam("categoryId") int categoryId) {
         boolean result = categoriesService.deleteCategory(categoryId);
         if (!result)
@@ -87,7 +87,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok(true);
     }
 
-    @PutMapping("/enableCategory")
+    @PutMapping("/enable")
     public ResponseEntity<?> enableCategoryById(@RequestParam("categoryId") int categoryId) {
         boolean result = categoriesService.enableCategory(categoryId);
         if (!result)
@@ -95,7 +95,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok(true);
     }
 
-    @PutMapping("/updateCategory")
+    @PutMapping("/update")
     public ResponseEntity<?> updateCategory(@RequestBody UpdateCategoryRequest updateCategoryRequest) {
         boolean result = categoriesService.updateCategory(updateCategoryRequest);
         if (!result)

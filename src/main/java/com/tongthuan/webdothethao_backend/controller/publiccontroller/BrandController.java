@@ -15,10 +15,10 @@ public class BrandController {
     @Autowired
     private BrandService brandService;
 
-    @GetMapping("/getBrandByProductId")
+    @GetMapping("/get-by-product-id")
     public ResponseEntity<Optional<BrandResponse>> getBrandByProductId(@RequestParam("productId") String productId)
     {
-        if(productId.equals(""))
+        if(productId.equalsIgnoreCase(""))
         {
             return ResponseEntity.badRequest().build();
         }

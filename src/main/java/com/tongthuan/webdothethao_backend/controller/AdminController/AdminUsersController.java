@@ -1,4 +1,4 @@
-package com.tongthuan.webdothethao_backend.controller;
+package com.tongthuan.webdothethao_backend.controller.AdminController;
 
 import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.UserStatsResponse;
 import com.tongthuan.webdothethao_backend.dto.response.UserResponse.UserResponse;
@@ -14,11 +14,11 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin("*")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/users") // Chữ thường
-public class UsersController {
+@RequestMapping("/api/admin/users") // Chữ thường
+public class AdminUsersController {
 
     @Autowired
     private UsersService usersService;
@@ -26,17 +26,22 @@ public class UsersController {
     @Autowired
     private PagedResourcesAssembler<UserResponse> pagedAssembler;
 
+    //Admin
+    @GetMapping("/all")
+    public ResponseEntity<PagedModel<EntityModel<UserResponse>>> getAllUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size) { // Trả về List<Users>
 
-    @GetMapping("/check-exists-by-user-name")
-    public boolean checkExistsByUserName(@RequestParam("userName") String userName)
-    {
-        return usersService.checkExistsByUserName(userName);
+        Pageable pageable = PageRequest.of(page,size);
+        Page<UserResponse> usersResponse = usersService.findAllUsersPage(pageable).map(UserResponse::new);
+
+        PagedModel<EntityModel<UserResponse>> pagedModel = pagedAssembler.toModel(usersResponse);
+
+        return ResponseEntity.ok(pagedModel);
     }
 
-    @GetMapping("/check-exists-by-email")
-    public boolean checkExistsByEmail(@RequestParam("email") String email)
-    {
-        return usersService.checkExistsByEmail(email);
+    @GetMapping("/stats")
+    public ResponseEntity<UserStatsResponse> getUserStats() {
+        UserStatsResponse response = usersService.getUserStats();
+        return ResponseEntity.ok(response);
     }
 
 

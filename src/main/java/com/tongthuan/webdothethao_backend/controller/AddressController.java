@@ -13,19 +13,19 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/address")
+@RequestMapping("/api/my-address")
 public class AddressController {
 
     @Autowired
     private AddressService addressService;
 
-    @GetMapping("/getAddress")
+    @GetMapping("/get")
     public ResponseEntity<List<AddressResponse>> findByUser(HttpServletRequest request)
     {
         return ResponseEntity.ok().body(addressService.findByUser(request).stream().map(AddressResponse::new).toList());
     }
 
-    @DeleteMapping("/deleteById")
+    @DeleteMapping("/delete-by-id")
     public ResponseEntity<Boolean> deleteById(@RequestParam("addressId")String addressId,HttpServletRequest request){
         boolean result = addressService.deleteAddress(addressId,request);
         if(!result)
@@ -33,7 +33,7 @@ public class AddressController {
         return ResponseEntity.ok(true);
     }
 
-    @PostMapping("/addAddress")
+    @PostMapping("/add")
     public ResponseEntity<Boolean> addAddress(@RequestBody AddAddressRequest addAddressRequest, HttpServletRequest request)
     {
         boolean result = addressService.AddAddress(addAddressRequest,request);
@@ -42,7 +42,7 @@ public class AddressController {
         return ResponseEntity.ok(true);
     }
 
-    @PutMapping("/updateAddress")
+    @PutMapping("/update")
     public ResponseEntity<Boolean> updateAddress(@RequestBody UpdateAddressRequest updateAddressRequest, HttpServletRequest request)
     {
         boolean result = addressService.updateAddress(updateAddressRequest,request);

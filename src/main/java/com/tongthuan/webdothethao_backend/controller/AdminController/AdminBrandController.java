@@ -26,12 +26,12 @@ public class AdminBrandController {
     @Autowired
     private PagedResourcesAssembler<BrandResponse> brandResponsePagedResourcesAssembler;
 
-    @GetMapping("/getAllBrand")
+    @GetMapping("/get-all")
     public ResponseEntity<List<BrandResponse>> getListBrand() {
         return ResponseEntity.ok(brandService.getAllBrands().stream().map(BrandResponse::new).toList());
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/get-page")
     public ResponseEntity<PagedModel<EntityModel<BrandResponse>>> getAllBrand(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size) {
 
         Pageable pageable = PageRequest.of(page, size);

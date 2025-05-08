@@ -28,7 +28,7 @@ public class ProductController {
     @Autowired
     private PagedResourcesAssembler<ProductsResponse> pagedAssembler;
 
-    @GetMapping
+    @GetMapping("/get-all")
     public ResponseEntity<PagedModel<EntityModel<ProductsResponse>>> getAllProducts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
@@ -43,7 +43,7 @@ public class ProductController {
         return ResponseEntity.ok(pagedModel);
     }
 
-    @GetMapping("/listByCateId")
+    @GetMapping("/page-by-category-id")
     public ResponseEntity<PagedModel<EntityModel<ProductsResponse>>> getListProductsByCategoryId(@RequestParam("categoryId") int categoryId,
                                                                                                  @RequestParam(defaultValue = "0") int page,
                                                                                                  @RequestParam(defaultValue = "10") int size) {
@@ -57,10 +57,10 @@ public class ProductController {
         return ResponseEntity.ok(pagedModel);
     }
 
-    @GetMapping("/listByName")
+    @GetMapping("/page-by-name")
     public ResponseEntity<PagedModel<EntityModel<ProductsResponse>>> getListProductsByProductName(@RequestParam("productName") String productName,
                                                                                                   @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        if (productName.equals("")) {
+        if (productName.equalsIgnoreCase("")) {
             return ResponseEntity.badRequest().build();
         }
         Pageable pageable = PageRequest.of(page, size);
@@ -71,16 +71,16 @@ public class ProductController {
         return ResponseEntity.ok(pagedModel);
     }
 
-    @GetMapping("/oneproduct")
+    @GetMapping("/get-by-id")
     public ResponseEntity<Optional<ProductsResponse>> getProductById(@RequestParam("productId") String productId) {
-        if (productId.equals("")) {
+        if (productId.equalsIgnoreCase("")) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok().body(productsServiceInterface.getByProductId(productId).map(ProductsResponse::new));
     }
 
 
-    @GetMapping("/top4")
+    @GetMapping("/top-4")
     public ResponseEntity<PagedModel<EntityModel<ProductsResponse>>> findTop4Selling(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size) {
         Pageable pageable = PageRequest.of(page, size);
 
@@ -93,7 +93,7 @@ public class ProductController {
     }
 
 
-    @GetMapping("/topNewestProduct")
+    @GetMapping("/page-newest")
     public ResponseEntity<PagedModel<EntityModel<ProductsResponse>>> findTopNewestProduct(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size) {
         Pageable pageable = PageRequest.of(page, size);
 
@@ -104,7 +104,7 @@ public class ProductController {
         return ResponseEntity.ok(pagedModel);
 
     }
-    @GetMapping("/sameProductType")
+    @GetMapping("/same")
     public ResponseEntity<PagedModel<EntityModel<ProductsResponse>>> findSameProductType(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size,@RequestParam("productId")String productId) {
         Pageable pageable = PageRequest.of(page, size);
 
@@ -115,7 +115,7 @@ public class ProductController {
 
     }
 
-    @GetMapping("/discountingProduct")
+    @GetMapping("/discounting")
     public ResponseEntity<PagedModel<EntityModel<ProductsResponse>>> findDiscountingProducts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size) {
         Pageable pageable = PageRequest.of(page, size);
 

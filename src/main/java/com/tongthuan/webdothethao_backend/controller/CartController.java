@@ -17,13 +17,13 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    @PostMapping("/addToCart")
+    @PostMapping("/add")
     public ResponseEntity<?> addItemToCart(@RequestBody AddCartItemRequest cartItemRequest) {
         return cartService.addItemToCart(cartItemRequest);
 
     }
 
-    @GetMapping("/getListCartItem")
+    @GetMapping("/get-list")
     public ResponseEntity<List<CartItemReponse>> getListCartItem(@RequestParam("cartId") String cartId) {
         if (cartId.equals("")) {
             return ResponseEntity.badRequest().build();
@@ -31,7 +31,7 @@ public class CartController {
         return ResponseEntity.ok().body(cartService.getListCartItem(cartId).stream().map(CartItemReponse::new).toList());
     }
 
-    @DeleteMapping("/deleteCartItem")
+    @DeleteMapping("/delete-cart-item")
     public ResponseEntity<String> deleteCartItemByID(@RequestParam("cartItemID") String cartItemID) {
         if (cartService.deleteCartItem(cartItemID) != 0) {
             return ResponseEntity.ok().body("true");
