@@ -69,7 +69,8 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.DELETE, EndPoints.ADMIN_DELETE_ENDPOINTS).hasAnyAuthority("ADMIN","STAFF")
 
                         .requestMatchers(HttpMethod.GET,EndPoints.HAS_ROLE_GET_ENDPOINTS).hasAnyAuthority("ADMIN","CUSTOMER","STAFF")
-                        .requestMatchers(HttpMethod.POST,EndPoints.HAS_ROLE_POST_ENDPOINTS).hasAnyAuthority("ADMIN","CUSTOMER","STAFF")
+//                        .requestMatchers(HttpMethod.POST,EndPoints.HAS_ROLE_POST_ENDPOINTS).hasAnyAuthority("ADMIN","CUSTOMER","STAFF")
+                        .requestMatchers(HttpMethod.POST,EndPoints.HAS_ROLE_POST_ENDPOINTS).permitAll()
 
                         .anyRequest().authenticated() // Bắt buộc phải xác thực mới vào
                 )

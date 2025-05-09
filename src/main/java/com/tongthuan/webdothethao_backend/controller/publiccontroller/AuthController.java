@@ -70,7 +70,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public String logout(HttpServletResponse response) {
+    public ResponseEntity<?> logout(HttpServletResponse response) {
         Cookie cookie = new Cookie("token", "");
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
@@ -78,7 +78,7 @@ public class AuthController {
         cookie.setMaxAge(0); // Xóa cookie
         response.addCookie(cookie);
 
-        return "Logout success!";
+        return ResponseEntity.ok("success");
     }
 
     @GetMapping("/me")

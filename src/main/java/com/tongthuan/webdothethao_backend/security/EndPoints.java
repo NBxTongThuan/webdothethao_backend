@@ -61,6 +61,9 @@ public class EndPoints {
             //Account
             "/api/account/register",
             "/api/account/reset-password",
+
+            //Auth
+            "/api/auth/logout",
     };
 
     public static final String[] PUBLIC_PUT_ENDPOINTS = {
@@ -148,7 +151,7 @@ public class EndPoints {
 
     public static final String[] HAS_ROLE_POST_ENDPOINTS = {
             //Auth
-            "/api/auth/logout",
+
     };
 
     public static final String[] HAS_ROLE_GET_ENDPOINTS = {
