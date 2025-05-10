@@ -213,6 +213,9 @@ public class EndPoints {
             "/api/admin/users/all",
             "/api/admin/users/stats",
 
+            //UserDetail
+            "/api/admin/user-detail/get-by-name"
+
     };
 
     public static final String[] ADMIN_PUT_ENDPOINTS = {
