@@ -5,6 +5,7 @@ import com.tongthuan.webdothethao_backend.dto.adminRequest.UpdateProductRequest;
 import com.tongthuan.webdothethao_backend.dto.request.ProductRequest.ProductRequest;
 import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.AdminProductsResponse;
 import com.tongthuan.webdothethao_backend.dto.response.ProductsResponse;
+import com.tongthuan.webdothethao_backend.entity.Products;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -127,6 +128,15 @@ public class AdminProductController {
 
         PagedModel<EntityModel<AdminProductsResponse>> pagedModel = productsResponsePagedResourcesAssembler.toModel(productsPage);
         return ResponseEntity.ok(pagedModel);
+    }
+
+    @GetMapping("/get-by-id")
+    public ResponseEntity<AdminProductsResponse> findById(String productId) {
+
+        Products products = productsService.findById(productId);
+
+        return ResponseEntity.ok(new AdminProductsResponse(products));
+
     }
 
 

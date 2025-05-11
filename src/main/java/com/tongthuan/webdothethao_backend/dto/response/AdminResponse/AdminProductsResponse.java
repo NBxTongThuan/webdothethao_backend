@@ -16,6 +16,7 @@ public class AdminProductsResponse {
     private int quantitySold;
     private long price;
     private long moneyOff;
+    private long importPrice;
     private String typeName;
     private String categoryName;
     private boolean isInStock;
@@ -28,6 +29,7 @@ public class AdminProductsResponse {
         this.quantitySold = products.getQuantitySold();
         this.price = products.getPrice();
         this.moneyOff = products.getMoneyOff();
+        this.importPrice = products.getImportPrice();
         this.typeName = products.getType().getTypename();
         this.categoryName = products.getType().getCategories().getCategoriesName();
         this.isInStock = products.isInStock();

@@ -73,8 +73,6 @@ public class OrdersController {
         return ResponseEntity.ok(new OrderResponse(orders));
     }
 
-
-
     @PutMapping("/cancel")
     public ResponseEntity<?> cancelingOrder(@RequestBody CancelOrderRequest cancelOrderRequest)
     {

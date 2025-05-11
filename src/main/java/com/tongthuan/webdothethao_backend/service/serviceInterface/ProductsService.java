@@ -45,4 +45,6 @@ public interface ProductsService {
 
     Page<Products> getInStockProducts(Pageable pageable);
 
+    Products findById(String productId);
+
 }

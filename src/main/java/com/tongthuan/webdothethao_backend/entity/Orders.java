@@ -27,6 +27,9 @@ public class Orders {
     @Column(name = "final_price")
     private long finalPrice;
 
+    @Column(name = "total_import_price")
+    private long totalImportPrice;
+
     @Column(name = "total_money_off")
     private long totalMoneyOff;
 

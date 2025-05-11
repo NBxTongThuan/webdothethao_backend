@@ -14,7 +14,8 @@ public class ProductRequest {
 
     private String productName;
     private String productDescription;
-    private Long price;
+    private long price;
+    private long importPrice;
     private int brandId;
     private int typeId;
     private List<ProductAttributeRequest> listProductAttribute;

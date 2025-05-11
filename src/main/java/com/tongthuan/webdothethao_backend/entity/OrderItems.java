@@ -16,16 +16,19 @@ public class OrderItems {
     private int quantity;
 
     @Column(name = "original_price")
-    private Long originalPrice;
+    private long originalPrice;
 
     @Column(name = "final_price")
-    private Long finalPrice;
+    private long finalPrice;
 
     @Column(name = "is_reviewed")
     private boolean isReviewed;
 
+    @Column(name = "import_price")
+    private long importPrice;
+
     @Column(name = "money_off_per_one_product")
-    private Long moneyOffPerOneProduct;
+    private long moneyOffPerOneProduct;
 
     @ManyToOne(
             cascade = {

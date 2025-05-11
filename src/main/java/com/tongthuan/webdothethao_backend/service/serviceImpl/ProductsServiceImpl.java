@@ -82,6 +82,7 @@ public class ProductsServiceImpl implements ProductsService {
         product.setProductName(productRequest.getProductName());
         product.setDescription(productRequest.getProductDescription());
         product.setPrice(productRequest.getPrice());
+        product.setImportPrice(productRequest.getImportPrice());
         product.setCreatedDate(LocalDateTime.now());
         product.setInStock(true);
 
@@ -156,6 +157,8 @@ public class ProductsServiceImpl implements ProductsService {
         product.setDescription(updateProductRequest.getDescription());
         product.setPrice(updateProductRequest.getPrice());
         product.setProductName(updateProductRequest.getProductName());
+        System.out.println(updateProductRequest.getImportPrice());
+        product.setImportPrice(updateProductRequest.getImportPrice());
 
         //handle Image
         if(!updateProductRequest.getListUpdateImage().isEmpty())
@@ -236,5 +239,10 @@ public class ProductsServiceImpl implements ProductsService {
     @Override
     public Page<Products> getInStockProducts(Pageable pageable) {
         return productsRepository.findInStockProducts(pageable);
+    }
+
+    @Override
+    public Products findById(String productId) {
+        return productsRepository.findById(productId).orElse(null);
     }
 }

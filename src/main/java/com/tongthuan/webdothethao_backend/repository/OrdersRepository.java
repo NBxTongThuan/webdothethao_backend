@@ -34,7 +34,7 @@ public interface OrdersRepository extends JpaRepository<Orders, String> {
     @Query("SELECT SUM(o.totalPrice) FROM Orders o WHERE o.status = :status AND MONTH(o.createdDate) = :month AND YEAR(o.createdDate) = :year")
     Long getRevenueOfMonth(@Param("status") OrderStatus orderStatus, @Param("month") int month, @Param("year") int year);
 
-    @Query("SELECT FUNCTION('DATE', o.createdDate) AS date, SUM(o.totalPrice) " +
+    @Query("SELECT FUNCTION('DATE', o.createdDate) AS date, SUM(o.totalPrice  - o.totalImportPrice) "+
     " FROM Orders o" +
     " WHERE o.status = :status" +
     " AND o.createdDate BETWEEN :start AND :end" +

@@ -200,6 +200,7 @@ public class EndPoints {
             "/api/admin/products/get-page-discount",
             "/api/admin/products/get-count-enable",
             "/api/admin/products/get-enable",
+            "/api/admin/products/get-by-id",
 
             //Reviews
             "/api/admin/reviews/get-page",

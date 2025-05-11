@@ -99,6 +99,7 @@ public class OrdersServiceImpl implements OrdersService {
         orders.setOrderNote(orderRequest.getOrderNote());
         orders.setStatus(OrderStatus.PENDING);
         orders.setTotalPrice(getTotalPrice(cart.getCartId()));
+        orders.setTotalImportPrice(getTotalImportPrice(cart.getCartId()));
         orders.setTotalMoneyOff(getTotalMoneyOff(cart.getCartId()));
         orders.setFinalPrice(getFinalPrice(cart.getCartId()));
         orders.setShipFee(30000L);
@@ -215,6 +216,7 @@ public class OrdersServiceImpl implements OrdersService {
         orders.setOrderNote(orderRequest.getOrderNote());
         orders.setStatus(OrderStatus.PENDING);
         orders.setTotalPrice(getTotalPrice(cart.getCartId()));
+        orders.setTotalImportPrice(getTotalImportPrice(cart.getCartId()));
         orders.setTotalMoneyOff(getTotalMoneyOff(cart.getCartId()));
         orders.setFinalPrice(getFinalPrice(cart.getCartId()));
         orders.setShipFee(30000L);
@@ -413,6 +415,18 @@ public class OrdersServiceImpl implements OrdersService {
         return totalPrice;
     }
 
+    public long getTotalImportPrice(String cartId) {
+        long totalImportPrice = 0;
+        List<CartItems> cartItems = cartItemsRepository.findByCartId(cartId);
+        if (!cartItems.isEmpty()) {
+            for (CartItems cartItem : cartItems) {
+                Products product = cartItem.getProductAttribute().getProduct();
+                totalImportPrice += product.getImportPrice() * cartItem.getQuantity();
+            }
+        }
+        return totalImportPrice;
+    }
+
     public long getTotalMoneyOff(String cartId) {
         long totalMoneyOff = 0L;
         List<CartItems> cartItems = cartItemsRepository.findByCartId(cartId);
@@ -446,6 +460,7 @@ public class OrdersServiceImpl implements OrdersService {
                 orderItems.setReviewed(false);
                 orderItems.setQuantity(cartItem.getQuantity());
                 orderItems.setProductAttribute(cartItem.getProductAttribute());
+                orderItems.setImportPrice(cartItem.getProductAttribute().getProduct().getImportPrice());
                 orderItems.setMoneyOffPerOneProduct(cartItem.getProductAttribute().getProduct().getMoneyOff());
                 orderItems.setOriginalPrice(cartItem.getPrice());
                 orderItems.setFinalPrice(cartItem.getPrice() - cartItem.getProductAttribute().getProduct().getMoneyOff());

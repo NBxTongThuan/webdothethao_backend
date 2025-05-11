@@ -16,6 +16,7 @@ public class UpdateProductRequest {
     private String productId;
     private String productName;
     private String description;
+    private long importPrice;
     private Long price;
     private int brandId;
     private int typeId;
