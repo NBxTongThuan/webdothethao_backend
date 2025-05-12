@@ -10,7 +10,9 @@ import com.tongthuan.webdothethao_backend.repository.CartItemsRepository;
 import com.tongthuan.webdothethao_backend.repository.CartRepository;
 import com.tongthuan.webdothethao_backend.repository.ProductAttributesRepository;
 import com.tongthuan.webdothethao_backend.repository.UsersRepository;
+import com.tongthuan.webdothethao_backend.service.JWTService;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.CartService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,9 @@ public class CartServiceImpl implements CartService {
 
     @Autowired
     ProductAttributesRepository productAttributesRepository;
+
+    @Autowired
+    JWTService jwtService;
 
     @Override
     public ResponseEntity<?> addItemToCart(AddCartItemRequest cartItemRequest) {
@@ -96,14 +101,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<CartItems> getListCartItem(String cartId) {
-        return cartItemsRepository.findByCartId(cartId);
+    public List<CartItems> getListCartItem(HttpServletRequest request) {
+        return cartItemsRepository.findByCartId(getCartId(request));
     }
 
-
     @Override
-    public int deleteCartItem(String cartItemID) {
-        return cartItemsRepository.deleteByCartItemID(cartItemID);
+    public int deleteCartItem(String cartItemId) {
+        return cartItemsRepository.deleteByCartItemID(cartItemId);
     }
 
     @Override
@@ -120,4 +124,15 @@ public class CartServiceImpl implements CartService {
 //
 //        return false;
 //    }
+
+    public String getCartId(HttpServletRequest request) {
+
+        String token = jwtService.getTokenFromCookie(request);
+        if (token == null)
+            return null;
+        System.out.println(jwtService.extractCartId(token));
+        return jwtService.extractCartId(token);
+    }
+
+
 }

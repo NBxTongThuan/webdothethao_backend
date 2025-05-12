@@ -1,6 +1,7 @@
 package com.tongthuan.webdothethao_backend.controller.publiccontroller;
 
 import com.tongthuan.webdothethao_backend.constantvalue.ResponseCode;
+import com.tongthuan.webdothethao_backend.constantvalue.Role;
 import com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest.LoginRequest;
 import com.tongthuan.webdothethao_backend.dto.response.UserResponse.UserInformationResponse;
 import com.tongthuan.webdothethao_backend.entity.Users;
@@ -46,6 +47,13 @@ public class AuthController {
                                     "message", "Tài khoản chưa được kích hoạt, vui lòng kích hoạt tài khoản trước!")
                     );
 
+                if (user.getRole() != Role.CUSTOMER) {
+                    return ResponseEntity.ok().body(
+                            Map.of("statusCode", ResponseCode.NO_ACCESS,
+                                    "message", "Bạn không đủ quyền đăng nhập trang này!")
+                    );
+                }
+
                 final String jwtToken = jwtService.generateToken(loginRequest.getUserName());
 
                 Cookie cookie = new Cookie("token", jwtToken);
@@ -53,7 +61,6 @@ public class AuthController {
                 cookie.setSecure(false); // nếu dev local thì có thể tạm để false
                 cookie.setPath("/");
                 cookie.setMaxAge(7 * 24 * 60 * 60); // 7 ngày
-
                 response.addCookie(cookie);
 
                 return ResponseEntity.ok().body(

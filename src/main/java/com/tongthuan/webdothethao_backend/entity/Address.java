@@ -26,6 +26,7 @@ public class Address {
     @Column(name = "to_phone")
     private String toPhone;
 
+    @Column(name = "to_province")
     private String toProvince;
 
     @Column(name = "to_district")

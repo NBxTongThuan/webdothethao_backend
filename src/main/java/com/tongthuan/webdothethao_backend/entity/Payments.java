@@ -35,7 +35,7 @@ public class Payments {
     private Orders order;
 
     @Column(name = "amount")
-    private double amount;
+    private long amount;
 
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
