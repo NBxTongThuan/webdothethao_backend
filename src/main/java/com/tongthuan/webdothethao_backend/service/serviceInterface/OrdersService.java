@@ -4,6 +4,7 @@ import com.tongthuan.webdothethao_backend.constantvalue.OrderStatus;
 import com.tongthuan.webdothethao_backend.dto.adminRequest.AdminUpdateOrderRequest;
 import com.tongthuan.webdothethao_backend.dto.request.OrderRequest.CancelOrderRequest;
 import com.tongthuan.webdothethao_backend.dto.request.OrderRequest.OrderRequest;
+import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.InterestByDateResponse;
 import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.RevenueByDateResponse;
 import com.tongthuan.webdothethao_backend.entity.Cart;
 import com.tongthuan.webdothethao_backend.entity.Orders;
@@ -48,6 +49,8 @@ public interface OrdersService {
     Long getRevenueOfMonth();
 
     List<RevenueByDateResponse> getRevenueByDateResponse(LocalDate start, LocalDate end);
+
+    List<InterestByDateResponse> getInterestByDateResponse(LocalDate start, LocalDate end);
 
     Page<Orders> getNewOrders(Pageable pageable);
 

@@ -2,6 +2,7 @@ package com.tongthuan.webdothethao_backend.controller.AdminController;
 
 import com.tongthuan.webdothethao_backend.constantvalue.OrderStatus;
 import com.tongthuan.webdothethao_backend.dto.adminRequest.AdminUpdateOrderRequest;
+import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.InterestByDateResponse;
 import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.RevenueByDateResponse;
 import com.tongthuan.webdothethao_backend.dto.response.OrderResponse;
 import com.tongthuan.webdothethao_backend.entity.Orders;
@@ -70,6 +71,12 @@ public class AdminOrdersController {
     @GetMapping("/revenue-by-date")
     public ResponseEntity<List<RevenueByDateResponse>> getRevenueByDate(@RequestParam("start") LocalDate start, @RequestParam("end") LocalDate end) {
         return ResponseEntity.ok(ordersService.getRevenueByDateResponse(start, end));
+    }
+
+
+    @GetMapping("/interest-by-date")
+    public ResponseEntity<List<InterestByDateResponse>> getInterestByDate(@RequestParam("start") LocalDate start, @RequestParam("end") LocalDate end) {
+        return ResponseEntity.ok(ordersService.getInterestByDateResponse(start, end));
     }
 
     @GetMapping("/new")

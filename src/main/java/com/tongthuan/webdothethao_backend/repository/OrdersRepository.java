@@ -34,7 +34,7 @@ public interface OrdersRepository extends JpaRepository<Orders, String> {
     @Query("SELECT SUM(o.totalPrice) FROM Orders o WHERE o.status = :status AND MONTH(o.createdDate) = :month AND YEAR(o.createdDate) = :year")
     Long getRevenueOfMonth(@Param("status") OrderStatus orderStatus, @Param("month") int month, @Param("year") int year);
 
-    @Query("SELECT FUNCTION('DATE', o.createdDate) AS date, SUM(o.totalPrice  - o.totalImportPrice) "+
+    @Query("SELECT FUNCTION('DATE', o.createdDate) AS date, SUM(o.totalPrice) "+
     " FROM Orders o" +
     " WHERE o.status = :status" +
     " AND o.createdDate BETWEEN :start AND :end" +
@@ -43,6 +43,18 @@ public interface OrdersRepository extends JpaRepository<Orders, String> {
     List<Object[]> getRevenueByDayBetween(@Param("status") OrderStatus status,
                                          @Param("start") LocalDateTime start,
                                          @Param("end") LocalDateTime end);
+
+
+    @Query("SELECT FUNCTION('DATE', o.createdDate) AS date, SUM(o.totalPrice  - o.totalImportPrice) "+
+            " FROM Orders o" +
+            " WHERE o.status = :status" +
+            " AND o.createdDate BETWEEN :start AND :end" +
+            " GROUP BY FUNCTION('DATE', o.createdDate)" +
+            " ORDER BY date ASC")
+    List<Object[]> getInterestByDayBetween(@Param("status") OrderStatus status,
+                                          @Param("start") LocalDateTime start,
+                                          @Param("end") LocalDateTime end);
+
 
     @Query("SELECT o FROM Orders o WHERE DAY(o.createdDate) = :today AND MONTH(o.createdDate) = :month AND YEAR(o.createdDate) = :year")
     Page<Orders> getOrdersToday(Pageable pageable,@Param("today") int today,@Param("month") int month,@Param("year") int year);

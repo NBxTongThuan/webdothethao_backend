@@ -26,23 +26,30 @@ public class ChatBoxMessages {
     @Column(name = "content", columnDefinition = "LONGTEXT")
     private String content;
 
-    @ManyToOne(cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH
-    })
-    @JoinColumn(name = "user_id",nullable = false)
-    private Users user;
 
-    @ManyToOne(cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH
-    })
-    @JoinColumn(name = "chat_box_id",nullable = false)
-    private ChatBox chatBox;
+    @ManyToOne(
+            cascade = {
+                    CascadeType.DETACH,
+                    CascadeType.MERGE,
+                    CascadeType.PERSIST,
+                    CascadeType.REFRESH
+            }
+    )
+    @JoinColumn(name = "sender_id", nullable = false)
+    private Users sender;
+
+    @ManyToOne(
+            cascade = {
+                    CascadeType.DETACH,
+                    CascadeType.MERGE,
+                    CascadeType.PERSIST,
+                    CascadeType.REFRESH
+            }
+    )
+    @JoinColumn(name = "receiver_id", nullable = false)
+    private Users receiver;
+
+
 
 
 

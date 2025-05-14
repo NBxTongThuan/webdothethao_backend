@@ -6,6 +6,7 @@ import com.tongthuan.webdothethao_backend.constantvalue.PaymentStatus;
 import com.tongthuan.webdothethao_backend.dto.adminRequest.AdminUpdateOrderRequest;
 import com.tongthuan.webdothethao_backend.dto.request.OrderRequest.CancelOrderRequest;
 import com.tongthuan.webdothethao_backend.dto.request.OrderRequest.OrderRequest;
+import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.InterestByDateResponse;
 import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.RevenueByDateResponse;
 import com.tongthuan.webdothethao_backend.entity.*;
 import com.tongthuan.webdothethao_backend.repository.*;
@@ -387,6 +388,17 @@ public class OrdersServiceImpl implements OrdersService {
         LocalDateTime endDateTime = end.atTime(LocalTime.MAX);
 
         return ordersRepository.getRevenueByDayBetween(OrderStatus.DELIVERED, startDateTime, endDateTime).stream().map(row -> new RevenueByDateResponse(
+                ((Date) row[0]).toLocalDate(),
+                (Long) row[1]
+        )).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<InterestByDateResponse> getInterestByDateResponse(LocalDate start, LocalDate end) {
+        LocalDateTime startDateTime = start.atStartOfDay();
+        LocalDateTime endDateTime = end.atTime(LocalTime.MAX);
+
+        return ordersRepository.getInterestByDayBetween(OrderStatus.DELIVERED, startDateTime, endDateTime).stream().map(row -> new InterestByDateResponse(
                 ((Date) row[0]).toLocalDate(),
                 (Long) row[1]
         )).collect(Collectors.toList());

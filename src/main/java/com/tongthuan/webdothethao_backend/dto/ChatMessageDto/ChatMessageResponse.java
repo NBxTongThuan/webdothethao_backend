@@ -13,11 +13,13 @@ import java.time.LocalDateTime;
 public class ChatMessageResponse {
 
     private String sender;
+    private String receiver;
     private String content;
     private LocalDateTime createdAt;
 
     public ChatMessageResponse(ChatBoxMessages messages) {
-        this.sender = messages.getUser().getUserName();
+        this.sender = messages.getSender().getUserName();
+        this.receiver = messages.getReceiver().getUserName();
         this.content = messages.getContent();
         this.createdAt = messages.getCreatedDate();
     }

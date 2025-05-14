@@ -47,6 +47,9 @@ public class EndPoints {
             "/api/users/check-exists-by-user-name",
             "/api/users/check-exists-by-email",
 
+            //Messages
+            "/api/chat/history",
+
 
     };
 
@@ -186,6 +189,7 @@ public class EndPoints {
             "/api/admin/orders/total-today",
             "/api/admin/orders/revenue-of-month",
             "/api/admin/orders/revenue-by-date",
+            "/api/admin/orders/interest-by-date",
             "/api/admin/orders/new",
             "/api/admin/orders/get-by-id",
 
