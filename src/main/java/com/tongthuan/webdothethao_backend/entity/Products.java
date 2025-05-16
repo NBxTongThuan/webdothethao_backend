@@ -20,7 +20,7 @@ public class Products {
 
     @Column(name = "product_name")
     private String productName;
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "LONGTEXT")
     private String description;
 
     @Column(name = "created_date")

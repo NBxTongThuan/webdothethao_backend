@@ -105,7 +105,7 @@ public class ProductsServiceImpl implements ProductsService {
             Images image = new Images();
             image.setData(imageRequest.getData());
             image.setUrl(imageRequest.getUrl());
-            image.setName(imageRequest.getImageName());
+            image.setName(imageRequest.getName());
             image.setProduct(product);
             imagesList.add(image);
         }

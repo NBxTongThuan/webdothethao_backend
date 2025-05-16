@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ImageRequest {
 
-    private String imageName;
+    private String name;
     private String url;
     private String data;
-
-
 }

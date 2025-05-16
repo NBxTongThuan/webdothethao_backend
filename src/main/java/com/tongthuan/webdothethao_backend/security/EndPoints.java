@@ -120,7 +120,6 @@ public class EndPoints {
             //Orders
             "/api/orders/cod-order",
 
-
     };
 
     public static final String[] CUSTOMER_PUT_ENDPOINTS = {
