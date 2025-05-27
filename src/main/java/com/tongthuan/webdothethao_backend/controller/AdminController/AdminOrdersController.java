@@ -2,6 +2,7 @@ package com.tongthuan.webdothethao_backend.controller.AdminController;
 
 import com.tongthuan.webdothethao_backend.constantvalue.OrderStatus;
 import com.tongthuan.webdothethao_backend.dto.adminRequest.AdminUpdateOrderRequest;
+import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.CountOrderStatusResponse;
 import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.InterestByDateResponse;
 import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.RevenueByDateResponse;
 import com.tongthuan.webdothethao_backend.dto.response.OrderResponse;
@@ -97,6 +98,12 @@ public class AdminOrdersController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(new OrderResponse(orders));
+    }
+
+    @GetMapping("get-rate-by-status")
+    public ResponseEntity<CountOrderStatusResponse> getRateOrderByOrderStatus()
+    {
+        return ResponseEntity.ok(ordersService.getOrderStatusRate());
     }
 
 

@@ -35,4 +35,14 @@ public interface UsersRepository extends JpaRepository<Users, String> {
     @Query("SELECT COUNT(u) FROM Users u")
     Long countAll();
 
+    @Query("""
+            SELECT u AS user, SUM(o.finalPrice)
+            AS totalSpent
+            FROM Users u
+            JOIN u.listOrders o
+            GROUP BY u
+            ORDER BY SUM(o.finalPrice) DESC
+            """)
+    Page<Object[]> findTopBuyer(Pageable pageable);
+
 }

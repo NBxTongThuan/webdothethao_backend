@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
@@ -137,6 +138,30 @@ public class AdminProductController {
 
         return ResponseEntity.ok(new AdminProductsResponse(products));
 
+    }
+
+    @GetMapping("/get-top-sale")
+    public ResponseEntity<PagedModel<EntityModel<AdminProductsResponse>>> findTopSale(@RequestParam(defaultValue = "0") int page,
+                                                                                      @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "quantitySold"));
+
+        Page<AdminProductsResponse> productsPage = productsService.findTopSale(pageable)
+                .map(AdminProductsResponse::new);
+
+        PagedModel<EntityModel<AdminProductsResponse>> pagedModel = productsResponsePagedResourcesAssembler.toModel(productsPage);
+        return ResponseEntity.ok(pagedModel);
+    }
+
+    @GetMapping("/get-top-slow-sale")
+    public ResponseEntity<PagedModel<EntityModel<AdminProductsResponse>>> findTopSlowSale(@RequestParam(defaultValue = "0") int page,
+                                                                                      @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "quantitySold"));
+
+        Page<AdminProductsResponse> productsPage = productsService.findTopSlowSale(pageable)
+                .map(AdminProductsResponse::new);
+
+        PagedModel<EntityModel<AdminProductsResponse>> pagedModel = productsResponsePagedResourcesAssembler.toModel(productsPage);
+        return ResponseEntity.ok(pagedModel);
     }
 
 

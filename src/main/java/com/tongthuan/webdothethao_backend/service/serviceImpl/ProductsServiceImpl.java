@@ -245,4 +245,24 @@ public class ProductsServiceImpl implements ProductsService {
     public Products findById(String productId) {
         return productsRepository.findById(productId).orElse(null);
     }
+
+    @Override
+    public Page<Products> findTopSale(Pageable pageable) {
+        return productsRepository.findTopSale(pageable);
+    }
+
+    @Override
+    public Page<Products> findTopSlowSale(Pageable pageable) {
+        return productsRepository.findTopSlowSale(pageable);
+    }
+
+    @Override
+    public Page<Products> findByCategoryAndPrice(Pageable pageable, int categoryId, long price) {
+        return productsRepository.findByCategoryAndPrice(pageable,categoryId,price);
+    }
+
+    @Override
+    public Page<Products> findByPrice(Pageable pageable, long price) {
+        return productsRepository.findByPrice(pageable,price);
+    }
 }

@@ -47,4 +47,13 @@ public interface ProductsService {
 
     Products findById(String productId);
 
+    Page<Products> findTopSale(Pageable pageable);
+
+    Page<Products> findTopSlowSale(Pageable pageable);
+
+    Page<Products> findByCategoryAndPrice(Pageable pageable,int categoryId, long price);
+
+    Page<Products> findByPrice(Pageable pageable, long price);
+
+
 }

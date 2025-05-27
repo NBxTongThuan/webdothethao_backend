@@ -1,5 +1,6 @@
 package com.tongthuan.webdothethao_backend.service.serviceInterface;
 
+import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.TopBuyerResponse;
 import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.UserStatsResponse;
 import com.tongthuan.webdothethao_backend.entity.Users;
 import org.springframework.data.domain.Page;
@@ -24,4 +25,6 @@ public interface UsersService extends UserDetailsService {
 
     @Override
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+
+    Page<TopBuyerResponse> findTopBuyer(Pageable pageable);
 }

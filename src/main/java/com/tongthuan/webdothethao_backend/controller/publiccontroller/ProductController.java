@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -125,5 +126,30 @@ public class ProductController {
         return ResponseEntity.ok(pagedModel);
 
     }
+
+    @GetMapping("/get-by-cate-price")
+    public ResponseEntity<PagedModel<EntityModel<ProductsResponse>>> findByCategoryAndPrice(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size, @RequestParam("categoryId") int categoryId, @RequestParam("price") long price) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("price"));
+
+        Page<ProductsResponse> productsResponses = productsServiceInterface.findByCategoryAndPrice(pageable,categoryId,price)
+                .map(ProductsResponse::new);
+        PagedModel<EntityModel<ProductsResponse>> pagedModel = pagedAssembler.toModel(productsResponses);
+        return ResponseEntity.ok(pagedModel);
+
+    }
+
+    @GetMapping("/get-by-price")
+    public ResponseEntity<PagedModel<EntityModel<ProductsResponse>>> findByPrice(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size, @RequestParam("price") long price) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("price"));
+
+        Page<ProductsResponse> productsResponses = productsServiceInterface.findByPrice(pageable,price)
+                .map(ProductsResponse::new);
+        PagedModel<EntityModel<ProductsResponse>> pagedModel = pagedAssembler.toModel(productsResponses);
+        return ResponseEntity.ok(pagedModel);
+
+    }
+
+
+
 
 }

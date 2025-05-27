@@ -6,6 +6,7 @@ import com.tongthuan.webdothethao_backend.constantvalue.PaymentStatus;
 import com.tongthuan.webdothethao_backend.dto.adminRequest.AdminUpdateOrderRequest;
 import com.tongthuan.webdothethao_backend.dto.request.OrderRequest.CancelOrderRequest;
 import com.tongthuan.webdothethao_backend.dto.request.OrderRequest.OrderRequest;
+import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.CountOrderStatusResponse;
 import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.InterestByDateResponse;
 import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.RevenueByDateResponse;
 import com.tongthuan.webdothethao_backend.entity.*;
@@ -412,6 +413,15 @@ public class OrdersServiceImpl implements OrdersService {
         int year = now.getYear();
 
         return ordersRepository.getOrdersToday(pageable, today, month, year);
+    }
+
+    @Override
+    public CountOrderStatusResponse getOrderStatusRate() {
+
+        long canceledOrder = ordersRepository.getCountOrdersByOrderStatus(OrderStatus.CANCELLED);
+        long deliveredOrder = ordersRepository.getCountOrdersByOrderStatus(OrderStatus.DELIVERED);
+
+        return new CountOrderStatusResponse(canceledOrder,deliveredOrder);
     }
 
 

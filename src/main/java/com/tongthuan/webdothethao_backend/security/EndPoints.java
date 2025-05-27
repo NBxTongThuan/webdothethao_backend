@@ -35,7 +35,8 @@ public class EndPoints {
             "/api/products/page-newest",
             "/api/products/same",
             "/api/products/discounting",
-
+            "/api/products/get-by-cate-price",
+            "/api/products/get-by-price",
             //Reviews
             "/api/reviews/get-list-by-product-id",
 
@@ -191,8 +192,9 @@ public class EndPoints {
             "/api/admin/orders/interest-by-date",
             "/api/admin/orders/new",
             "/api/admin/orders/get-by-id",
+            "/api/admin/orders/get-rate-by-status",
 
-//            OrderItem
+            //OrderItem
             "/api/admin/order-items/list",
 
             //ProductAttribute
@@ -204,6 +206,8 @@ public class EndPoints {
             "/api/admin/products/get-count-enable",
             "/api/admin/products/get-enable",
             "/api/admin/products/get-by-id",
+            "/api/admin/products/get-top-sale",
+            "/api/admin/products/get-top-slow-sale",
 
             //Reviews
             "/api/admin/reviews/get-page",
@@ -216,6 +220,7 @@ public class EndPoints {
             //Users
             "/api/admin/users/all",
             "/api/admin/users/stats",
+            "/api/admin/users/top-buyer",
 
             //UserDetail
             "/api/admin/user-detail/get-by-name"

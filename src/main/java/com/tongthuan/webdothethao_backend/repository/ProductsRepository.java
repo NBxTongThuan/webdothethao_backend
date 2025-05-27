@@ -16,7 +16,10 @@ import java.util.Optional;
 @Repository
 public interface ProductsRepository extends JpaRepository<Products, String> {
 
-    @Query("SELECT p FROM Products p JOIN p.type t JOIN t.categories c WHERE c.categoriesId = :categoriesId")
+    @Query("SELECT p FROM Products p " +
+            "JOIN p.type t " +
+            "JOIN t.categories c " +
+            "WHERE c.categoriesId = :categoriesId")
     Page<Products> findProductsByCategoryId(@Param("categoriesId") int categoriesId, Pageable pageable);
 
     @Query("SELECT p FROM Products p WHERE LOWER(p.productName) LIKE LOWER(CONCAT('%', :productName, '%'))")
@@ -45,5 +48,29 @@ public interface ProductsRepository extends JpaRepository<Products, String> {
 
     @Query("SELECT p FROM Products p WHERE p.isInStock = true AND p.moneyOff = 0")
     Page<Products> findInStockProducts(Pageable pageable);
+
+    @Query("SELECT p FROM Products p WHERE p.quantitySold > 0 AND p.isInStock = true ORDER BY p.quantitySold DESC")
+    Page<Products> findTopSale(Pageable pageable);
+
+    @Query("SELECT p FROM Products p WHERE p.isInStock = true ORDER BY p.quantitySold ASC, p.createdDate ASC")
+    Page<Products> findTopSlowSale(Pageable pageable);
+
+    @Query("""
+            SELECT p FROM Products p
+            JOIN p.type t
+            JOIN t.categories c
+            WHERE c.categoriesId = :categoriesId AND p.price <= :price
+            ORDER BY p.price DESC
+            """)
+    Page<Products> findByCategoryAndPrice(Pageable pageable,@Param("categoriesId") int categoryId, @Param("price") long price);
+
+    @Query("""
+            SELECT p FROM Products p
+            WHERE p.price <= :price
+            ORDER BY p.price DESC
+            """)
+    Page<Products> findByPrice(Pageable pageable, @Param("price") long price);
+
+
 
 }

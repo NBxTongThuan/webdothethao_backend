@@ -55,6 +55,8 @@ public interface OrdersRepository extends JpaRepository<Orders, String> {
                                           @Param("start") LocalDateTime start,
                                           @Param("end") LocalDateTime end);
 
+    @Query("SELECT COUNT(o) FROM Orders o WHERE o.status = :orderStatus")
+    long getCountOrdersByOrderStatus(@Param("orderStatus") OrderStatus orderStatus);
 
     @Query("SELECT o FROM Orders o WHERE DAY(o.createdDate) = :today AND MONTH(o.createdDate) = :month AND YEAR(o.createdDate) = :year")
     Page<Orders> getOrdersToday(Pageable pageable,@Param("today") int today,@Param("month") int month,@Param("year") int year);
