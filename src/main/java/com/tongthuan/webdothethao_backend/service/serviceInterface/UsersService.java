@@ -1,15 +1,14 @@
 package com.tongthuan.webdothethao_backend.service.serviceInterface;
 
-import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.TopBuyerResponse;
-import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.UserStatsResponse;
-import com.tongthuan.webdothethao_backend.entity.Users;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.List;
+import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.TopBuyerResponse;
+import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.UserStatsResponse;
+import com.tongthuan.webdothethao_backend.entity.Users;
 
 public interface UsersService extends UserDetailsService {
     public Page<Users> findAllUsersPage(Pageable pageable);
@@ -20,7 +19,7 @@ public interface UsersService extends UserDetailsService {
 
     Users findByUserName(String userName);
 
-    //admin
+    // admin
     public UserStatsResponse getUserStats();
 
     @Override

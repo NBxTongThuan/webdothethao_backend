@@ -1,9 +1,10 @@
 package com.tongthuan.webdothethao_backend.entity;
 
-import jakarta.persistence.*;
-import lombok.Data;
-
 import java.util.List;
+
+import jakarta.persistence.*;
+
+import lombok.Data;
 
 @Data
 @Entity
@@ -21,24 +22,13 @@ public class Types {
     @Column(name = "enable")
     private boolean enable;
 
-    @ManyToOne(
-            cascade = {
-                    CascadeType.DETACH,
-                    CascadeType.MERGE,
-                    CascadeType.PERSIST,
-                    CascadeType.REFRESH
-            }
-    )
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "category_id", nullable = false)
     private Categories categories;
 
-    @OneToMany(mappedBy = "type",
-            fetch = FetchType.LAZY, cascade = {
-            CascadeType.DETACH,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH,
-            CascadeType.MERGE
-    })
+    @OneToMany(
+            mappedBy = "type",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     private List<Products> productsList;
-
 }

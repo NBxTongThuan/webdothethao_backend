@@ -1,7 +1,7 @@
 package com.tongthuan.webdothethao_backend.dto.response;
 
-
 import com.tongthuan.webdothethao_backend.entity.Address;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,6 +28,5 @@ public class AddressResponse {
         this.toProvince = address.getToProvince();
         this.toWard = address.getToWard();
         this.toAddress = address.getToAddress();
-
     }
 }

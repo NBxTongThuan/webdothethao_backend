@@ -1,10 +1,12 @@
 package com.tongthuan.webdothethao_backend.entity;
 
-import com.tongthuan.webdothethao_backend.constantvalue.Gender;
-import jakarta.persistence.*;
-import lombok.Data;
-
 import java.sql.Date;
+
+import jakarta.persistence.*;
+
+import com.tongthuan.webdothethao_backend.constantvalue.Gender;
+
+import lombok.Data;
 
 @Data
 @Entity
@@ -22,6 +24,7 @@ public class UserDetail {
 
     @Column(name = "last_name")
     private String lastName;
+
     @Column(name = "first_name")
     private String firstName;
 
@@ -46,5 +49,4 @@ public class UserDetail {
 
     @Column(name = "address", columnDefinition = "LONGTEXT")
     private String address;
-
 }

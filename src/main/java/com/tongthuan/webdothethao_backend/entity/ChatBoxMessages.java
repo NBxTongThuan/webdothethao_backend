@@ -1,12 +1,12 @@
 package com.tongthuan.webdothethao_backend.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -26,31 +26,11 @@ public class ChatBoxMessages {
     @Column(name = "content", columnDefinition = "LONGTEXT")
     private String content;
 
-
-    @ManyToOne(
-            cascade = {
-                    CascadeType.DETACH,
-                    CascadeType.MERGE,
-                    CascadeType.PERSIST,
-                    CascadeType.REFRESH
-            }
-    )
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "sender_id", nullable = false)
     private Users sender;
 
-    @ManyToOne(
-            cascade = {
-                    CascadeType.DETACH,
-                    CascadeType.MERGE,
-                    CascadeType.PERSIST,
-                    CascadeType.REFRESH
-            }
-    )
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "receiver_id", nullable = false)
     private Users receiver;
-
-
-
-
-
 }

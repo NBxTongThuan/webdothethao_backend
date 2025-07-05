@@ -1,9 +1,10 @@
 package com.tongthuan.webdothethao_backend.entity;
 
-import jakarta.persistence.*;
-import lombok.Data;
-
 import java.util.List;
+
+import jakarta.persistence.*;
+
+import lombok.Data;
 
 @Data
 @Entity
@@ -20,14 +21,9 @@ public class Brand {
     @Column(name = "country")
     private String country;
 
-
-    @OneToMany(mappedBy = "brand",
-            fetch = FetchType.EAGER, cascade = {
-            CascadeType.DETACH,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH,
-            CascadeType.MERGE
-    })
+    @OneToMany(
+            mappedBy = "brand",
+            fetch = FetchType.EAGER,
+            cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     private List<Products> productsList;
-
 }

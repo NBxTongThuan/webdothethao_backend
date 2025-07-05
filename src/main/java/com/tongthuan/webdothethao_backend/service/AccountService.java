@@ -1,5 +1,15 @@
 package com.tongthuan.webdothethao_backend.service;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.tongthuan.webdothethao_backend.HandleError;
 import com.tongthuan.webdothethao_backend.constantvalue.Role;
 import com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest.ChangePasswordRequest;
@@ -11,16 +21,6 @@ import com.tongthuan.webdothethao_backend.repository.CartRepository;
 import com.tongthuan.webdothethao_backend.repository.UserDetailsRepository;
 import com.tongthuan.webdothethao_backend.repository.UsersRepository;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.EmailService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.sql.Date;
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Service
 public class AccountService {
@@ -65,7 +65,6 @@ public class AccountService {
         userDetailsRepository.saveAndFlush(userDetails);
         sendActiveEmail(user.getEmail(), user.getActiveCode());
         return ResponseEntity.ok().build();
-
     }
 
     @Transactional
@@ -82,8 +81,6 @@ public class AccountService {
         return usersRepository.saveAndFlush(user);
     }
 
-
-
     private String genUUIDCode() {
         return UUID.randomUUID().toString();
     }
@@ -98,15 +95,14 @@ public class AccountService {
         text += "<p>Nhấn vào nút bên dưới để kích hoạt tài khoản:</p>";
 
         String url = "http://localhost:3000/Active/" + email + "/" + activeCode;
-        text += "<a href=\"" + url + "\" style=\"display: inline-block; padding: 12px 20px; background-color: #2e7d32; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 10px;\">KÍCH HOẠT</a>";
+        text += "<a href=\"" + url
+                + "\" style=\"display: inline-block; padding: 12px 20px; background-color: #2e7d32; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 10px;\">KÍCH HOẠT</a>";
 
         text += "<p style=\"margin-top: 20px;\">Nếu bạn không thực hiện hành động này, hãy bỏ qua email này.</p>";
         text += "<p>Trân trọng,<br/>Đội ngũ YOUSPORT</p>";
         text += "</div>";
         emailService.sendMessage("tongthuan15092003@gmail.com", email, subject, text);
-
     }
-
 
     public ResponseEntity<?> activeAccount(String email, String activeCode) {
 
@@ -129,7 +125,6 @@ public class AccountService {
         } else {
             return ResponseEntity.badRequest().body("Mã kích hoạt không chính xác!");
         }
-
     }
 
     public void addCart(Users user) {
@@ -142,44 +137,38 @@ public class AccountService {
     }
 
     public boolean changePassword(ChangePasswordRequest changePasswordRequest) {
-        Users user = usersRepository.findByUserName(changePasswordRequest.getUserName()).orElse(null);
-        if (user == null)
-            return false;
+        Users user = usersRepository
+                .findByUserName(changePasswordRequest.getUserName())
+                .orElse(null);
+        if (user == null) return false;
 
-        if (!passwordEncoder.matches(changePasswordRequest.getOldPassword(),user.getPassword()))
-            return false;
+        if (!passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) return false;
         user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
         usersRepository.saveAndFlush(user);
         return true;
     }
 
-    public boolean forgotPassword(String email)
-    {
+    public boolean forgotPassword(String email) {
         Users user = usersRepository.findByEmail(email);
-        if(user == null)
-        {
+        if (user == null) {
             return false;
         }
         user.setForgotPasswordCode(genUUIDCode());
 
-        sendResetPasswordMail(email,user.getForgotPasswordCode());
+        sendResetPasswordMail(email, user.getForgotPasswordCode());
         usersRepository.saveAndFlush(user);
         return true;
-
     }
 
-    public boolean resetPassword(ResetPasswordRequest resetPasswordRequest)
-    {
+    public boolean resetPassword(ResetPasswordRequest resetPasswordRequest) {
         Users user = usersRepository.findByEmail(resetPasswordRequest.getEmail());
-        if(user == null)
-        {
+        if (user == null) {
             return false;
         }
 
         String forgotCode = user.getForgotPasswordCode();
 
-        if(!forgotCode.equals(resetPasswordRequest.getForgotPasswordCode()))
-            return false;
+        if (!forgotCode.equals(resetPasswordRequest.getForgotPasswordCode())) return false;
 
         user.setPassword(passwordEncoder.encode(resetPasswordRequest.getNewPassword()));
         user.setForgotPasswordCode(null);
@@ -187,8 +176,7 @@ public class AccountService {
         return true;
     }
 
-    private void sendResetPasswordMail(String email,String resetPasswordCode)
-    {
+    private void sendResetPasswordMail(String email, String resetPasswordCode) {
         String subject = "Tạo lại mật khẩu tài khoản tại web YOUSPORT";
         String text = "";
 
@@ -199,14 +187,13 @@ public class AccountService {
         text += "<p>Nhấn vào nút bên dưới để đặt lại mật khẩu:</p>";
 
         String url = "http://localhost:3000/resetPassword/" + email + "/" + resetPasswordCode;
-        text += "<a href=\"" + url + "\" style=\"display: inline-block; padding: 12px 20px; background-color: #d32f2f; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 10px;\">ĐẶT LẠI MẬT KHẨU</a>";
+        text += "<a href=\"" + url
+                + "\" style=\"display: inline-block; padding: 12px 20px; background-color: #d32f2f; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 10px;\">ĐẶT LẠI MẬT KHẨU</a>";
 
         text += "<p style=\"margin-top: 20px;\">Nếu bạn không yêu cầu, vui lòng bỏ qua email này.</p>";
         text += "<p>Trân trọng,<br/>Đội ngũ YOUSPORT</p>";
         text += "</div>";
 
         emailService.sendMessage("tongthuan15092003@gmail.com", email, subject, text);
-
     }
-
 }

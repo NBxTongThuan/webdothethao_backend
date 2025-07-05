@@ -1,11 +1,10 @@
 package com.tongthuan.webdothethao_backend.dto.request.ProductRequest;
 
-import com.tongthuan.webdothethao_backend.entity.Products;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor

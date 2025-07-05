@@ -1,27 +1,28 @@
 package com.tongthuan.webdothethao_backend.dto.response;
 
+import java.sql.Date;
+
 import com.tongthuan.webdothethao_backend.constantvalue.Gender;
 import com.tongthuan.webdothethao_backend.entity.UserDetail;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.sql.Date;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDetailResponse {
-   private String userDetailId;
-   private String firstName;
-   private String lastName;
-   private Gender gender;
-   private Date dateOfBirth;
-   private String phoneNumber;
-   private String province;
-   private String district;
-   private String ward;
-   private String address;
+    private String userDetailId;
+    private String firstName;
+    private String lastName;
+    private Gender gender;
+    private Date dateOfBirth;
+    private String phoneNumber;
+    private String province;
+    private String district;
+    private String ward;
+    private String address;
 
     public UserDetailResponse(UserDetail userDetails) {
         this.userDetailId = userDetails.getUserDetailId();

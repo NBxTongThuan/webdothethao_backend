@@ -13,5 +13,4 @@ public class AddCartItemRequest {
     private Long price;
     private int quantity;
     private String productAttributeId;
-
 }

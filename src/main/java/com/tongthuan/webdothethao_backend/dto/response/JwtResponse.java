@@ -8,5 +8,4 @@ import lombok.Getter;
 public class JwtResponse {
 
     private final String jwt;
-
 }

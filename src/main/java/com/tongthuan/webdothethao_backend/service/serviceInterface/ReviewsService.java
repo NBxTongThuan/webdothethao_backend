@@ -1,12 +1,13 @@
 package com.tongthuan.webdothethao_backend.service.serviceInterface;
 
-import com.tongthuan.webdothethao_backend.dto.request.ReviewRequest.AddReviewRequest;
-import com.tongthuan.webdothethao_backend.dto.request.ReviewRequest.UpdateReviewRequest;
-import com.tongthuan.webdothethao_backend.entity.Reviews;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+import com.tongthuan.webdothethao_backend.dto.request.ReviewRequest.AddReviewRequest;
+import com.tongthuan.webdothethao_backend.dto.request.ReviewRequest.UpdateReviewRequest;
+import com.tongthuan.webdothethao_backend.entity.Reviews;
 
 public interface ReviewsService {
     List<Reviews> findByProductId(String productId);
@@ -17,8 +18,7 @@ public interface ReviewsService {
 
     boolean updateReview(UpdateReviewRequest updateReviewRequest);
 
-    //Admin
+    // Admin
 
     public Page<Reviews> getAllReview(Pageable pageable);
-
 }

@@ -15,5 +15,4 @@ public class AddReviewRequest {
     private String productId;
     private String productAttributeId;
     private String userName;
-
 }

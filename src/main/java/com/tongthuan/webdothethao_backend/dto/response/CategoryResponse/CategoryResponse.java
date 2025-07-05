@@ -2,6 +2,7 @@ package com.tongthuan.webdothethao_backend.dto.response.CategoryResponse;
 
 import com.tongthuan.webdothethao_backend.constantvalue.Size;
 import com.tongthuan.webdothethao_backend.entity.Categories;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,6 @@ public class CategoryResponse {
     private String imageData;
     private boolean enable;
     private Size size;
-
 
     public CategoryResponse(Categories categories) {
         this.categoriesId = categories.getCategoriesId();

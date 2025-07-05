@@ -1,12 +1,13 @@
 package com.tongthuan.webdothethao_backend.service.serviceImpl;
 
-import com.tongthuan.webdothethao_backend.entity.Notifications;
-import com.tongthuan.webdothethao_backend.repository.NotificationRepository;
-import com.tongthuan.webdothethao_backend.service.serviceInterface.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import com.tongthuan.webdothethao_backend.entity.Notifications;
+import com.tongthuan.webdothethao_backend.repository.NotificationRepository;
+import com.tongthuan.webdothethao_backend.service.serviceInterface.NotificationService;
 
 @Service
 public class NotificationsServiceImpl implements NotificationService {
@@ -27,13 +28,11 @@ public class NotificationsServiceImpl implements NotificationService {
     @Override
     public boolean setIsRead(String notificationId) {
 
-        Notifications notification = notificationRepository.findById(notificationId).orElse(null);
-        if (notification == null)
-            return false;
+        Notifications notification =
+                notificationRepository.findById(notificationId).orElse(null);
+        if (notification == null) return false;
         notification.setRead(true);
         notificationRepository.saveAndFlush(notification);
         return true;
     }
-
-
 }

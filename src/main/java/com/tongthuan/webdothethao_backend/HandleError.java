@@ -1,6 +1,5 @@
 package com.tongthuan.webdothethao_backend;
 
-
 public class HandleError {
 
     private String content;
@@ -8,6 +7,4 @@ public class HandleError {
     public HandleError(String content) {
         this.content = content;
     }
-
 }
-

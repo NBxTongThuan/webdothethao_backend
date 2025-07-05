@@ -1,17 +1,15 @@
 package com.tongthuan.webdothethao_backend.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.tongthuan.webdothethao_backend.entity.Products;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductsResponse{
+public class ProductsResponse {
 
     private String productId;
     private String productName;

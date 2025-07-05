@@ -1,21 +1,19 @@
 package com.tongthuan.webdothethao_backend.service.serviceInterface;
 
-import com.tongthuan.webdothethao_backend.dto.adminRequest.AddTypesRequest;
-import com.tongthuan.webdothethao_backend.dto.adminRequest.UpdateTypeRequest;
-import com.tongthuan.webdothethao_backend.entity.Types;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import javax.swing.text.html.Option;
-import java.util.List;
-import java.util.Optional;
-
+import com.tongthuan.webdothethao_backend.dto.adminRequest.AddTypesRequest;
+import com.tongthuan.webdothethao_backend.dto.adminRequest.UpdateTypeRequest;
+import com.tongthuan.webdothethao_backend.entity.Types;
 
 public interface TypeService {
 
     public Page<Types> getAllTypes(Pageable pageable);
 
-    public boolean checkExists(String typeName,String categoryName);
+    public boolean checkExists(String typeName, String categoryName);
 
     public boolean addType(AddTypesRequest addTypesRequest);
 
@@ -26,5 +24,4 @@ public interface TypeService {
     public boolean updateType(UpdateTypeRequest updateTypeRequest);
 
     public List<Types> getTypesByCategoryName(String categoryName);
-
 }

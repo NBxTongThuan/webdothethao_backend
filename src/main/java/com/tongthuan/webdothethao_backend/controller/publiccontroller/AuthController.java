@@ -1,14 +1,10 @@
 package com.tongthuan.webdothethao_backend.controller.publiccontroller;
 
-import com.tongthuan.webdothethao_backend.constantvalue.ResponseCode;
-import com.tongthuan.webdothethao_backend.constantvalue.Role;
-import com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest.LoginRequest;
-import com.tongthuan.webdothethao_backend.dto.response.UserResponse.UserInformationResponse;
-import com.tongthuan.webdothethao_backend.entity.Users;
-import com.tongthuan.webdothethao_backend.service.JWTService;
-import com.tongthuan.webdothethao_backend.service.serviceInterface.UsersService;
+import java.util.Map;
+
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,7 +13,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import com.tongthuan.webdothethao_backend.constantvalue.ResponseCode;
+import com.tongthuan.webdothethao_backend.constantvalue.Role;
+import com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest.LoginRequest;
+import com.tongthuan.webdothethao_backend.dto.response.UserResponse.UserInformationResponse;
+import com.tongthuan.webdothethao_backend.entity.Users;
+import com.tongthuan.webdothethao_backend.service.JWTService;
+import com.tongthuan.webdothethao_backend.service.serviceInterface.UsersService;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -42,16 +44,20 @@ public class AuthController {
 
                 Users user = usersService.findByUserName(loginRequest.getUserName());
                 if (!user.isActive())
-                    return ResponseEntity.ok().body(
-                            Map.of("statusCode", ResponseCode.USER_NOT_ACTIVE,
-                                    "message", "Tài khoản chưa được kích hoạt, vui lòng kích hoạt tài khoản trước!")
-                    );
+                    return ResponseEntity.ok()
+                            .body(Map.of(
+                                    "statusCode",
+                                    ResponseCode.USER_NOT_ACTIVE,
+                                    "message",
+                                    "Tài khoản chưa được kích hoạt, vui lòng kích hoạt tài khoản trước!"));
 
                 if (user.getRole() != Role.CUSTOMER) {
-                    return ResponseEntity.ok().body(
-                            Map.of("statusCode", ResponseCode.NO_ACCESS,
-                                    "message", "Bạn không đủ quyền đăng nhập trang này!")
-                    );
+                    return ResponseEntity.ok()
+                            .body(Map.of(
+                                    "statusCode",
+                                    ResponseCode.NO_ACCESS,
+                                    "message",
+                                    "Bạn không đủ quyền đăng nhập trang này!"));
                 }
 
                 final String jwtToken = jwtService.generateToken(loginRequest.getUserName());
@@ -63,17 +69,23 @@ public class AuthController {
                 cookie.setMaxAge(7 * 24 * 60 * 60); // 7 ngày
                 response.addCookie(cookie);
 
-                return ResponseEntity.ok().body(
-                        Map.of("statusCode", ResponseCode.SUCCESS,
-                                "message", "Đăng nhập thành công")
-                );
+                return ResponseEntity.ok()
+                        .body(Map.of("statusCode", ResponseCode.SUCCESS, "message", "Đăng nhập thành công"));
             }
         } catch (AuthenticationException e) {
-            return ResponseEntity.badRequest().body(Map.of("statusCode", ResponseCode.FALSE_USERNAME_OR_PASSWORD,
-                    "message", "Sai tên đăng nhập hoặc mật khẩu!"));
+            return ResponseEntity.badRequest()
+                    .body(Map.of(
+                            "statusCode",
+                            ResponseCode.FALSE_USERNAME_OR_PASSWORD,
+                            "message",
+                            "Sai tên đăng nhập hoặc mật khẩu!"));
         }
-        return ResponseEntity.badRequest().body(Map.of("statusCode", ResponseCode.FALSE_USERNAME_OR_PASSWORD,
-                "message", "Sai tên đăng nhập hoặc mật khẩu!"));
+        return ResponseEntity.badRequest()
+                .body(Map.of(
+                        "statusCode",
+                        ResponseCode.FALSE_USERNAME_OR_PASSWORD,
+                        "message",
+                        "Sai tên đăng nhập hoặc mật khẩu!"));
     }
 
     @PostMapping("/logout")
@@ -97,5 +109,4 @@ public class AuthController {
         userInfo.setRole(jwtService.extractRole(token));
         return ResponseEntity.ok(userInfo);
     }
-
 }

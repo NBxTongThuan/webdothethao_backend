@@ -12,5 +12,4 @@ public class UpdateTypeRequest {
     private int typeId;
     private String typeName;
     private String categoryName;
-
 }

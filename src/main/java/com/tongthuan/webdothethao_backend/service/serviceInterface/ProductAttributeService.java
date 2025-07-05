@@ -1,14 +1,14 @@
 package com.tongthuan.webdothethao_backend.service.serviceInterface;
 
-import com.tongthuan.webdothethao_backend.constantvalue.Color;
-import com.tongthuan.webdothethao_backend.dto.adminRequest.UpdateProductAttributeRequest;
-import com.tongthuan.webdothethao_backend.dto.request.ProductRequest.AddProductAttributeRequest;
-import com.tongthuan.webdothethao_backend.dto.request.ProductRequest.ProductAttributeRequest;
-import com.tongthuan.webdothethao_backend.entity.ProductAttributes;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+import com.tongthuan.webdothethao_backend.constantvalue.Color;
+import com.tongthuan.webdothethao_backend.dto.adminRequest.UpdateProductAttributeRequest;
+import com.tongthuan.webdothethao_backend.dto.request.ProductRequest.AddProductAttributeRequest;
+import com.tongthuan.webdothethao_backend.entity.ProductAttributes;
 
 public interface ProductAttributeService {
 
@@ -16,9 +16,9 @@ public interface ProductAttributeService {
 
     public ProductAttributes findByProductAttributeId(String productAttributeId);
 
-    public boolean checkProductAttributeExists(String productId,Color color,String size);
+    public boolean checkProductAttributeExists(String productId, Color color, String size);
 
-    //Admin
+    // Admin
 
     public boolean disableProductAttribute(String productAttributeId);
 
@@ -29,5 +29,4 @@ public interface ProductAttributeService {
     public boolean updateProductAttribute(UpdateProductAttributeRequest updateProductAttributeRequest);
 
     boolean addProductAttribute(AddProductAttributeRequest addProductAttributeRequest);
-
 }

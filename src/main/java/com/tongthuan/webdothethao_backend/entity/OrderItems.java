@@ -1,6 +1,7 @@
 package com.tongthuan.webdothethao_backend.entity;
 
 import jakarta.persistence.*;
+
 import lombok.Data;
 
 @Data
@@ -30,26 +31,11 @@ public class OrderItems {
     @Column(name = "money_off_per_one_product")
     private long moneyOffPerOneProduct;
 
-    @ManyToOne(
-            cascade = {
-                    CascadeType.DETACH,
-                    CascadeType.MERGE,
-                    CascadeType.PERSIST,
-                    CascadeType.REFRESH
-            }
-    )
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "order_id", nullable = false)
     private Orders order;
 
-    @ManyToOne(
-            cascade = {
-                    CascadeType.DETACH,
-                    CascadeType.MERGE,
-                    CascadeType.PERSIST,
-                    CascadeType.REFRESH
-            }
-    )
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "product_attribute_id", nullable = false)
     private ProductAttributes productAttribute;
-
 }

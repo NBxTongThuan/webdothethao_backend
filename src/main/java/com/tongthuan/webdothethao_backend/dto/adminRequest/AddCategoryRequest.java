@@ -11,5 +11,4 @@ public class AddCategoryRequest {
 
     private String categoryName;
     private String categoryImage;
-
 }

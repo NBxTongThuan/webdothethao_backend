@@ -1,14 +1,14 @@
 package com.tongthuan.webdothethao_backend.service.serviceInterface;
 
-import com.tongthuan.webdothethao_backend.dto.adminRequest.UpdateProductRequest;
-import com.tongthuan.webdothethao_backend.dto.request.ProductRequest.ProductRequest;
-import com.tongthuan.webdothethao_backend.entity.Products;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-
-import java.util.List;
-import java.util.Optional;
+import com.tongthuan.webdothethao_backend.dto.adminRequest.UpdateProductRequest;
+import com.tongthuan.webdothethao_backend.dto.request.ProductRequest.ProductRequest;
+import com.tongthuan.webdothethao_backend.entity.Products;
 
 public interface ProductsService {
     List<Products> findAll();
@@ -29,7 +29,7 @@ public interface ProductsService {
 
     boolean updateProduct(UpdateProductRequest updateProductRequest);
 
-    boolean checkExistsByProductName(String productName, String typeName,String brandName);
+    boolean checkExistsByProductName(String productName, String typeName, String brandName);
 
     Long getCountProductIsInStock();
 
@@ -37,7 +37,7 @@ public interface ProductsService {
 
     Page<Products> getNewestProduct(Pageable pageable);
 
-    Page<Products> getSameProductType(Pageable pageable,String productId);
+    Page<Products> getSameProductType(Pageable pageable, String productId);
 
     Page<Products> getDiscountingProducts(Pageable pageable);
 
@@ -51,9 +51,7 @@ public interface ProductsService {
 
     Page<Products> findTopSlowSale(Pageable pageable);
 
-    Page<Products> findByCategoryAndPrice(Pageable pageable,int categoryId, long price);
+    Page<Products> findByCategoryAndPrice(Pageable pageable, int categoryId, long price);
 
     Page<Products> findByPrice(Pageable pageable, long price);
-
-
 }

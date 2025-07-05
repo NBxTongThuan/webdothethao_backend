@@ -1,10 +1,9 @@
 package com.tongthuan.webdothethao_backend.service.serviceImpl;
 
-import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.TopBuyerResponse;
-import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.UserStatsResponse;
-import com.tongthuan.webdothethao_backend.entity.Users;
-import com.tongthuan.webdothethao_backend.repository.UsersRepository;
-import com.tongthuan.webdothethao_backend.service.serviceInterface.UsersService;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -16,15 +15,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.TopBuyerResponse;
+import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.UserStatsResponse;
+import com.tongthuan.webdothethao_backend.entity.Users;
+import com.tongthuan.webdothethao_backend.repository.UsersRepository;
+import com.tongthuan.webdothethao_backend.service.serviceInterface.UsersService;
 
 @Service
 public class UsersServiceImpl implements UsersService {
     @Autowired
     UsersRepository usersRepository;
-
 
     @Override
     public Page<Users> findAllUsersPage(Pageable pageable) {
@@ -79,7 +79,8 @@ public class UsersServiceImpl implements UsersService {
         if (user == null) {
             throw new UsernameNotFoundException("Khong tim thay nguoi dung");
         }
-        List<GrantedAuthority> roles = List.of(new SimpleGrantedAuthority(user.getRole().name()));
+        List<GrantedAuthority> roles =
+                List.of(new SimpleGrantedAuthority(user.getRole().name()));
 
         return new User(user.getUserName(), user.getPassword(), roles);
     }
@@ -89,10 +90,7 @@ public class UsersServiceImpl implements UsersService {
         Page<Object[]> result = usersRepository.findTopBuyer(pageable);
 
         List<TopBuyerResponse> content = result.stream()
-                .map(row -> new TopBuyerResponse(
-                        (Users) row[0],
-                        (Long) row[1]
-                ))
+                .map(row -> new TopBuyerResponse((Users) row[0], (Long) row[1]))
                 .collect(Collectors.toList());
 
         return new PageImpl<>(content, pageable, result.getTotalElements());

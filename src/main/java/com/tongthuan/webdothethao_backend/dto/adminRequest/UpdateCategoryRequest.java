@@ -12,5 +12,4 @@ public class UpdateCategoryRequest {
     private int categoryId;
     private String categoryName;
     private String categoryImage;
-
 }

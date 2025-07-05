@@ -1,10 +1,12 @@
 package com.tongthuan.webdothethao_backend.entity;
 
-import com.tongthuan.webdothethao_backend.constantvalue.Size;
-import jakarta.persistence.*;
-import lombok.Data;
-
 import java.util.List;
+
+import jakarta.persistence.*;
+
+import com.tongthuan.webdothethao_backend.constantvalue.Size;
+
+import lombok.Data;
 
 @Data
 @Entity
@@ -29,17 +31,9 @@ public class Categories {
     @Enumerated(EnumType.STRING)
     public Size size;
 
-    @OneToMany(mappedBy = "categories",
-            fetch = FetchType.EAGER, cascade = {
-            CascadeType.DETACH,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH,
-            CascadeType.MERGE
-    })
+    @OneToMany(
+            mappedBy = "categories",
+            fetch = FetchType.EAGER,
+            cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     private List<Types> typesList;
-
-
-
-
-
 }

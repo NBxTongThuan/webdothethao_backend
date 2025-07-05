@@ -1,12 +1,13 @@
 package com.tongthuan.webdothethao_backend.entity;
 
-import com.tongthuan.webdothethao_backend.constantvalue.ProductGender;
-import jakarta.persistence.*;
-import lombok.Data;
-
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import jakarta.persistence.*;
+
+import com.tongthuan.webdothethao_backend.constantvalue.ProductGender;
+
+import lombok.Data;
 
 @Data
 @Entity
@@ -20,6 +21,7 @@ public class Products {
 
     @Column(name = "product_name")
     private String productName;
+
     @Column(name = "description", columnDefinition = "LONGTEXT")
     private String description;
 
@@ -35,55 +37,30 @@ public class Products {
     @Column(name = "is_in_stock")
     private boolean isInStock;
 
-    @OneToMany(mappedBy = "product",
-            fetch = FetchType.EAGER, cascade = {
-            CascadeType.DETACH,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH,
-            CascadeType.MERGE
-    })
+    @OneToMany(
+            mappedBy = "product",
+            fetch = FetchType.EAGER,
+            cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     private List<Images> listImage;
 
-    @ManyToOne(
-            cascade = {
-                    CascadeType.DETACH,
-                    CascadeType.MERGE,
-                    CascadeType.PERSIST,
-                    CascadeType.REFRESH
-            }
-    )
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "brand_id", nullable = false)
     private Brand brand;
 
-
-    @OneToMany(mappedBy = "product",
-            fetch = FetchType.EAGER, cascade = {
-            CascadeType.DETACH,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH,
-            CascadeType.MERGE
-    })
+    @OneToMany(
+            mappedBy = "product",
+            fetch = FetchType.EAGER,
+            cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     private List<ProductAttributes> listProductAttributes;
-    @ManyToOne(
-            cascade = {
-                    CascadeType.DETACH,
-                    CascadeType.MERGE,
-                    CascadeType.PERSIST,
-                    CascadeType.REFRESH
-            }
-    )
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "type_id", nullable = false)
     private Types type;
 
-
-
-    @OneToMany(mappedBy = "product",
-            fetch = FetchType.EAGER, cascade = {
-            CascadeType.DETACH,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH,
-            CascadeType.MERGE
-    })
+    @OneToMany(
+            mappedBy = "product",
+            fetch = FetchType.EAGER,
+            cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     private List<Reviews> reviewsList;
 
     @Column(name = "gender")
@@ -95,5 +72,4 @@ public class Products {
 
     @Column(name = "import_price")
     private long importPrice;
-
 }

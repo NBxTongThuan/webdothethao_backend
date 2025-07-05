@@ -1,26 +1,16 @@
 package com.tongthuan.webdothethao_backend.controller;
 
-import com.tongthuan.webdothethao_backend.constantvalue.ResponseCode;
-import com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest.ChangePasswordRequest;
-import com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest.LoginRequest;
-import com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest.ResetPasswordRequest;
-import com.tongthuan.webdothethao_backend.dto.response.AdminResponse.UserStatsResponse;
-import com.tongthuan.webdothethao_backend.dto.response.JwtResponse;
-import com.tongthuan.webdothethao_backend.entity.Users;
-import com.tongthuan.webdothethao_backend.service.AccountService;
-import com.tongthuan.webdothethao_backend.service.JWTService;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest.ChangePasswordRequest;
+import com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest.ResetPasswordRequest;
+import com.tongthuan.webdothethao_backend.entity.Users;
+import com.tongthuan.webdothethao_backend.service.AccountService;
+import com.tongthuan.webdothethao_backend.service.JWTService;
 
 @RestController
 @RequestMapping("/api/account")
@@ -43,7 +33,8 @@ public class AccountController {
     }
 
     @GetMapping("/active")
-    public ResponseEntity<?> activeAccount(@RequestParam("email") String email, @RequestParam("activeCode") String activeCode) {
+    public ResponseEntity<?> activeAccount(
+            @RequestParam("email") String email, @RequestParam("activeCode") String activeCode) {
         ResponseEntity<?> response = accountService.activeAccount(email, activeCode);
         return response;
     }
@@ -55,7 +46,6 @@ public class AccountController {
         if (result) return ResponseEntity.ok().body("doi mat khau thanh cong");
 
         return ResponseEntity.badRequest().body("thong tin tai khoan hoac mat khau khong chinh xac!");
-
     }
 
     @GetMapping("/forgot-password")
@@ -65,13 +55,10 @@ public class AccountController {
         return ResponseEntity.ok().build();
     }
 
-
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
         if (!accountService.resetPassword(resetPasswordRequest))
             return ResponseEntity.badRequest().build();
         return ResponseEntity.ok().build();
     }
-
-
 }

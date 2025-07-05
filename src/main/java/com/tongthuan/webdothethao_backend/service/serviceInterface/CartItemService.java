@@ -5,5 +5,4 @@ import com.tongthuan.webdothethao_backend.dto.request.CartItemRequest.UpdateCart
 public interface CartItemService {
 
     public boolean updateCartItem(UpdateCartItemRequest updateCartItemRequest);
-
 }

@@ -1,11 +1,12 @@
 package com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest;
 
+import java.sql.Date;
+
 import com.tongthuan.webdothethao_backend.constantvalue.Gender;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.sql.Date;
 
 @Data
 @AllArgsConstructor
@@ -24,5 +25,4 @@ public class UserDetailRequest {
     private String district;
     private String ward;
     private String address;
-
 }

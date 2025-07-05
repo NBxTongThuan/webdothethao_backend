@@ -1,17 +1,18 @@
 package com.tongthuan.webdothethao_backend.service.serviceImpl;
 
-import com.tongthuan.webdothethao_backend.dto.adminRequest.AddCategoryRequest;
-import com.tongthuan.webdothethao_backend.dto.adminRequest.UpdateCategoryRequest;
-import com.tongthuan.webdothethao_backend.entity.Categories;
-import com.tongthuan.webdothethao_backend.repository.CategoriesRepository;
-import com.tongthuan.webdothethao_backend.service.serviceInterface.CategoriesService;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.tongthuan.webdothethao_backend.dto.adminRequest.AddCategoryRequest;
+import com.tongthuan.webdothethao_backend.dto.adminRequest.UpdateCategoryRequest;
+import com.tongthuan.webdothethao_backend.entity.Categories;
+import com.tongthuan.webdothethao_backend.repository.CategoriesRepository;
+import com.tongthuan.webdothethao_backend.service.serviceInterface.CategoriesService;
 
 @Service
 public class CategoriesServiceImpl implements CategoriesService {
@@ -37,7 +38,9 @@ public class CategoriesServiceImpl implements CategoriesService {
     @Override
     public boolean addCategory(AddCategoryRequest addCategoryRequest) {
 
-        if (categoriesRepository.findByName(addCategoryRequest.getCategoryName()).isPresent()) {
+        if (categoriesRepository
+                .findByName(addCategoryRequest.getCategoryName())
+                .isPresent()) {
             return false;
         }
         Categories category = new Categories();
@@ -52,8 +55,7 @@ public class CategoriesServiceImpl implements CategoriesService {
     public boolean deleteCategory(int categoryId) {
 
         Categories category = categoriesRepository.findById(categoryId).orElse(null);
-        if (category == null)
-            return false;
+        if (category == null) return false;
         category.setEnable(false);
         categoriesRepository.saveAndFlush(category);
         return true;
@@ -61,9 +63,10 @@ public class CategoriesServiceImpl implements CategoriesService {
 
     @Override
     public boolean updateCategory(UpdateCategoryRequest updateCategoryRequest) {
-        Categories category = categoriesRepository.findById(updateCategoryRequest.getCategoryId()).orElse(null);
-        if (category == null)
-            return false;
+        Categories category = categoriesRepository
+                .findById(updateCategoryRequest.getCategoryId())
+                .orElse(null);
+        if (category == null) return false;
         category.setCategoriesName(updateCategoryRequest.getCategoryName());
         category.setImageData(updateCategoryRequest.getCategoryImage());
         categoriesRepository.saveAndFlush(category);
@@ -73,8 +76,7 @@ public class CategoriesServiceImpl implements CategoriesService {
     @Override
     public boolean enableCategory(int categoryId) {
         Categories category = categoriesRepository.findById(categoryId).orElse(null);
-        if (category == null)
-            return false;
+        if (category == null) return false;
         category.setEnable(true);
         categoriesRepository.saveAndFlush(category);
         return true;

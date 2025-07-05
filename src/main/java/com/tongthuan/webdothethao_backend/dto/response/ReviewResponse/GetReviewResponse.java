@@ -1,12 +1,13 @@
 package com.tongthuan.webdothethao_backend.dto.response.ReviewResponse;
 
+import java.sql.Date;
+
 import com.tongthuan.webdothethao_backend.constantvalue.Color;
 import com.tongthuan.webdothethao_backend.entity.Reviews;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.sql.Date;
 
 @Data
 @NoArgsConstructor
@@ -21,7 +22,8 @@ public class GetReviewResponse {
     private String userName;
     private Color color;
     private String size;
-    public GetReviewResponse(Reviews reviews){
+
+    public GetReviewResponse(Reviews reviews) {
         this.reviewId = reviews.getReviewId();
         this.rating = reviews.getRating();
         this.comment = reviews.getComment();
@@ -31,6 +33,4 @@ public class GetReviewResponse {
         this.color = reviews.getProductAttribute().getColor();
         this.size = reviews.getProductAttribute().getSize();
     }
-
-
 }

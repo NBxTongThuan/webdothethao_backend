@@ -1,21 +1,20 @@
 package com.tongthuan.webdothethao_backend.service.serviceInterface;
 
-import com.tongthuan.webdothethao_backend.entity.Brand;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import com.tongthuan.webdothethao_backend.entity.Brand;
+
 public interface BrandService {
 
-//   User
+    //   User
     public Optional<Brand> findByProductID(String productId);
 
-
-//    Admin
+    //    Admin
     public Page<Brand> getAllBrand(Pageable pageable);
 
     public List<Brand> getAllBrands();
-
 }

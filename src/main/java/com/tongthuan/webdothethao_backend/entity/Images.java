@@ -1,7 +1,7 @@
 package com.tongthuan.webdothethao_backend.entity;
 
-import com.tongthuan.webdothethao_backend.constantvalue.Color;
 import jakarta.persistence.*;
+
 import lombok.Data;
 
 @Data
@@ -18,24 +18,17 @@ public class Images {
     @Lob
     private String data;
 
-//    @Column(name = "color")
-//    @Enumerated(EnumType.STRING)  // Lưu dưới dạng chuỗi
-//    private Color color;
+    //    @Column(name = "color")
+    //    @Enumerated(EnumType.STRING)  // Lưu dưới dạng chuỗi
+    //    private Color color;
 
     @Column(name = "url")
     private String url;
+
     @Column(name = "name")
     private String name;
 
-
-    @ManyToOne(
-            cascade = {
-                    CascadeType.DETACH,
-                    CascadeType.MERGE,
-                    CascadeType.PERSIST,
-                    CascadeType.REFRESH
-            }
-    )
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "product_id", nullable = false)
     private Products product;
 }

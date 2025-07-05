@@ -11,5 +11,4 @@ public class AddTypesRequest {
 
     private String typeName;
     private String categoryName;
-
 }

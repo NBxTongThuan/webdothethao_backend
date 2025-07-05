@@ -1,20 +1,20 @@
 package com.tongthuan.webdothethao_backend.service.serviceImpl;
 
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.tongthuan.webdothethao_backend.dto.request.UserAccountRequest.UserDetailRequest;
 import com.tongthuan.webdothethao_backend.entity.UserDetail;
 import com.tongthuan.webdothethao_backend.entity.Users;
 import com.tongthuan.webdothethao_backend.repository.UserDetailsRepository;
 import com.tongthuan.webdothethao_backend.repository.UsersRepository;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.UserDetailService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
-public class UserDetailServiceImpl implements UserDetailService{
+public class UserDetailServiceImpl implements UserDetailService {
 
     @Autowired
     UserDetailsRepository userDetailsRepository;
@@ -36,7 +36,8 @@ public class UserDetailServiceImpl implements UserDetailService{
             return null;
         }
         userDetail.setUserDetailId(userDetailsRequest.getUserDetailId());
-        Users user = usersRepository.findByUserName(userDetailsRequest.getUserName()).orElse(null);
+        Users user =
+                usersRepository.findByUserName(userDetailsRequest.getUserName()).orElse(null);
         if (user == null) {
             return null;
         }
@@ -53,5 +54,4 @@ public class UserDetailServiceImpl implements UserDetailService{
         userDetailsRepository.saveAndFlush(userDetail);
         return userDetail;
     }
-
 }

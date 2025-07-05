@@ -1,13 +1,14 @@
 package com.tongthuan.webdothethao_backend.service.serviceInterface;
 
-import com.tongthuan.webdothethao_backend.dto.adminRequest.AddCategoryRequest;
-import com.tongthuan.webdothethao_backend.dto.adminRequest.UpdateCategoryRequest;
-import com.tongthuan.webdothethao_backend.entity.Categories;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-import java.util.Optional;
+import com.tongthuan.webdothethao_backend.dto.adminRequest.AddCategoryRequest;
+import com.tongthuan.webdothethao_backend.dto.adminRequest.UpdateCategoryRequest;
+import com.tongthuan.webdothethao_backend.entity.Categories;
 
 public interface CategoriesService {
 
@@ -30,5 +31,4 @@ public interface CategoriesService {
     Categories findByName(String categoryName);
 
     Page<Categories> findTopCategoriesByProductCount(Pageable pageable);
-
 }

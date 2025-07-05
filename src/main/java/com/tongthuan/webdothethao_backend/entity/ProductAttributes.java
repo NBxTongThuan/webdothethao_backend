@@ -1,10 +1,12 @@
 package com.tongthuan.webdothethao_backend.entity;
 
-import com.tongthuan.webdothethao_backend.constantvalue.Color;
-import jakarta.persistence.*;
-import lombok.Data;
-
 import java.util.List;
+
+import jakarta.persistence.*;
+
+import com.tongthuan.webdothethao_backend.constantvalue.Color;
+
+import lombok.Data;
 
 @Data
 @Entity
@@ -17,7 +19,7 @@ public class ProductAttributes {
     private String productAttributeId;
 
     @Column(name = "color")
-    @Enumerated(EnumType.STRING)  // Lưu dưới dạng chuỗi
+    @Enumerated(EnumType.STRING) // Lưu dưới dạng chuỗi
     private Color color;
 
     @Column(name = "size")
@@ -32,41 +34,25 @@ public class ProductAttributes {
     @Column(name = "quantity_sold")
     private int quantitySold;
 
-    @ManyToOne(
-            cascade = {
-                    CascadeType.DETACH,
-                    CascadeType.MERGE,
-                    CascadeType.PERSIST,
-                    CascadeType.REFRESH
-            }
-    )
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "product_id", nullable = false)
     private Products product;
 
-    @OneToMany(mappedBy = "productAttribute",
-            fetch = FetchType.LAZY, cascade = {
-            CascadeType.DETACH,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH,
-            CascadeType.MERGE
-    })
+    @OneToMany(
+            mappedBy = "productAttribute",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     private List<CartItems> cartItemsList;
 
-    @OneToMany(mappedBy = "productAttribute",
-            fetch = FetchType.LAZY, cascade = {
-            CascadeType.DETACH,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH,
-            CascadeType.MERGE
-    })
+    @OneToMany(
+            mappedBy = "productAttribute",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     private List<OrderItems> orderItemsList;
 
-    @OneToMany(mappedBy = "productAttribute",
-            fetch = FetchType.LAZY, cascade = {
-            CascadeType.DETACH,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH,
-            CascadeType.MERGE})
+    @OneToMany(
+            mappedBy = "productAttribute",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     private List<Reviews> reviewsList;
-
 }

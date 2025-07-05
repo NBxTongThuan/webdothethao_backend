@@ -1,5 +1,22 @@
 package com.tongthuan.webdothethao_backend.service.serviceImpl;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.tongthuan.webdothethao_backend.constantvalue.OrderStatus;
 import com.tongthuan.webdothethao_backend.constantvalue.PaymentMethod;
 import com.tongthuan.webdothethao_backend.constantvalue.PaymentStatus;
@@ -15,23 +32,6 @@ import com.tongthuan.webdothethao_backend.service.JWTService;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.OrdersService;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.ProductAttributeService;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.UsersService;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class OrdersServiceImpl implements OrdersService {
@@ -72,19 +72,16 @@ public class OrdersServiceImpl implements OrdersService {
     @Autowired
     private JWTService jwtService;
 
-    //USER
+    // USER
     @Transactional
     @Override
     public Orders addCodOrder(OrderRequest orderRequest, HttpServletRequest request) {
 
         String token = jwtService.getTokenFromCookie(request);
 
+        if (token.equalsIgnoreCase("")) return null;
 
-        if (token.equalsIgnoreCase(""))
-            return null;
-
-        if (jwtService.isTokenExpired(token))
-            return null;
+        if (jwtService.isTokenExpired(token)) return null;
 
         Users user = usersService.findByUserName(jwtService.extractUsername(token));
         if (user == null) {
@@ -92,8 +89,7 @@ public class OrdersServiceImpl implements OrdersService {
         }
 
         Cart cart = cartRepository.findCartByUserId(user.getUserId());
-        if (cart == null)
-            return null;
+        if (cart == null) return null;
         Orders orders = new Orders();
         orders.setUser(user);
         orders.setCreatedDate(LocalDateTime.now());
@@ -113,11 +109,10 @@ public class OrdersServiceImpl implements OrdersService {
         orders.setToName(orderRequest.getToName());
         orders.setToPhone(orderRequest.getToPhone());
 
-        //orderDetails
-        //orderDetails
+        // orderDetails
+        // orderDetails
         List<OrderItems> orderItems = createOrderItemsList(cart.getCartId());
         orderItems.forEach(item -> {
-
             ProductAttributes productAttribute = item.getProductAttribute();
             if (productAttribute == null) {
                 return;
@@ -129,11 +124,10 @@ public class OrdersServiceImpl implements OrdersService {
             item.setOrder(orders);
             productsRepository.saveAndFlush(product);
             productAttributesRepository.saveAndFlush(productAttribute);
-
         });
 
         orders.setListOrderItems(orderItems);
-        //Payment
+        // Payment
         Payments payments = new Payments();
         payments.setOrder(orders);
         payments.setUser(user);
@@ -142,7 +136,7 @@ public class OrdersServiceImpl implements OrdersService {
         payments.setCreatedDate(LocalDateTime.now());
         payments.setPaymentMethod(PaymentMethod.CASH_ON_DELIVERY);
 
-        //Notification
+        // Notification
         Notifications notification = new Notifications();
         notification.setContent("Người dùng " + user.getUserName() + " vừa tạo một đơn hàng mới!");
         notification.setTitle("ĐƠN HÀNG MỚI");
@@ -177,9 +171,12 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public boolean cancelingOrder(CancelOrderRequest cancelOrderRequest) {
 
-        Orders order = ordersRepository.findByOrderId(cancelOrderRequest.getOrderId()).orElse(null);
+        Orders order =
+                ordersRepository.findByOrderId(cancelOrderRequest.getOrderId()).orElse(null);
 
-        Payments payment = paymentsRepository.findByOrderId(cancelOrderRequest.getOrderId()).orElse(null);
+        Payments payment = paymentsRepository
+                .findByOrderId(cancelOrderRequest.getOrderId())
+                .orElse(null);
         if (payment == null) {
             return false;
         }
@@ -189,14 +186,13 @@ public class OrdersServiceImpl implements OrdersService {
         }
         List<OrderItems> orderItemsList = orderItemRepository.findByOrderId(cancelOrderRequest.getOrderId());
 
-        orderItemsList.forEach(
-                item -> {
-                    ProductAttributes productAttribute = productAttributesRepository.findByProductAttributeId(item.getProductAttribute().getProductAttributeId());
-                    if (productAttribute == null)
-                        return;
-                    productAttribute.setQuantity(productAttribute.getQuantity() + item.getQuantity());
-                    productAttributesRepository.saveAndFlush(productAttribute);
-                });
+        orderItemsList.forEach(item -> {
+            ProductAttributes productAttribute = productAttributesRepository.findByProductAttributeId(
+                    item.getProductAttribute().getProductAttributeId());
+            if (productAttribute == null) return;
+            productAttribute.setQuantity(productAttribute.getQuantity() + item.getQuantity());
+            productAttributesRepository.saveAndFlush(productAttribute);
+        });
         payment.setStatus(PaymentStatus.CANCELLED);
         order.setStatus(OrderStatus.CANCELLED);
         order.setOrderNoteCanceled(cancelOrderRequest.getOrderCancelNote());
@@ -206,7 +202,7 @@ public class OrdersServiceImpl implements OrdersService {
         return true;
     }
 
-    //VNPay
+    // VNPay
     @Override
     public Orders createVNPayOrder(OrderRequest orderRequest, Users user, Cart cart, String vnpTxnRef) {
 
@@ -230,10 +226,9 @@ public class OrdersServiceImpl implements OrdersService {
         orders.setToName(orderRequest.getToName());
         orders.setToPhone(orderRequest.getToPhone());
 
-        //orderDetails
+        // orderDetails
         List<OrderItems> orderItems = createOrderItemsList(cart.getCartId());
         orderItems.forEach(item -> {
-
             ProductAttributes productAttribute = item.getProductAttribute();
             if (productAttribute == null) {
                 return;
@@ -245,11 +240,10 @@ public class OrdersServiceImpl implements OrdersService {
             item.setOrder(orders);
             productsRepository.saveAndFlush(product);
             productAttributesRepository.saveAndFlush(productAttribute);
-
         });
         orders.setListOrderItems(orderItems);
         System.out.println("return true 1");
-        //Payment
+        // Payment
         Payments payments = new Payments();
         payments.setOrder(orders);
         payments.setStatus(PaymentStatus.PENDING);
@@ -259,8 +253,7 @@ public class OrdersServiceImpl implements OrdersService {
         payments.setVnpTxnRef(vnpTxnRef);
         payments.setPaymentMethod(PaymentMethod.VN_PAY);
 
-
-        //Notification
+        // Notification
         Notifications notification = new Notifications();
         notification.setContent("Người dùng " + user.getUserName() + " vừa tạo một đơn hàng mới!");
         notification.setTitle("ĐƠN HÀNG MỚI");
@@ -297,58 +290,60 @@ public class OrdersServiceImpl implements OrdersService {
         paymentsRepository.save(payment);
     }
 
-//VNPay
+    // VNPay
 
-    //ADMIN
+    // ADMIN
     @Override
     public boolean adminUpdateOrderByOrderId(AdminUpdateOrderRequest adminUpdateOrderRequest) {
-        Orders order = ordersRepository.findByOrderId(adminUpdateOrderRequest.getOrderId()).orElse(null);
+        Orders order = ordersRepository
+                .findByOrderId(adminUpdateOrderRequest.getOrderId())
+                .orElse(null);
         if (order == null) {
             System.out.println("ko thay don hang");
             return false;
         }
-        Payments payment = paymentsRepository.findByOrderId(adminUpdateOrderRequest.getOrderId()).orElse(null);
+        Payments payment = paymentsRepository
+                .findByOrderId(adminUpdateOrderRequest.getOrderId())
+                .orElse(null);
         if (payment == null) {
             System.out.println("ko thay don hang");
             return false;
         }
         order.setStatus(adminUpdateOrderRequest.getOrderStatus());
 
-        //CONFIRMED hoặc SHIPPING
-        if (adminUpdateOrderRequest.getOrderStatus() == OrderStatus.CONFIRMED || adminUpdateOrderRequest.getOrderStatus() == OrderStatus.SHIPPING) {
+        // CONFIRMED hoặc SHIPPING
+        if (adminUpdateOrderRequest.getOrderStatus() == OrderStatus.CONFIRMED
+                || adminUpdateOrderRequest.getOrderStatus() == OrderStatus.SHIPPING) {
             order.setDateReceive(LocalDateTime.now());
-            if (payment.getPaymentMethod() == PaymentMethod.VN_PAY)
-                payment.setStatus(PaymentStatus.COMPLETED);
+            if (payment.getPaymentMethod() == PaymentMethod.VN_PAY) payment.setStatus(PaymentStatus.COMPLETED);
             else if (payment.getPaymentMethod() == PaymentMethod.CASH_ON_DELIVERY)
                 payment.setStatus(PaymentStatus.PENDING);
-        }//SHIPPING
+        } // SHIPPING
         else if (adminUpdateOrderRequest.getOrderStatus() == (OrderStatus.DELIVERED)) {
             List<OrderItems> orderItemsList = orderItemRepository.findByOrderId(order.getOrderId());
             for (OrderItems orderItem : orderItemsList) {
-                ProductAttributes productAttribute = productAttributesRepository.findByProductAttributeId(orderItem.getProductAttribute().getProductAttributeId());
-                if (productAttribute == null)
-                    continue;
+                ProductAttributes productAttribute = productAttributesRepository.findByProductAttributeId(
+                        orderItem.getProductAttribute().getProductAttributeId());
+                if (productAttribute == null) continue;
                 Products product = productAttribute.getProduct();
                 product.setQuantitySold(product.getQuantitySold() + orderItem.getQuantity());
                 productsRepository.saveAndFlush(product);
             }
             order.setDateReceive(LocalDateTime.now());
             payment.setStatus(PaymentStatus.COMPLETED);
-        }//CANCELLED
+        } // CANCELLED
         else if (adminUpdateOrderRequest.getOrderStatus() == (OrderStatus.CANCELLED)) {
             List<OrderItems> orderItemsList = orderItemRepository.findByOrderId(adminUpdateOrderRequest.getOrderId());
-            orderItemsList.forEach(
-                    item -> {
-                        ProductAttributes productAttribute = productAttributesRepository.findByProductAttributeId(item.getProductAttribute().getProductAttributeId());
-                        if (productAttribute == null)
-                            return;
-                        productAttribute.setQuantity(productAttribute.getQuantity() + item.getQuantity());
-                        productAttributesRepository.saveAndFlush(productAttribute);
-                    });
+            orderItemsList.forEach(item -> {
+                ProductAttributes productAttribute = productAttributesRepository.findByProductAttributeId(
+                        item.getProductAttribute().getProductAttributeId());
+                if (productAttribute == null) return;
+                productAttribute.setQuantity(productAttribute.getQuantity() + item.getQuantity());
+                productAttributesRepository.saveAndFlush(productAttribute);
+            });
             order.setOrderNoteCanceled(adminUpdateOrderRequest.getOrderCancelNote());
             order.setDateCanceled(LocalDateTime.now());
             payment.setStatus(PaymentStatus.CANCELLED);
-
         }
         ordersRepository.saveAndFlush(order);
         paymentsRepository.saveAndFlush(payment);
@@ -388,10 +383,9 @@ public class OrdersServiceImpl implements OrdersService {
         LocalDateTime startDateTime = start.atStartOfDay();
         LocalDateTime endDateTime = end.atTime(LocalTime.MAX);
 
-        return ordersRepository.getRevenueByDayBetween(OrderStatus.DELIVERED, startDateTime, endDateTime).stream().map(row -> new RevenueByDateResponse(
-                ((Date) row[0]).toLocalDate(),
-                (Long) row[1]
-        )).collect(Collectors.toList());
+        return ordersRepository.getRevenueByDayBetween(OrderStatus.DELIVERED, startDateTime, endDateTime).stream()
+                .map(row -> new RevenueByDateResponse(((Date) row[0]).toLocalDate(), (Long) row[1]))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -399,10 +393,9 @@ public class OrdersServiceImpl implements OrdersService {
         LocalDateTime startDateTime = start.atStartOfDay();
         LocalDateTime endDateTime = end.atTime(LocalTime.MAX);
 
-        return ordersRepository.getInterestByDayBetween(OrderStatus.DELIVERED, startDateTime, endDateTime).stream().map(row -> new InterestByDateResponse(
-                ((Date) row[0]).toLocalDate(),
-                (Long) row[1]
-        )).collect(Collectors.toList());
+        return ordersRepository.getInterestByDayBetween(OrderStatus.DELIVERED, startDateTime, endDateTime).stream()
+                .map(row -> new InterestByDateResponse(((Date) row[0]).toLocalDate(), (Long) row[1]))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -421,9 +414,8 @@ public class OrdersServiceImpl implements OrdersService {
         long canceledOrder = ordersRepository.getCountOrdersByOrderStatus(OrderStatus.CANCELLED);
         long deliveredOrder = ordersRepository.getCountOrdersByOrderStatus(OrderStatus.DELIVERED);
 
-        return new CountOrderStatusResponse(canceledOrder,deliveredOrder);
+        return new CountOrderStatusResponse(canceledOrder, deliveredOrder);
     }
-
 
     public long getTotalPrice(String cartId) {
         long totalPrice = 0;
@@ -467,7 +459,9 @@ public class OrdersServiceImpl implements OrdersService {
         if (!cartItems.isEmpty()) {
             for (CartItems cartItem : cartItems) {
                 Products product = cartItem.getProductAttribute().getProduct();
-                finalPrice += product.getMoneyOff() > 0 ? ((product.getPrice() - product.getMoneyOff()) * cartItem.getQuantity()) : (product.getPrice() * cartItem.getQuantity());
+                finalPrice += product.getMoneyOff() > 0
+                        ? ((product.getPrice() - product.getMoneyOff()) * cartItem.getQuantity())
+                        : (product.getPrice() * cartItem.getQuantity());
             }
         }
         return finalPrice + 30000L;
@@ -482,15 +476,16 @@ public class OrdersServiceImpl implements OrdersService {
                 orderItems.setReviewed(false);
                 orderItems.setQuantity(cartItem.getQuantity());
                 orderItems.setProductAttribute(cartItem.getProductAttribute());
-                orderItems.setImportPrice(cartItem.getProductAttribute().getProduct().getImportPrice());
-                orderItems.setMoneyOffPerOneProduct(cartItem.getProductAttribute().getProduct().getMoneyOff());
+                orderItems.setImportPrice(
+                        cartItem.getProductAttribute().getProduct().getImportPrice());
+                orderItems.setMoneyOffPerOneProduct(
+                        cartItem.getProductAttribute().getProduct().getMoneyOff());
                 orderItems.setOriginalPrice(cartItem.getPrice());
-                orderItems.setFinalPrice(cartItem.getPrice() - cartItem.getProductAttribute().getProduct().getMoneyOff());
+                orderItems.setFinalPrice(cartItem.getPrice()
+                        - cartItem.getProductAttribute().getProduct().getMoneyOff());
                 orderItemsList.add(orderItems);
             }
         }
         return orderItemsList;
     }
-
-
 }

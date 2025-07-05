@@ -1,17 +1,18 @@
 package com.tongthuan.webdothethao_backend.service.serviceImpl;
 
-import com.tongthuan.webdothethao_backend.dto.request.ReviewRequest.AddReviewRequest;
-import com.tongthuan.webdothethao_backend.dto.request.ReviewRequest.UpdateReviewRequest;
-import com.tongthuan.webdothethao_backend.entity.*;
-import com.tongthuan.webdothethao_backend.repository.*;
-import com.tongthuan.webdothethao_backend.service.serviceInterface.ReviewsService;
+import java.sql.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.util.List;
+import com.tongthuan.webdothethao_backend.dto.request.ReviewRequest.AddReviewRequest;
+import com.tongthuan.webdothethao_backend.dto.request.ReviewRequest.UpdateReviewRequest;
+import com.tongthuan.webdothethao_backend.entity.*;
+import com.tongthuan.webdothethao_backend.repository.*;
+import com.tongthuan.webdothethao_backend.service.serviceInterface.ReviewsService;
 
 @Service
 public class ReviewsServiceImpl implements ReviewsService {
@@ -40,15 +41,15 @@ public class ReviewsServiceImpl implements ReviewsService {
     public boolean addReviews(AddReviewRequest reviewRequest) {
 
         Reviews review = reviewsRepository.findByOrderItemId(reviewRequest.getOrderItemId());
-        if (review != null)
-            return false;
+        if (review != null) return false;
         review = new Reviews();
         Products product = productsRepository.findByProductId(reviewRequest.getProductId());
         if (product == null) {
             return false;
         }
         review.setProduct(product);
-        ProductAttributes productAttribute = productAttributesRepository.findByProductAttributeId(reviewRequest.getProductAttributeId());
+        ProductAttributes productAttribute =
+                productAttributesRepository.findByProductAttributeId(reviewRequest.getProductAttributeId());
         if (productAttribute == null) {
             return false;
         }
@@ -83,10 +84,10 @@ public class ReviewsServiceImpl implements ReviewsService {
     @Override
     public boolean updateReview(UpdateReviewRequest updateReviewRequest) {
 
-        Reviews review = reviewsRepository.findById(updateReviewRequest.getReviewId()).orElse(null);
-        if(review == null)
-        {
-            return  false;
+        Reviews review =
+                reviewsRepository.findById(updateReviewRequest.getReviewId()).orElse(null);
+        if (review == null) {
+            return false;
         }
 
         review.setEdited(true);
@@ -99,5 +100,4 @@ public class ReviewsServiceImpl implements ReviewsService {
     public Page<Reviews> getAllReview(Pageable pageable) {
         return reviewsRepository.findAll(pageable);
     }
-
 }

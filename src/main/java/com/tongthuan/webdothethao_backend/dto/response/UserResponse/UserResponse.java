@@ -1,11 +1,12 @@
 package com.tongthuan.webdothethao_backend.dto.response.UserResponse;
 
+import java.time.LocalDateTime;
+
 import com.tongthuan.webdothethao_backend.entity.Users;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -20,7 +21,7 @@ public class UserResponse {
     private boolean enable;
 
     public UserResponse(Users user) {
-        this.userId=user.getUserId();
+        this.userId = user.getUserId();
         this.username = user.getUserName();
         this.email = user.getEmail();
         this.role = user.getRole().name();

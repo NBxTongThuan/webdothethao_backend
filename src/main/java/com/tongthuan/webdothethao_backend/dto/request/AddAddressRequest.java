@@ -14,5 +14,4 @@ public class AddAddressRequest {
     private String toProvince;
     private String toWard;
     private String toAddress;
-
 }

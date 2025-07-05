@@ -11,7 +11,4 @@ public class UpdateReviewRequest {
     private String reviewId;
     private String comment;
     private int rating;
-
-
-
 }

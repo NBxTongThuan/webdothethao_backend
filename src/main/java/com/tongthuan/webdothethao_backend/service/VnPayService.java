@@ -1,32 +1,32 @@
 package com.tongthuan.webdothethao_backend.service;
 
-import com.tongthuan.webdothethao_backend.config.VNPayConfig;
-import com.tongthuan.webdothethao_backend.constantvalue.OrderStatus;
-import com.tongthuan.webdothethao_backend.constantvalue.PaymentMethod;
-import com.tongthuan.webdothethao_backend.constantvalue.PaymentStatus;
-import com.tongthuan.webdothethao_backend.dto.request.OrderRequest.OrderRequest;
-import com.tongthuan.webdothethao_backend.entity.*;
-import com.tongthuan.webdothethao_backend.repository.*;
-import com.tongthuan.webdothethao_backend.service.serviceInterface.OrdersService;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.*;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.tongthuan.webdothethao_backend.config.VNPayConfig;
+import com.tongthuan.webdothethao_backend.constantvalue.OrderStatus;
+import com.tongthuan.webdothethao_backend.constantvalue.PaymentStatus;
+import com.tongthuan.webdothethao_backend.dto.request.OrderRequest.OrderRequest;
+import com.tongthuan.webdothethao_backend.entity.*;
+import com.tongthuan.webdothethao_backend.repository.*;
+import com.tongthuan.webdothethao_backend.service.serviceInterface.OrdersService;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class VnPayService {
-
 
     @Autowired
     private final CartItemsRepository cartItemsRepository;
@@ -52,14 +52,13 @@ public class VnPayService {
     @Autowired
     private final OrdersRepository ordersRepository;
 
-    public String createPaymentUrl(OrderRequest orderRequest, HttpServletRequest request) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    public String createPaymentUrl(OrderRequest orderRequest, HttpServletRequest request)
+            throws UnsupportedEncodingException, NoSuchAlgorithmException {
         String vnpTxnRef = "VNP_" + System.currentTimeMillis();
         String orderInfo = "Thanh toan don hang " + vnpTxnRef;
 
         String token = jwtService.getTokenFromCookie(request);
-        if (token.equalsIgnoreCase(""))
-            return "";
-
+        if (token.equalsIgnoreCase("")) return "";
 
         String userName = jwtService.extractUsername(token);
         Users user = usersRepository.findByUserName(userName).orElse(null);
@@ -68,12 +67,10 @@ public class VnPayService {
         }
 
         Cart cart = cartRepository.findCartByUserId(user.getUserId());
-        if (cart == null)
-            return "";
+        if (cart == null) return "";
 
         Orders order = ordersService.createVNPayOrder(orderRequest, user, cart, vnpTxnRef);
-        if (order == null)
-            return "";
+        if (order == null) return "";
 
         // 2. Tạo param gửi VNPAY
         Map<String, String> vnpParams = new HashMap<>();
@@ -99,8 +96,14 @@ public class VnPayService {
         for (String fieldName : fieldNames) {
             String value = vnpParams.get(fieldName);
             if (value != null && !value.isEmpty()) {
-                hashData.append(fieldName).append('=').append(URLEncoder.encode(value, StandardCharsets.US_ASCII)).append('&');
-                query.append(fieldName).append('=').append(URLEncoder.encode(value, StandardCharsets.US_ASCII)).append('&');
+                hashData.append(fieldName)
+                        .append('=')
+                        .append(URLEncoder.encode(value, StandardCharsets.US_ASCII))
+                        .append('&');
+                query.append(fieldName)
+                        .append('=')
+                        .append(URLEncoder.encode(value, StandardCharsets.US_ASCII))
+                        .append('&');
             }
         }
 
@@ -122,8 +125,7 @@ public class VnPayService {
         String orderInfo = "Thanh toan don hang " + vnpTxnRef;
 
         Payments payment = paymentRepo.findById(paymentId).orElse(null);
-        if (payment == null)
-            return "";
+        if (payment == null) return "";
 
         if (payment.getStatus() == PaymentStatus.COMPLETED) {
             throw new IllegalStateException("Payment already completed.");
@@ -156,8 +158,14 @@ public class VnPayService {
         for (String fieldName : fieldNames) {
             String value = vnpParams.get(fieldName);
             if (value != null && !value.isEmpty()) {
-                hashData.append(fieldName).append('=').append(URLEncoder.encode(value, StandardCharsets.US_ASCII)).append('&');
-                query.append(fieldName).append('=').append(URLEncoder.encode(value, StandardCharsets.US_ASCII)).append('&');
+                hashData.append(fieldName)
+                        .append('=')
+                        .append(URLEncoder.encode(value, StandardCharsets.US_ASCII))
+                        .append('&');
+                query.append(fieldName)
+                        .append('=')
+                        .append(URLEncoder.encode(value, StandardCharsets.US_ASCII))
+                        .append('&');
             }
         }
 
@@ -171,7 +179,6 @@ public class VnPayService {
 
         // 5. Return URL
         return vnpayConfig.getVnpUrl() + "?" + query;
-
     }
 
     private String hmacSHA512(String key, String data) throws NoSuchAlgorithmException {
@@ -204,7 +211,9 @@ public class VnPayService {
                 System.out.println("product money off:" + product.getMoneyOff());
                 System.out.println("product price " + product.getPrice());
                 System.out.println("product name" + product.getProductName());
-                finalPrice += product.getMoneyOff() > 0 ? ((product.getPrice() - product.getMoneyOff()) * cartItem.getQuantity()) : (product.getPrice() * cartItem.getQuantity());
+                finalPrice += product.getMoneyOff() > 0
+                        ? ((product.getPrice() - product.getMoneyOff()) * cartItem.getQuantity())
+                        : (product.getPrice() * cartItem.getQuantity());
             }
         }
         return finalPrice;
@@ -222,7 +231,10 @@ public class VnPayService {
         for (String key : keys) {
             String value = vnpParams.get(key);
             if (value != null && !value.isEmpty()) {
-                hashData.append(key).append('=').append(URLEncoder.encode(value, StandardCharsets.US_ASCII)).append('&');
+                hashData.append(key)
+                        .append('=')
+                        .append(URLEncoder.encode(value, StandardCharsets.US_ASCII))
+                        .append('&');
             }
         }
         hashData.setLength(hashData.length() - 1); // xóa & cuối
@@ -263,5 +275,4 @@ public class VnPayService {
             return "error";
         }
     }
-
 }

@@ -1,32 +1,33 @@
 package com.tongthuan.webdothethao_backend.service;
 
-import com.tongthuan.webdothethao_backend.constantvalue.Role;
-import com.tongthuan.webdothethao_backend.entity.Users;
-import com.tongthuan.webdothethao_backend.repository.CartRepository;
-import com.tongthuan.webdothethao_backend.service.serviceInterface.CartService;
-import com.tongthuan.webdothethao_backend.service.serviceInterface.UsersService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import java.security.Key;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
+import com.tongthuan.webdothethao_backend.entity.Users;
+import com.tongthuan.webdothethao_backend.repository.CartRepository;
+import com.tongthuan.webdothethao_backend.service.serviceInterface.UsersService;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JWTService {
 
     @Autowired
     private UsersService usersService;
+
     public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 
     @Autowired
@@ -39,10 +40,10 @@ public class JWTService {
 
         if (user != null) {
             claims.put("ROLE", user.getRole().name());
-            claims.put("CartId", cartRepository.findCartByUserId(user.getUserId()).getCartId());
+            claims.put(
+                    "CartId", cartRepository.findCartByUserId(user.getUserId()).getCartId());
         }
         return createToken(claims, userName);
-
     }
 
     public String getTokenFromCookie(HttpServletRequest request) {
@@ -67,16 +68,15 @@ public class JWTService {
                 .compact();
     }
 
-    //Lấy secret key
+    // Lấy secret key
     private Key getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    //Trích xuất thông tin
+    // Trích xuất thông tin
     public Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
+        return Jwts.parserBuilder()
                 .setSigningKey(getSignKey())
                 .build()
                 .parseClaimsJws(token)
@@ -93,12 +93,12 @@ public class JWTService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    //Lấy tên đăng nhập
+    // Lấy tên đăng nhập
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    //Kiểm tra Jwt hết hạn
+    // Kiểm tra Jwt hết hạn
     public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
@@ -109,7 +109,7 @@ public class JWTService {
         return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    //lấy ROLE
+    // lấy ROLE
     public String extractRole(String token) {
         return extractClaim(token, claims -> claims.get("ROLE", String.class));
     }
@@ -117,5 +117,4 @@ public class JWTService {
     public String extractCartId(String token) {
         return extractClaim(token, claims -> claims.get("CartId", String.class));
     }
-
 }

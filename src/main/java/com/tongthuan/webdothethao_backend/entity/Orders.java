@@ -1,12 +1,13 @@
 package com.tongthuan.webdothethao_backend.entity;
 
-import com.tongthuan.webdothethao_backend.constantvalue.OrderStatus;
-import jakarta.persistence.*;
-import lombok.Data;
-
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import jakarta.persistence.*;
+
+import com.tongthuan.webdothethao_backend.constantvalue.OrderStatus;
+
+import lombok.Data;
 
 @Data
 @Entity
@@ -36,7 +37,6 @@ public class Orders {
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
-
 
     @Column(name = "created_date")
     private LocalDateTime createdDate;
@@ -77,23 +77,13 @@ public class Orders {
     @Column(name = "date_canceled")
     private LocalDateTime dateCanceled;
 
-    @ManyToOne(cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH
-    })
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
     private Users user;
 
-    @OneToMany(mappedBy = "order",
-            fetch = FetchType.EAGER, cascade = {
-            CascadeType.DETACH,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH,
-            CascadeType.MERGE
-    })
+    @OneToMany(
+            mappedBy = "order",
+            fetch = FetchType.EAGER,
+            cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     private List<OrderItems> listOrderItems;
-
-
 }

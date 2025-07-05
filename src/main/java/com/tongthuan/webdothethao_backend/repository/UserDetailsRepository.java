@@ -1,10 +1,11 @@
 package com.tongthuan.webdothethao_backend.repository;
 
-import com.tongthuan.webdothethao_backend.entity.UserDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import com.tongthuan.webdothethao_backend.entity.UserDetail;
 
 @Repository
 public interface UserDetailsRepository extends JpaRepository<UserDetail, String> {
@@ -14,6 +15,4 @@ public interface UserDetailsRepository extends JpaRepository<UserDetail, String>
 
     @Query("SELECT ud FROM UserDetail ud WHERE ud.userDetailId = :userDetailId")
     UserDetail findByUserDetailId(@Param("userDetailId") String userDetailId);
-
-
 }

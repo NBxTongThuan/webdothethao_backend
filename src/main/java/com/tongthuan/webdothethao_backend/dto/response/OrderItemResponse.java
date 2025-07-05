@@ -2,7 +2,7 @@ package com.tongthuan.webdothethao_backend.dto.response;
 
 import com.tongthuan.webdothethao_backend.constantvalue.Color;
 import com.tongthuan.webdothethao_backend.entity.OrderItems;
-import com.tongthuan.webdothethao_backend.entity.Orders;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,7 +28,7 @@ public class OrderItemResponse {
     public OrderItemResponse(OrderItems orderItems) {
         this.orderItemId = orderItems.getOrderItemId();
         this.finalPrice = orderItems.getFinalPrice();
-        this.originalPrice =  orderItems.getOriginalPrice();
+        this.originalPrice = orderItems.getOriginalPrice();
         this.moneyOffPerOneProduct = orderItems.getMoneyOffPerOneProduct();
         this.quantity = orderItems.getQuantity();
         this.reviewed = orderItems.isReviewed();

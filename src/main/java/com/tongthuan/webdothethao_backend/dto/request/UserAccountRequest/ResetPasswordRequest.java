@@ -11,5 +11,4 @@ public class ResetPasswordRequest {
     private String email;
     private String forgotPasswordCode;
     private String newPassword;
-
 }

@@ -1,11 +1,12 @@
 package com.tongthuan.webdothethao_backend.dto.ChatMessageDto;
 
+import java.time.LocalDateTime;
+
 import com.tongthuan.webdothethao_backend.entity.ChatBoxMessages;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor

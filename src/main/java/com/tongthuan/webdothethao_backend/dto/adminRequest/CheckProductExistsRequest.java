@@ -11,5 +11,4 @@ public class CheckProductExistsRequest {
     private String productName;
     private String typeName;
     private String brandName;
-
 }

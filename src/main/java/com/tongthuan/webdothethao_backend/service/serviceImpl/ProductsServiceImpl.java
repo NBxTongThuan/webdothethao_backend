@@ -1,24 +1,24 @@
 package com.tongthuan.webdothethao_backend.service.serviceImpl;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
 import com.tongthuan.webdothethao_backend.dto.adminRequest.UpdateImageRequest;
 import com.tongthuan.webdothethao_backend.dto.adminRequest.UpdateProductRequest;
 import com.tongthuan.webdothethao_backend.dto.request.ProductRequest.ImageRequest;
-import com.tongthuan.webdothethao_backend.dto.request.ProductRequest.ProductAttributeRequest;
 import com.tongthuan.webdothethao_backend.dto.request.ProductRequest.ProductAttributeRequest;
 import com.tongthuan.webdothethao_backend.dto.request.ProductRequest.ProductRequest;
 import com.tongthuan.webdothethao_backend.entity.*;
 import com.tongthuan.webdothethao_backend.repository.*;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.ProductAttributeService;
 import com.tongthuan.webdothethao_backend.service.serviceInterface.ProductsService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductsServiceImpl implements ProductsService {
@@ -63,14 +63,12 @@ public class ProductsServiceImpl implements ProductsService {
         return productsRepository.findProductsByProductName(productName, pageable);
     }
 
-
     //    Admin
     @Override
     public boolean addProduct(ProductRequest productRequest) {
 
         Brand brand = brandRepository.findById(productRequest.getBrandId()).orElse(null);
-        if (brand == null)
-            return false;
+        if (brand == null) return false;
 
         Types type = typesRepository.findById(productRequest.getTypeId()).orElse(null);
         if (type == null) {
@@ -89,7 +87,7 @@ public class ProductsServiceImpl implements ProductsService {
         List<ProductAttributes> productAttributesList = new ArrayList<>();
 
         for (ProductAttributeRequest productAttributeRequest : productRequest.getListProductAttribute()) {
-//            boolean chec = productAttributeService.checkProductAttributeExists(product)
+            //            boolean chec = productAttributeService.checkProductAttributeExists(product)
             ProductAttributes productAttribute = new ProductAttributes();
             productAttribute.setColor(productAttributeRequest.getColor());
             productAttribute.setSize(productAttributeRequest.getSize());
@@ -120,8 +118,7 @@ public class ProductsServiceImpl implements ProductsService {
     public boolean disableInStock(String productId) {
 
         Products product = productsRepository.findByProductId(productId);
-        if (product == null)
-            return false;
+        if (product == null) return false;
         product.setInStock(false);
         productsRepository.saveAndFlush(product);
         return true;
@@ -130,8 +127,7 @@ public class ProductsServiceImpl implements ProductsService {
     @Override
     public boolean inStock(String productId) {
         Products product = productsRepository.findByProductId(productId);
-        if (product == null)
-            return false;
+        if (product == null) return false;
         product.setInStock(true);
         productsRepository.saveAndFlush(product);
         return true;
@@ -141,17 +137,15 @@ public class ProductsServiceImpl implements ProductsService {
     public boolean updateProduct(UpdateProductRequest updateProductRequest) {
 
         Products product = productsRepository.findByProductId(updateProductRequest.getProductId());
-        if(product == null)
-            return false;
+        if (product == null) return false;
 
         Types type = typesRepository.findById(updateProductRequest.getTypeId()).orElse(null);
-        if(type == null)
-            return false;
+        if (type == null) return false;
         product.setType(type);
 
-        Brand brand = brandRepository.findById(updateProductRequest.getBrandId()).orElse(null);
-        if(brand == null)
-            return false;
+        Brand brand =
+                brandRepository.findById(updateProductRequest.getBrandId()).orElse(null);
+        if (brand == null) return false;
         product.setBrand(brand);
 
         product.setDescription(updateProductRequest.getDescription());
@@ -160,23 +154,22 @@ public class ProductsServiceImpl implements ProductsService {
         System.out.println(updateProductRequest.getImportPrice());
         product.setImportPrice(updateProductRequest.getImportPrice());
 
-        //handle Image
-        if(!updateProductRequest.getListUpdateImage().isEmpty())
-        {
+        // handle Image
+        if (!updateProductRequest.getListUpdateImage().isEmpty()) {
             List<Images> imagesList = new ArrayList<>();
-            for(UpdateImageRequest updateImageRequest : updateProductRequest.getListUpdateImage())
-            {
-                if(!updateImageRequest.getImageId().equalsIgnoreCase("")){
-                    Images image = imagesRepository.findById(updateImageRequest.getImageId()).orElse(null);
-                    if(image!=null)
-                    {
+            for (UpdateImageRequest updateImageRequest : updateProductRequest.getListUpdateImage()) {
+                if (!updateImageRequest.getImageId().equalsIgnoreCase("")) {
+                    Images image = imagesRepository
+                            .findById(updateImageRequest.getImageId())
+                            .orElse(null);
+                    if (image != null) {
                         image.setProduct(product);
                         image.setData(updateImageRequest.getData());
                         image.setUrl(updateImageRequest.getUrl());
                         image.setName(updateImageRequest.getName());
                         imagesList.add(image);
                     }
-                }else{
+                } else {
                     Images image = new Images();
                     image.setProduct(product);
                     image.setData(updateImageRequest.getData());
@@ -185,8 +178,7 @@ public class ProductsServiceImpl implements ProductsService {
                     imagesList.add(image);
                 }
             }
-            if(!imagesList.isEmpty())
-            {
+            if (!imagesList.isEmpty()) {
                 imagesRepository.saveAll(imagesList);
             }
         }
@@ -196,8 +188,10 @@ public class ProductsServiceImpl implements ProductsService {
     }
 
     @Override
-    public boolean checkExistsByProductName(String productName, String typeName,String brandName) {
-        return productsRepository.findProductsByProductNameAndTypeName(productName, typeName,brandName).isPresent();
+    public boolean checkExistsByProductName(String productName, String typeName, String brandName) {
+        return productsRepository
+                .findProductsByProductNameAndTypeName(productName, typeName, brandName)
+                .isPresent();
     }
 
     @Override
@@ -216,9 +210,9 @@ public class ProductsServiceImpl implements ProductsService {
     }
 
     @Override
-    public Page<Products> getSameProductType(Pageable pageable,String productId) {
+    public Page<Products> getSameProductType(Pageable pageable, String productId) {
         Products product = productsRepository.findByProductId(productId);
-        return productsRepository.findSameTypeProducts(pageable,productId,product.getType());
+        return productsRepository.findSameTypeProducts(pageable, productId, product.getType());
     }
 
     @Override
@@ -229,8 +223,7 @@ public class ProductsServiceImpl implements ProductsService {
     @Override
     public boolean updateDiscountPrice(String productId, long moneyOff) {
         Products product = productsRepository.findByProductId(productId);
-        if(product == null)
-            return false;
+        if (product == null) return false;
         product.setMoneyOff(moneyOff);
         productsRepository.save(product);
         return true;
@@ -258,11 +251,11 @@ public class ProductsServiceImpl implements ProductsService {
 
     @Override
     public Page<Products> findByCategoryAndPrice(Pageable pageable, int categoryId, long price) {
-        return productsRepository.findByCategoryAndPrice(pageable,categoryId,price);
+        return productsRepository.findByCategoryAndPrice(pageable, categoryId, price);
     }
 
     @Override
     public Page<Products> findByPrice(Pageable pageable, long price) {
-        return productsRepository.findByPrice(pageable,price);
+        return productsRepository.findByPrice(pageable, price);
     }
 }

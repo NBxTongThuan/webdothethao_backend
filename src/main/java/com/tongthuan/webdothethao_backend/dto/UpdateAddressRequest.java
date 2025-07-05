@@ -16,5 +16,4 @@ public class UpdateAddressRequest {
     private String toProvince;
     private String toWard;
     private String toAddress;
-
 }

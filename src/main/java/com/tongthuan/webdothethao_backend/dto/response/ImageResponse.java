@@ -1,7 +1,7 @@
 package com.tongthuan.webdothethao_backend.dto.response;
 
-import com.tongthuan.webdothethao_backend.constantvalue.Color;
 import com.tongthuan.webdothethao_backend.entity.Images;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
